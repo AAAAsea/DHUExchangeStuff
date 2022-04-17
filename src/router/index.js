@@ -5,7 +5,7 @@ import {createRouter,  createWebHashHistory} from 'vue-router'
 const	routes=[
 		{
 			path:'/',
-			name: 'Home',
+			name: '广场',
 			component: ()=>import("@/views/Home"),
 			meta: {
 				index: 1
