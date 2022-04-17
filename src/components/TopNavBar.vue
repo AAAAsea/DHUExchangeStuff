@@ -1,20 +1,21 @@
 <template>
   <div class="container">
     <div class="user">
-      <img src="../assets/logo.png" alt="">
+      <img src="https://img1.baidu.com/it/u=3435958490,2041388940&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=686" alt="">
     </div>
     <div class="titles">
-      首页
+      {{route.name}}
     </div>
   </div>
 </template>
 
 <script>
 import { reactive, ref, toRefs } from 'vue'
-
+import { useRoute } from 'vue-router'
 export default {
   name:"TopNavBar",
   setup(){
+    const route = useRoute()
     const data = reactive({
       activeIndex: ref('1'),
       activeIndex2: ref('1')
@@ -25,7 +26,8 @@ export default {
 
     return {
       ...toRefs(data),
-      handleSelect
+      handleSelect,
+      route
     }
   }
 }
@@ -36,20 +38,23 @@ export default {
     background-size: cover;
     width: 100vw;
     height: 40vh;
-    border: 1px solid red;
     top: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-around;
+    // justify-content: space-around;
     .user{
+      margin-top: 30px;
       img{
-        width: 60px;
-        height: 60px;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        margin-bottom: 30px;
       }
     }
     .titles{
       font-size: 40px;
+      font-weight: bolder;
     }
   }
 </style>

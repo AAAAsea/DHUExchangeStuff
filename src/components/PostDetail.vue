@@ -1,16 +1,13 @@
 <template>
   <div class="container">
-    <div class="detail">
-      <div class="title">
-        <h1>测试标题</h1>
-      </div>
-      <div class="detail">
-        你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好
-      </div>
-    </div>
+    <Post
+      :title="postDetail.title"
+      :subTitle="postDetail.subTitle"
+      :avatarUrl="postDetail.avatarUrl"
+    />
     <div class="comment-container">
       <CommentCard
-      v-for="comment in comments"
+      v-for="comment in postDetail.comments"
       :key="comment.id"
       :comment="comment"
       class="comment"/>
@@ -19,28 +16,21 @@
 </template>
 
 <script>
-import { reactive, toRefs } from '@vue/reactivity'
+
 import CommentCard from './CommentCard.vue'
+import Post from './Post.vue'
+
 export default {
   name: 'PostDetail',
-  props: ['id'],
+  props: ['id', 'postDetail'],
   components: {
-    CommentCard
+    CommentCard,
+    Post
   },
-  setup(){
-    const data = reactive({
-      comments: [
-        {
-          id: 0,
-          avataUrl: "../assets/logo.png",
-          nickName: "Asea",
-          time: "2022-04-17 16:37:16",
-          cotent: "哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈 哈哈"
-        }
-      ]
-    })
+  setup(props){
+
     return{
-      ...toRefs(data)
+      ...props
     }
   }
 }
@@ -48,20 +38,21 @@ export default {
 
 <style lang="scss" scoped>
 .container{
-  padding: 20px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  .detail{
-    padding: 20px;
-  }
   .comment-container{
-    padding: 20px;
-    width: 85vw;
-    border: 1px solid red;
+    
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    .comment{
+      box-sizing: border-box;
+      padding: 20px;
+      margin-top: 20px;
+    }
   }
   
 }
