@@ -2,14 +2,16 @@
   <div class="container">
     <router-link 
       v-for="post in postList"
-      :to="{ path: '/detail/'+post.id}"
+      :to="{ path: '/detail/' + post.id }"
       :key="post.id"
+      class="post-card"
     >
       <Post
-      :title="post.title"
-      :subTitle="post.subTitle"
-      class="post-card"
-    />
+        :title="post.title"
+        :subTitle="post.subTitle"
+        :avatarUrl="post.avatarUrl"
+        class="post"
+      />
     </router-link>
   </div>
 </template>
@@ -19,22 +21,13 @@ import { reactive, toRefs } from '@vue/reactivity'
 import Post from "./Post.vue"
 export default {
   name: "PostList",
+  props: ['postList'],
   components: {
     Post
   },
   setup(){
     const data = reactive({
-      postList: [
-        {
-          id: 0,
-          title: "hhh",
-          subTitle: "埃德加啊地方就爱上对方就第三方模具费马上大家驸马吗",
-        },{
-          id: 1,
-          title: "hhh",
-          subTitle: "埃德加啊地方就爱上对方就第三方模具费马上大家驸马吗",
-        }
-      ]
+      
     })
     return{
       ...toRefs(data)
@@ -48,9 +41,15 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  
   .post-card{
     margin-bottom: 30px;
+    box-sizing: border-box;
     color: white;
+    width: 100%;
+    .post{
+      width: 100%;
+    }
   }
 }
 </style>
