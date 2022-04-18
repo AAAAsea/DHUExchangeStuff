@@ -6,22 +6,24 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title><%= htmlWebpackPlugin.options.title %></title>
+
   </head>
   <body>
     <noscript>
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
-    <div id="app"></div>
+    <div id="app" style="margin: 0;"></div>
     <!-- built files will be auto injected -->
   </body>
 </html>
 <style>
-/* 解决页面自带空白布局 */
-html,body{
-  height:100%;
-  width:100%;
-  border:hidden;
-  overflow:hidden;
+*{
+  margin: 0;
+  padding: 0;
+}
+body,html{
+    margin: 0;
+    padding: 0;
 }
 
 </style>

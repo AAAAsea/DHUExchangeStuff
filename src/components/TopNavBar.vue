@@ -38,7 +38,7 @@ export default {
 <style lang="scss" scoped>
   .container{
     background-size: cover;
-    width: 100vw;
+    // width: 100vw;
     height: 40vh;
     top: 0;
     display: flex;
