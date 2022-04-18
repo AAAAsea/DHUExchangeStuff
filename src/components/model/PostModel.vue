@@ -1,9 +1,9 @@
 <template>
 
   <!-- Form -->
-  <el-dialog v-model="store.state.model.postModelFlag" title="发贴">
-    <el-form :model="form">
-      <el-form-item label="标题" :label-width="formLabelWidth">
+  <el-dialog v-model="store.state.model.postModelFlag" title="发贴" custom-class="dialog" width="75vw">
+    <el-form :model="form" >
+      <el-form-item label="标题" :label-width="auto" >
         <el-input v-model="form.name" maxlength="10" show-word-limit autocomplete="off"  placeholder="输入你的标题"/>
       </el-form-item>
       <!-- <el-form-item label="楼号" :label-width="formLabelWidth">
@@ -19,7 +19,7 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="store.state.model.postModelFlag = false">取消</el-button>
-        <el-button type="primary" @click="store.state.model.postModelFlag = false"
+        <el-button type="primary" @click="publish"
           >发布</el-button
         >
       </span>
@@ -30,20 +30,23 @@
 <script setup>
 import { reactive } from 'vue'
 import { useStore } from 'vuex'
+import { addPost } from '../../api/post'
+
 const store = useStore()
-const formLabelWidth = '140px'
 
 const form = reactive({
   name: '',
-  region: '',
-  date1: '',
-  date2: '',
-  delivery: false,
-  type: [],
-  resource: '',
-  desc: '',
   textarea: ''
 })
+
+function publish(){
+  addPost(form.name, form.textarea, 100)
+  .then(res=>{
+    console.log(res)
+    store.state.model.postModelFlag = false
+  })
+}
+
 </script>
 
 <style lang="scss" scoped>

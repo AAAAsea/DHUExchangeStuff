@@ -1,3 +1,5 @@
+import { ElNotification } from 'element-plus'
+
 export default {
   updateData(state, { key, value }) {
     state.data[key] = value;
@@ -6,4 +8,9 @@ export default {
     console.log("liked",name)
     state.liked[name] = data;
   },
+  showToast(state, payload){
+    ElNotification({
+      ...payload
+    })
+  }
 }

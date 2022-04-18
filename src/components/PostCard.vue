@@ -39,7 +39,8 @@ export default {
   .title{
     display: flex;
     align-items: center;
-    word-wrap:break-word;
+    word-wrap: break-word;
+    word-break:break-all; 
     img{
       width: 40px;
       border-radius: 50%;

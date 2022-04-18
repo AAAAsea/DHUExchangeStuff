@@ -6,7 +6,7 @@
       :isLoading="isLoading"
       class="postlist"
     />
-      <el-button @click="store.state.model.postModelFlag = true" type="primary" :icon="Edit" circle class="edit" color="#626aef" size="large"/>
+      <el-button @click="showPostModel" type="primary" :icon="Edit" circle class="edit" color="#626aef" size="large"/>
   </div>
 </template>
 
@@ -16,6 +16,7 @@ import { getPostList } from '../api/post.js'
 import { reactive, toRefs } from '@vue/reactivity'
 import { Edit } from '@element-plus/icons-vue'
 import { useStore } from 'vuex'
+import { isAuthLogin } from '../utils/auth'
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Home",
@@ -30,6 +31,7 @@ export default {
     })
     getPostList()
     .then((res)=>{
+      res = res.data
       data.postList.splice()
       data.postList.push(...res)
       data.isLoading = false
@@ -39,10 +41,22 @@ export default {
       console.log(err)
     })
 
+    function showPostModel(){
+      if(!isAuthLogin()){
+        store.commit('showToast',{
+        title: 'Warning',
+        message: '请先登录',
+        type: 'warning'
+      })
+      }else{
+        store.state.model.postModelFlag = true
+      }
+    }
     return{
       ...toRefs(data),
       Edit,
-      store
+      store,
+      showPostModel
     }
   }
 }

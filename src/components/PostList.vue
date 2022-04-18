@@ -13,16 +13,16 @@
     </template>
     <router-link 
       v-for="post in postList"
-      :to="{ path: '/detail/' + post.id }"
-      :key="post.id"
+      :to="{ path: '/detail/' + post.post.id }"
+      :key="post.post.id"
       class="post-card"
     >
       <PostCard
-        :title="post.title"
-        :content="post.content.substr(0, 50) + (post.content.length > 50 ? '...' : '')"
-        :avatarUrl="post.avatarUrl"
-        :tagName="post.tagName"
-        :time="post.time"
+        :title="post.post.title"
+        :content="post.post.content.substr(0, 50) + (post.post.content.length > 50 ? '...' : '')"
+        :avatarUrl="post.user.headerUrl"
+        :tagName="post.post.tagName"
+        :time="post.post.createTime"
         class="post"
       />
     </router-link>
