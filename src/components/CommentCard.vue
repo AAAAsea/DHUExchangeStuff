@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="comment-card">
     <div class="userInfo">
       <img :src="comment.avatarUrl" alt="">
       <div class="info">
@@ -11,9 +11,7 @@
         </div>
       </div>
     </div>
-    <div class="content">
-      {{comment.content}}
-    </div>
+
   </div>
 </template>
 
@@ -25,11 +23,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .card{
+  .comment-card{
     color: white;
     width: 100%;
     background: var(--comment-bg);
-    border-radius: 10px;
+    border-radius: 15px;
     transition: 0.2s;
     &:hover{
       box-shadow: 0 5px 15px -5px rgba(0,0,0,.3);

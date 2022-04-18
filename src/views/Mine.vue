@@ -1,0 +1,14 @@
+<template>
+  Mine
+</template>
+
+<script>
+export default {
+  // eslint-disable-next-line vue/multi-word-component-names
+  name: "Mine"
+}
+</script>
+
+<style>
+
+</style>

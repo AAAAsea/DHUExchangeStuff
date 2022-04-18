@@ -1,0 +1,19 @@
+:root{
+  --comment-text: white;
+  --comment-bg: rgba(51, 39, 58, 0.425);
+}
+*{
+  /* 去除移动端蓝色阴影 */
+  -webkit-tap-highlight-color: transparent; 
+  margin: 0;
+  padding: 0;
+}
+
+body{
+  background: linear-gradient(45deg, #ebfaef 0%, #f8ecf5 100%);
+  cursor: url(https://cdn.jsdelivr.net/gh/sviptzk/HexoStaticFile@latest/Hexo/img/default.cur),default;
+}
+a{
+  text-decoration: none;
+  user-select: none;
+}

@@ -8,7 +8,8 @@
       :tagName="postDetail.tagName"
       class="post-card"
     />
-    <div class="comment-container">
+      
+    <div class="comment-container"> 
       <CommentCard
       v-for="comment in postDetail.comments"
       :key="comment.id"
@@ -56,7 +57,7 @@ export default {
     align-items: center;
     .comment{
       box-sizing: border-box;
-      padding: 25px;
+      padding: 15px 25px 25px 25px;
       margin-top: 20px;
     }
   }

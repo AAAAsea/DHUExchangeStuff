@@ -1,7 +1,9 @@
 <template>
   <div class="container">
     <div class="user">
-      <img src="https://img1.baidu.com/it/u=3435958490,2041388940&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=686" alt="">
+      <router-link to="/mine">
+        <img src="https://img1.baidu.com/it/u=3435958490,2041388940&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=686" alt="">
+      </router-link>
     </div>
     <div class="titles">
       {{route.name}}

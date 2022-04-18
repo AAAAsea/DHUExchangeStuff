@@ -1,8 +1,20 @@
 <template>
   <div class="container">
+    <template v-if="isLoading">
+      <div class="skeleton" v-for="(item, index) in [1,2,3,4,5]" :key="index">
+        <br />
+        <el-skeleton style="--el-skeleton-circle-size: 100px">
+          <template #template>
+            <el-skeleton-item variant="circle" />
+          </template>
+        </el-skeleton>
+        <el-skeleton />
+      </div>
+    </template>
     <PostDetail
-    class="detail"
-    :postDetail="postDetail"
+      v-else
+      class="detail"
+      :postDetail="postDetail"
     />
   </div>
 </template>
@@ -20,11 +32,13 @@ export default {
   },
   setup(props){
     const data = reactive({
-      postDetail: {}
+      postDetail: {},
+      isLoading: true
     })
     getPostDetail(props.id)
     .then((res)=>{
       data.postDetail = res
+      data.isLoading = false
     })
     .catch(err=>{
       console.log(err)
@@ -38,7 +52,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.detail{
+.detail, .skeleton{
   width: 70vw;
   margin: 0 auto;
 }
