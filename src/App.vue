@@ -2,17 +2,14 @@
   <TopNavBar/>
   <router-view>
   </router-view>
+  <PostModel/>
+  <LoginModel/>
 </template>
 
-<script>
+<script setup>
 import TopNavBar from './components/TopNavBar'
-
-export default {
-  name: 'App',
-  components: {
-    TopNavBar,
-  }
-}
+import PostModel from './components/model/PostModel.vue'
+import LoginModel from './components/model/LoginModel.vue'
 </script>
 
 <style scoped>

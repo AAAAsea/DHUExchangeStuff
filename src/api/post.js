@@ -25,3 +25,19 @@ export function getPostDetail(id) {
     },
   });
 }
+
+/**
+ * 发布新的post
+ */
+export function addPost(title, content, userId) {
+  return request({
+    url: '/discuss/add',
+    method: 'post',
+    params: {
+      title,
+      content,
+      userId,
+      timestamp: new Date().getTime(),
+    },
+  });
+}

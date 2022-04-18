@@ -1,6 +1,8 @@
 //引入VueRouter
+import store from '@/store'
 import {createRouter,  createWebHashHistory} from 'vue-router'
-
+// 引入工具
+import { isAccountLoggedIn } from '../utils/auth'
 //创建routes
 const	routes=[
 		{
@@ -26,7 +28,8 @@ const	routes=[
 			component: ()=>import("@/views/Mine"),
 			props: true,
 			meta: {
-				index: 1
+				index: 1,
+				requireAccountLogin: true
 			}
 		},
 ]
@@ -38,25 +41,18 @@ const router = createRouter({
 })
 
 // 全局前置守卫
-// router.beforeEach((to, from, next) => {
-// 	// 是否需要登录
-// 	if (to.meta.requireAccountLogin) {
-// 		if (isAccountLoggedIn()) {
-// 			next();
-// 		} else {
-// 			next({ path: '/loginphone' });
-// 		}
-// 	}else if(to.path.startsWith('/login'))
-// 	{
-// 		if (!isAccountLoggedIn()) {
-// 			next();
-// 		}else(
-// 			next({ path: '/library' })
-// 		)
-// 	}else{
-// 		next();
-// 	}
+router.beforeEach((to, from, next) => {
+	// 是否需要登录
+	if (to.meta.requireAccountLogin) {
+		if (isAccountLoggedIn()) {
+			next();
+		} else {
+			store.state.model.loginModelFlag = true;
+		}
+	}else{
+		next();
+	}
 	
-// })
+})
 
 export default router;

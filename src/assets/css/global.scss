@@ -1,17 +1,36 @@
 :root{
   --comment-text: white;
   --comment-bg: rgba(51, 39, 58, 0.425);
+  --footer-bg:  rgba(51, 39, 58, 0.425);
+  --footer-text: white;
 }
 *{
   /* 去除移动端蓝色阴影 */
   -webkit-tap-highlight-color: transparent; 
   margin: 0;
   padding: 0;
+
 }
 
 body{
   background: linear-gradient(45deg, #ebfaef 0%, #f8ecf5 100%);
   cursor: url(https://cdn.jsdelivr.net/gh/sviptzk/HexoStaticFile@latest/Hexo/img/default.cur),default;
+  // 滚动条
+  &::-webkit-scrollbar{
+    width: 6px;
+    height: 6px;
+  }
+  &::-webkit-scrollbar-track{
+    background: transparent;
+    border-radius:2px;
+  }
+  &::-webkit-scrollbar-thumb{
+    background: rgba(0, 0, 0, 0.3);
+    border-radius:10px;
+  }
+  &::-webkit-scrollbar-thumb:hover{
+    background: rgba(56, 74, 82, 0.7);
+  }
 }
 a{
   text-decoration: none;

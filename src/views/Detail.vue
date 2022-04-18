@@ -1,22 +1,20 @@
 <template>
-  <div class="container">
-    <template v-if="isLoading">
-      <div class="skeleton" v-for="(item, index) in [1,2,3,4,5]" :key="index">
-        <br />
-        <el-skeleton style="--el-skeleton-circle-size: 100px">
-          <template #template>
-            <el-skeleton-item variant="circle" />
-          </template>
-        </el-skeleton>
-        <el-skeleton />
-      </div>
-    </template>
-    <PostDetail
-      v-else
-      class="detail"
-      :postDetail="postDetail"
-    />
-  </div>
+  <template v-if="isLoading">
+    <div class="skeleton" v-for="(item, index) in [1,2,3,4,5]" :key="index">
+      <br />
+      <el-skeleton style="--el-skeleton-circle-size: 100px">
+        <template #template>
+          <el-skeleton-item variant="circle" />
+        </template>
+      </el-skeleton>
+      <el-skeleton />
+    </div>
+  </template>
+  <PostDetail
+    v-else
+    class="detail"
+    :postDetail="postDetail"
+  />
 </template>
 
 <script>
@@ -52,8 +50,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.detail, .skeleton{
-  width: 70vw;
-  margin: 0 auto;
-}
+  .detail, .skeleton
+  {
+    width: 70%;
+    margin: 0 auto;
+  }
+  @media screen and (max-width: 1200px){
+    .detail, .skeleton{
+      width: 80%;
+    }
+  } 
 </style>

@@ -1,9 +1,9 @@
 <template>
   <div class="post-card">
-    <h1 class="title">
+    <h2 class="title">
       <img :src="avatarUrl" alt="">
       {{title}}
-    </h1>
+    </h2>
     <div class="sub">
       <p>{{content}}</p>
     </div>
@@ -28,7 +28,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  padding: 25px 30px;
+  padding: 20px 30px 25px 30px;
   box-sizing: border-box;
   color: white;
   transition: 0.2s ease;
@@ -39,8 +39,8 @@ export default {
   .title{
     display: flex;
     align-items: center;
-    margin: 0;
-    word-wrap:break-word;
+    word-wrap: break-word;
+    word-break:break-all; 
     img{
       width: 40px;
       border-radius: 50%;
@@ -49,6 +49,7 @@ export default {
   }
   .sub{
     p{
+      margin: 10px 0;
       letter-spacing: 1px;
       word-wrap:break-word
     }
