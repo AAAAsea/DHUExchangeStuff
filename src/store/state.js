@@ -3,11 +3,11 @@ export default {
     loginMode:'',
     ...JSON.parse(localStorage.getItem('data'))
   },
+  model:{
+    postModelFlag: false
+  },
   settings:{
     lang: 'zh-CN',
     ...JSON.parse(localStorage.getItem('settings'))
   },
-  liked:{
-    ...JSON.parse(localStorage.getItem('liked'))
-  }
 }

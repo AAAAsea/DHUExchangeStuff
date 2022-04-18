@@ -58,7 +58,7 @@ export default {
     width: 100%;
   }
   .post-card{
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     box-sizing: border-box;
     color: white;
     width: 100%;

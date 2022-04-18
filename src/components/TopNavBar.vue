@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="top-nav-bar">
     <div class="user">
       <router-link to="/mine">
         <img src="https://img1.baidu.com/it/u=3435958490,2041388940&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=686" alt="">
@@ -36,9 +36,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .container{
+  .top-nav-bar{
     background-size: cover;
-    width: 100vw;
     height: 40vh;
     top: 0;
     display: flex;
@@ -53,6 +52,7 @@ export default {
         border-radius: 50%;
         margin-bottom: 30px;
       }
+      
     }
     .titles{
       font-size: 40px;

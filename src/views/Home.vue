@@ -1,12 +1,12 @@
 <template>
-  <div class="container">
+  <div class="home-container">
     <PostList
       :style="{width: '70%'}"
       :postList="postList"
       :isLoading="isLoading"
       class="postlist"
     />
-      <el-button type="primary" :icon="Edit" circle class="edit" color="#626aef" size="large"/>
+      <el-button @click="store.state.model.postModelFlag = true" type="primary" :icon="Edit" circle class="edit" color="#626aef" size="large"/>
   </div>
 </template>
 
@@ -15,6 +15,7 @@ import PostList from '../components/PostList.vue'
 import { getPostList } from '../api/post.js'
 import { reactive, toRefs } from '@vue/reactivity'
 import { Edit } from '@element-plus/icons-vue'
+import { useStore } from 'vuex'
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Home",
@@ -22,6 +23,7 @@ export default {
     PostList
   },
   setup(){
+    const store = useStore()
     const data = reactive({
       postList: [],
       isLoading: true
@@ -39,14 +41,15 @@ export default {
 
     return{
       ...toRefs(data),
-      Edit
+      Edit,
+      store
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.container{
+.home-container{
   display: flex;
   justify-content: center;
   .edit{

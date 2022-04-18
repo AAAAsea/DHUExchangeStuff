@@ -8,10 +8,12 @@
         </div>
         <div class="time">
           {{comment.time}}
-        </div>
+        </div>    
       </div>
     </div>
-
+    <div class="content">
+      {{comment.content}}
+    </div>
   </div>
 </template>
 

@@ -39,7 +39,6 @@ export default {
   .title{
     display: flex;
     align-items: center;
-    margin: 0;
     word-wrap:break-word;
     img{
       width: 40px;
@@ -49,6 +48,7 @@ export default {
   }
   .sub{
     p{
+      margin: 10px 0;
       letter-spacing: 1px;
       word-wrap:break-word
     }
