@@ -6,10 +6,12 @@
       :key="post.id"
       class="post-card"
     >
-      <Post
+      <PostCard
         :title="post.title"
-        :subTitle="post.subTitle"
+        :content="post.content.substr(0, 50) + (post.content.length > 50 ? '...' : '')"
         :avatarUrl="post.avatarUrl"
+        :tagName="post.tagName"
+        :time="post.time"
         class="post"
       />
     </router-link>
@@ -18,12 +20,12 @@
 
 <script>
 import { reactive, toRefs } from '@vue/reactivity'
-import Post from "./Post.vue"
+import PostCard from "./PostCard.vue"
 export default {
   name: "PostList",
   props: ['postList'],
   components: {
-    Post
+    PostCard
   },
   setup(){
     const data = reactive({

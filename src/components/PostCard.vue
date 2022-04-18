@@ -5,7 +5,10 @@
       {{title}}
     </h1>
     <div class="sub">
-      <p>{{subTitle}}</p>
+      <p>{{content}}</p>
+    </div>
+    <div class="footer">
+      <p>{{tagName+" "+time}}</p>
     </div>
   </div>
 </template>
@@ -14,7 +17,7 @@
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Post",
-  props: ['title', 'subTitle','avatarUrl'],
+  props: ['title', 'content','avatarUrl','tagName','time'],
 }
 </script>
 
@@ -25,16 +28,35 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  padding: 10px 30px;
+  padding: 25px 30px;
   box-sizing: border-box;
+  color: white;
+  transition: 0.2s ease;
+  &:hover{
+    box-shadow: 0 5px 15px -5px rgba(0,0,0,.5);
+    transform: translateY(-3px);
+  }
   .title{
     display: flex;
     align-items: center;
+    margin: 0;
+    word-wrap:break-word;
     img{
       width: 40px;
       border-radius: 50%;
-      margin-right: 3%;
+      margin-right: 2%;
     }
+  }
+  .sub{
+    p{
+      letter-spacing: 1px;
+      word-wrap:break-word
+    }
+  }
+  .footer{
+    font-size: 14px;
+    display: flex;
+    justify-content: flex-end;
   }
 }
 </style>
