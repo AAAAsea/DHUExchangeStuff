@@ -36,6 +36,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  
   .top-nav-bar{
     background-size: cover;
     height: 40vh;
@@ -59,4 +60,9 @@ export default {
       font-weight: bolder;
     }
   }
+  @media screen and (max-width: 1200px){
+    .top-nav-bar{
+      height: 30vh;
+    }
+  } 
 </style>

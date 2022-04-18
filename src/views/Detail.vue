@@ -50,8 +50,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.detail, .skeleton{
-  width: 70%;
-  margin: 0 auto;
-}
+  .detail, .skeleton
+  {
+    width: 70%;
+    margin: 0 auto;
+  }
+  @media screen and (max-width: 1200px){
+    .detail, .skeleton{
+      width: 80%;
+    }
+  } 
 </style>

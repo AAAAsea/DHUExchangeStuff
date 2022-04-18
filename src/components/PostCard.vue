@@ -1,9 +1,9 @@
 <template>
   <div class="post-card">
-    <h1 class="title">
+    <h2 class="title">
       <img :src="avatarUrl" alt="">
       {{title}}
-    </h1>
+    </h2>
     <div class="sub">
       <p>{{content}}</p>
     </div>
@@ -28,7 +28,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  padding: 25px 30px;
+  padding: 20px 30px 25px 30px;
   box-sizing: border-box;
   color: white;
   transition: 0.2s ease;

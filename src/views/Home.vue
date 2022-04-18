@@ -1,7 +1,6 @@
 <template>
   <div class="home-container">
     <PostList
-      :style="{width: '70%'}"
       :postList="postList"
       :isLoading="isLoading"
       class="postlist"
@@ -73,5 +72,13 @@ export default {
     transform: scale(1.5);
     font-size: 20px;
   }
+  .postlist{
+    width: 70%;
+  }
+  @media screen and (max-width: 1200px){
+    .postlist{
+      width: 80%;
+    }
+  } 
 }
 </style>

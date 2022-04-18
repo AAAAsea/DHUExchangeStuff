@@ -53,12 +53,11 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-
   .skeleton{
     width: 100%;
   }
   .post-card{
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     box-sizing: border-box;
     color: white;
     width: 100%;
