@@ -6,6 +6,9 @@ export default {
   model:{
     postModelFlag: false
   },
+  user:{
+    isLogin: false
+  },
   settings:{
     lang: 'zh-CN',
     ...JSON.parse(localStorage.getItem('settings'))
