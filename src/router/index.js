@@ -19,7 +19,16 @@ const	routes=[
 			meta: {
 				index: 1
 			}
-		}
+		},
+		{
+			path:'/mine',	
+			name: '我',
+			component: ()=>import("@/views/Mine"),
+			props: true,
+			meta: {
+				index: 1
+			}
+		},
 ]
 		
 //创建router

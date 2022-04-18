@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="post-card">
     <h1 class="title">
       <img :src="avatarUrl" alt="">
       {{title}}
@@ -22,7 +22,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.card{
+.post-card{
   background: rgba(37, 26, 74, 0.425);
   border-radius: 15px;
   display: flex;

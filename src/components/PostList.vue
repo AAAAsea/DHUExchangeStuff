@@ -1,5 +1,16 @@
 <template>
   <div class="container">
+    <template v-if="isLoading">
+      <div class="skeleton" v-for="(item, index) in [1,2,3,4,5]" :key="index">
+        <br />
+        <el-skeleton style="--el-skeleton-circle-size: 100px">
+          <template #template>
+            <el-skeleton-item variant="circle" />
+          </template>
+        </el-skeleton>
+        <el-skeleton />
+      </div>
+    </template>
     <router-link 
       v-for="post in postList"
       :to="{ path: '/detail/' + post.id }"
@@ -23,13 +34,12 @@ import { reactive, toRefs } from '@vue/reactivity'
 import PostCard from "./PostCard.vue"
 export default {
   name: "PostList",
-  props: ['postList'],
+  props: ['postList','isLoading'],
   components: {
     PostCard
   },
   setup(){
     const data = reactive({
-      
     })
     return{
       ...toRefs(data)
@@ -43,7 +53,10 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  
+
+  .skeleton{
+    width: 100%;
+  }
   .post-card{
     margin-bottom: 30px;
     box-sizing: border-box;
