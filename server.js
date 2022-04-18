@@ -1294,7 +1294,7 @@ app.get('/postdetail', (req, res) => {
   res.send(postList.data[req.query.id]);
 });
 
-app.post('/postlist', (req, res) => {
+app.post('/discuss/add', (req, res) => {
   console.log(req.query)
   postList.data.unshift({
     post: {
@@ -1308,7 +1308,7 @@ app.post('/postlist', (req, res) => {
 });
 
 //3.调用app.listen()函数启动服务器
-app.listen(4000, () => {
+app.listen(8081, () => {
     console.log('running at http://127.0.0.1');
 })
 

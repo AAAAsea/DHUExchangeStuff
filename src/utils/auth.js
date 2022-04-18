@@ -1,3 +1,3 @@
-export function isAuthLogin(){
+export function isAccountLoggedIn(){
   return true;
 }

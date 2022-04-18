@@ -1,7 +1,7 @@
 <template>
 
   <!-- Form -->
-  <el-dialog v-model="store.state.model.postModelFlag" title="发贴" custom-class="dialog" width="75vw">
+  <el-dialog v-model="store.state.model.postModelFlag" title="发贴" custom-class="dialog" :width="dialogWidth">
     <el-form :model="form" >
       <el-form-item label="标题" :label-width="auto" >
         <el-input v-model="form.name" maxlength="10" show-word-limit autocomplete="off"  placeholder="输入你的标题"/>
@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue'
+import { reactive, computed } from 'vue'
 import { useStore } from 'vuex'
 import { addPost } from '../../api/post'
 
@@ -38,6 +38,7 @@ const form = reactive({
   name: '',
   textarea: ''
 })
+const dialogWidth = computed(()=>document.documentElement.clientWidth > 1000 ? '400px' : '90VW')
 
 function publish(){
   addPost(form.name, form.textarea, 100)

@@ -15,7 +15,7 @@ import { getPostList } from '../api/post.js'
 import { reactive, toRefs } from '@vue/reactivity'
 import { Edit } from '@element-plus/icons-vue'
 import { useStore } from 'vuex'
-import { isAuthLogin } from '../utils/auth'
+import { isAccountLoggedIn } from '../utils/auth'
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Home",
@@ -41,11 +41,11 @@ export default {
     })
 
     function showPostModel(){
-      if(!isAuthLogin()){
+      if(!isAccountLoggedIn()){
         store.commit('showToast',{
-        title: 'Warning',
-        message: '请先登录',
-        type: 'warning'
+        title: 'Error',
+        message: '点击头像登录',
+        type: 'error'
       })
       }else{
         store.state.model.postModelFlag = true

@@ -1,9 +1,9 @@
 <template>
   <div class="top-nav-bar">
     <div class="user">
-      <router-link to="/mine">
-        <img src="https://img1.baidu.com/it/u=3435958490,2041388940&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=686" alt="">
-      </router-link>
+        <router-link to="mine">
+          <img src="https://img1.baidu.com/it/u=3435958490,2041388940&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=686" alt="头像">
+        </router-link>
     </div>
     <div class="titles">
       {{route.name}}
@@ -12,24 +12,13 @@
 </template>
 
 <script>
-import { reactive, ref, toRefs } from 'vue'
 import { useRoute } from 'vue-router'
 export default {
   name:"TopNavBar",
   setup(){
     const route = useRoute()
-    const data = reactive({
-      activeIndex: ref('1'),
-      activeIndex2: ref('1')
-    })
-    const handleSelect = (key, keyPath) => {
-      console.log(key, keyPath)
-    }
-
     return {
-      ...toRefs(data),
-      handleSelect,
-      route
+        route
     }
   }
 }
@@ -48,10 +37,14 @@ export default {
     .user{
       margin-top: 30px;
       img{
+        transition: 0.5s ease;
         width: 80px;
         height: 80px;
         border-radius: 50%;
         margin-bottom: 30px;
+        &:hover{
+          transform: rotate(360deg);
+        }
       }
       
     }

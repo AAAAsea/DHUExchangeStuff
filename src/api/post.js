@@ -31,7 +31,7 @@ export function getPostDetail(id) {
  */
 export function addPost(title, content, userId) {
   return request({
-    url: '/postlist',
+    url: '/discuss/add',
     method: 'post',
     params: {
       title,
