@@ -2,8 +2,8 @@
 
   <!-- Form -->
   <el-dialog v-model="store.state.model.postModelFlag" title="发贴" custom-class="dialog" :width="dialogWidth">
-    <el-form :model="form" >
-      <el-form-item label="标题" :label-width="auto" >
+    <el-form :model="form" :rules="rules" ref="ruleFormRef">
+      <el-form-item label="标题" :label-width="auto" prop="title">
         <el-input v-model="form.name" maxlength="10" show-word-limit autocomplete="off"  placeholder="输入你的标题"/>
       </el-form-item>
       <!-- <el-form-item label="楼号" :label-width="formLabelWidth">
@@ -12,10 +12,32 @@
           <el-option label="2" value="beijing" />
         </el-select>
       </el-form-item> -->
-      <el-form-item label="内容" :label-width="formLabelWidth">
-        <el-input v-model="form.textarea"  maxlength="280" show-word-limit autocomplete="off" type="textarea" :autosize="{ minRows: 2, maxRows: 100 }" placeholder="内容"/>
+      <el-form-item label="内容" :label-width="formLabelWidth"  prop="content">
+        <el-input v-model="form.textarea"  maxlength="280" show-word-limit autocomplete="off" type="textarea" :autosize="{ minRows: 2, maxRows: 50 }" placeholder="写点什么呢..."/>
       </el-form-item>
     </el-form>
+    <el-tag
+      v-for="tag in dynamicTags"
+      :key="tag"
+      :style="{margin: '0  10px 10px 0'}"
+      closable  
+      :disable-transitions="false"
+      @close="handleClose(tag)"
+    >
+      {{ tag }}
+    </el-tag>
+    <el-input
+      v-if="inputVisible"
+      ref="InputRef"
+      v-model="inputValue"
+      :style="{width: '80px',margin: '0 10px 10px 0'}"
+      size="small"
+      @keyup.enter="handleInputConfirm"
+      @blur="handleInputConfirm"
+    />
+    <el-button v-else :style="{width: '80px',margin: '0  10px 0 0'}" size="small" @click="showInput">
+      +增加标签
+    </el-button>
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="store.state.model.postModelFlag = false">取消</el-button>
@@ -28,24 +50,67 @@
 </template>
 
 <script setup>
+// form
 import { reactive, computed } from 'vue'
 import { useStore } from 'vuex'
 import { addPost } from '../../api/post'
-
 const store = useStore()
-
 const form = reactive({
   name: '',
   textarea: ''
 })
 const dialogWidth = computed(()=>document.documentElement.clientWidth > 1000 ? '400px' : '90VW')
-
+const ruleFormRef = ref('')
+const rules = reactive({
+  title: [
+    { required: true, message: '标题不可为空', trigger: 'blur' },
+    { min: 1, max: 10, message: 'Length should be 1 to 10', trigger: 'blur' },
+  ],
+  content: [
+    { required: true, message: '内容不能为空', trigger: 'blur' },
+    { min:10, max: 280, message: 'Length should be 10 to 280', trigger: 'blur' },
+  ],
+})
 function publish(){
-  addPost(form.name, form.textarea, 100)
+  addPost(form.name, form.textarea, ~~(Math.random()*100))
   .then(res=>{
     console.log(res)
     store.state.model.postModelFlag = false
   })
+  .then(()=>{
+    store.dispatch('getPostList')
+  })
+}
+
+// tag
+import { nextTick, ref } from 'vue'
+const inputValue = ref('')
+const dynamicTags = ref([])
+const inputVisible = ref(false)
+const InputRef = ref('')
+const handleClose = (tag) => {
+  dynamicTags.value.splice(dynamicTags.value.indexOf(tag), 1)
+}
+const showInput = () => {
+  inputVisible.value = true
+  nextTick(() => {
+    InputRef.value.input.focus()
+  })
+}
+const handleInputConfirm = () => {
+  if (inputValue.value) {
+    if(dynamicTags.value.length > 4){
+      store.commit('showToast',{
+        type:"warning",
+        title:"Waning",
+        message:"最多添加五个标签"
+      })
+    }else{
+      dynamicTags.value.push(inputValue.value)
+    }
+  }
+  inputVisible.value = false
+  inputValue.value = ''
 }
 
 </script>

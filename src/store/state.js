@@ -4,7 +4,8 @@ export default {
     ...JSON.parse(localStorage.getItem('data'))
   },
   model:{
-    postModelFlag: false
+    postModelFlag: false,
+    loginModelFlag: false
   },
   user:{
     isLogin: false
