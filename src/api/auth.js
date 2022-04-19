@@ -3,12 +3,27 @@ import request from '../utils/request'
 /**
  * 获取邮箱验证码
  */
-export function getMailCode(mail) {
+export function getMailCode(username) {
   return request({
-    url: '/user/code',
+    url: '/users/code',
+    method: 'get',
+    params: {
+      username
+    },
+  });
+}
+
+/**
+ * 注册
+ */
+export function regist(username, password, code) {
+  return request({
+    url: '/register',
     method: 'post',
     params: {
-      mail
+      username,
+      password,
+      code
     },
   });
 }

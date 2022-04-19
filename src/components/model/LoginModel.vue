@@ -103,13 +103,24 @@ const registRules = reactive({
 })
 
 // 提交
-import { getMailCode } from '@/api/auth'
+import { getMailCode, regist } from '@/api/auth'
+// 验证码
 function handleCodeClick(){
   getMailCode(registRuleForm.mail)
   .then((res)=>{
     console.log(res)
   })
 }
+// 提交
+function submit(){
+  if(type.value === 'regist'){
+    regist(registRuleForm.mail, registRuleForm.password, registRuleForm.code)
+    .then(res=>{
+      console.log("注册返回信息：",res)
+    })
+  }
+}
+
 // 前台校验
 // const submitForm = async (formEl) => {
 //   if (!formEl) return
