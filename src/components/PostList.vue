@@ -39,8 +39,7 @@ export default {
     PostCard
   },
   setup(){
-    const data = reactive({
-    })
+    const data = reactive({})
     return{
       ...toRefs(data)
     }
@@ -57,7 +56,7 @@ export default {
     width: 100%;
   }
   .post-card{
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     box-sizing: border-box;
     color: white;
     width: 100%;

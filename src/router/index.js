@@ -30,7 +30,21 @@ const	routes=[
 			meta: {
 				index: 1,
 				requireAccountLogin: true
-			}
+			},
+			children: [
+				{//在地址为空时，直接跳转cell路由
+          path:'',
+          redirect:'/mine/post'
+        },
+				{
+					path: 'post',
+					component: ()=>import("@/components/MinePost"),
+				},
+				{
+					path: 'info',
+					component:  ()=>import("@/components/MineInfo"),
+				},
+			],
 		},
 ]
 		

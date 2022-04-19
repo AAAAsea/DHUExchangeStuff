@@ -16,16 +16,19 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { isAccountLoggedIn } from '@/utils/auth'
 import  unloginAvatar  from '@/assets/img/unlogin.png'
+import { useStore } from 'vuex'
 export default {
   name:"TopNavBar",
   setup(){
     const route = useRoute()
+    const store = useStore()
     const avatarUrl = computed(()=>{
       return isAccountLoggedIn() ? "https://img1.baidu.com/it/u=3435958490,2041388940&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=686" : unloginAvatar
     })
     return {
         route,
-        avatarUrl
+        avatarUrl,
+        store
     }
   }
 }
@@ -34,6 +37,7 @@ export default {
 <style lang="scss" scoped>
   
   .top-nav-bar{
+    transition: 0.5s;
     background-size: cover;
     height: 40vh;
     top: 0;

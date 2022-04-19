@@ -1,6 +1,7 @@
 export default {
   data:{
     loginMode:'',
+    routePath: '',
     ...JSON.parse(localStorage.getItem('data'))
   },
   model:{
