@@ -2,7 +2,7 @@
   <div class="top-nav-bar">
     <div class="user">
         <router-link to="mine">
-          <img src="https://img1.baidu.com/it/u=3435958490,2041388940&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=686" alt="头像">
+          <img :src="avatarUrl" alt="头像">
         </router-link>
     </div>
     <div class="titles">
@@ -12,13 +12,20 @@
 </template>
 
 <script>
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { isAccountLoggedIn } from '@/utils/auth'
+import  unloginAvatar  from '@/assets/img/unlogin.png'
 export default {
   name:"TopNavBar",
   setup(){
     const route = useRoute()
+    const avatarUrl = computed(()=>{
+      return isAccountLoggedIn() ? "https://img1.baidu.com/it/u=3435958490,2041388940&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=686" : unloginAvatar
+    })
     return {
-        route
+        route,
+        avatarUrl
     }
   }
 }
@@ -51,6 +58,7 @@ export default {
     .titles{
       font-size: 40px;
       font-weight: bolder;
+      color: var(--color-topNavBar-title)
     }
   }
   @media screen and (max-width: 1200px){

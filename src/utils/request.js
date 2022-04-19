@@ -5,7 +5,7 @@ let baseURL = '/api';
 const service = axios.create({
   baseURL,
   withCredentials: true,
-  timeout: 1500,
+  timeout: 10000,
 });
 
 // 请求拦截器
