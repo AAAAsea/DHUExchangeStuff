@@ -1,6 +1,7 @@
 export default {
   data:{
     loginMode:'',
+    routePath: '',
     ...JSON.parse(localStorage.getItem('data'))
   },
   model:{
@@ -8,7 +9,7 @@ export default {
     loginModelFlag: false
   },
   user:{
-    isLogin: false
+    isLogin: true
   },
   settings:{
     lang: 'zh-CN',

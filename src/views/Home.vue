@@ -32,6 +32,10 @@ export default {
     .then((res)=>{
       res = res.data
       data.postList.splice()
+      store.commit('updateData',{
+        key: "postList",
+        value: res
+      })
       data.postList.push(...res)
       data.isLoading = false
 
