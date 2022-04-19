@@ -1,12 +1,13 @@
+import { getPostList } from '@/api/post'
 export default {
-  // fetchUserProfile: ({ commit }) => {
-  //   // if (!isAccountLoggedIn()) return;
-  //   return userAccount().then(result => {
-  //     console.log("hhh",result)
-  //     if (result.code === 200) {
-  //       commit('updateData', { key: 'user', value: result.profile });
-  //     }
-  //   });
-  // },
+  fetchPostList: ({ commit }) => {
+    // if (!isAccountLoggedIn()) return;
+    return getPostList().then(result => {
+      console.log("postList",result.data)
+      if (result.code === 200) {
+        commit('updateData', { key: 'user', value: result.profile });
+      }
+    });
+  },
 }
 

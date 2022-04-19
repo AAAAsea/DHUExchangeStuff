@@ -1,3 +1,4 @@
+import store from '../store'
 export function isAccountLoggedIn(){
-  return true;
+  return store.state.user.isLogin;
 }
