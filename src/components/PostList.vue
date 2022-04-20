@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="post-list">
     <template v-if="isLoading">
       <div class="skeleton" v-for="(item, index) in [1,2,3,4,5]" :key="index">
         <br />
@@ -15,7 +15,7 @@
       v-for="post in postList"
       :to="{ path: '/detail/' + post.post.id }"
       :key="post.post.id"
-      class="post-card"
+      class="post-list-card"
     >
       <PostCard
         :title="post.post.title"
@@ -48,17 +48,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.container{
+.post-list{
   display: flex;
   flex-direction: column;
   align-items: center;
   .skeleton{
     width: 100%;
   }
-  .post-card{
+  .post-list-card{
     margin-bottom: 10px;
     box-sizing: border-box;
-    color: white;
     width: 100%;
     .post{
       width: 100%;
