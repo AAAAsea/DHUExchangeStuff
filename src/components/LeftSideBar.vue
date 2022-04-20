@@ -1,6 +1,6 @@
 <template>
   <div class="home-left">
-    
+    <h1>home-left</h1>
   </div>
 </template>
 
@@ -12,7 +12,9 @@ export default {
 
 <style lang="scss" scoped>
   .home-left{
-    height: 200px;
+    position: sticky;
+    top: 60px;
+    height: 600px;
     background: var(--secondary-bg);
     border-radius: 5px;
   }

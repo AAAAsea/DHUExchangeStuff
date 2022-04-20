@@ -3,12 +3,12 @@
     <template v-if="isLoading">
       <div class="skeleton" v-for="(item, index) in [1,2,3,4,5]" :key="index">
         <br />
-        <el-skeleton style="--el-skeleton-circle-size: 100px">
+        <el-skeleton style="--el-skeleton-circle-size: 70px" animated>
           <template #template>
             <el-skeleton-item variant="circle" />
           </template>
         </el-skeleton>
-        <el-skeleton />
+        <el-skeleton animated :rows="1"/>
       </div>
     </template>
     <router-link 
@@ -53,7 +53,8 @@ export default {
   flex-direction: column;
   align-items: center;
   .skeleton{
-    width: 100%;
+    color: var(--post-card-bg) !important;
+    width: 90%;
   }
   .post-list-card{
     margin-bottom: 10px;

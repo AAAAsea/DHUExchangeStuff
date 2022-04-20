@@ -1,12 +1,12 @@
 <template>
   <div class="home">
-    <el-row :gutter="10" >
+    <el-row :gutter="10" justify="center">
       <!-- 左侧 -->
-      <el-col  :xs="4" :sm="4" :md="4" :lg="4" :xl="4">
+      <el-col  :xs="6" :sm="4" :md="4" :lg="4" :xl="4">
         <LeftSideBar/>
       </el-col>
       <!-- 主体 -->
-      <el-col  :xs="20" :sm="14" :md="14" :lg="14" :xl="14">        
+      <el-col  :xs="18" :sm="14" :md="14" :lg="14" :xl="14">        
         <PostList
           :postList="postList"
           :isLoading="isLoading"
@@ -32,13 +32,14 @@
 
 <script>
 import PostList from '../components/PostList.vue'
+import LeftSideBar from '@/components/LeftSideBar.vue'
+import RightSideBar from '@/components/RightSideBar.vue'
 import { getPostList } from '../api/post.js'
 import { reactive, toRefs } from '@vue/reactivity'
 import { Edit } from '@element-plus/icons-vue'
 import { useStore } from 'vuex'
 import { isAccountLoggedIn } from '../utils/auth'
-import LeftSideBar from '@/components/LeftSideBar.vue'
-import RightSideBar from '@/components/RightSideBar.vue'
+
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -105,4 +106,11 @@ export default {
   }
 }
 
+.edit{
+  position: fixed;
+  right: 30px;
+  bottom: 40px;
+  font-size: 1.5rem;
+  transform: scale(1.2);
+}
 </style>
