@@ -1,12 +1,33 @@
 <template>
-  <div class="home-container">
-    <PostList
-      :postList="postList"
-      :isLoading="isLoading"
-      class="postlist"
-    />
-      <el-button @click="showPostModel" type="primary" :icon="Edit" circle class="edit" color="#626aef" size="large"/>
+  <div class="home">
+    <el-row :gutter="10" >
+      <!-- 左侧 -->
+      <el-col  :xs="4" :sm="4" :md="4" :lg="4" :xl="4">
+        <LeftSideBar/>
+      </el-col>
+      <!-- 主体 -->
+      <el-col  :xs="20" :sm="14" :md="14" :lg="14" :xl="14">        
+        <PostList
+          :postList="postList"
+          :isLoading="isLoading"
+          class="postlist"
+        />
+      </el-col>
+      <!-- 右侧 -->
+      <el-col  :xs="0" :sm="6" :md="6" :lg="6" :xl="6">
+        <RightSideBar/>
+      </el-col>
+    </el-row>
   </div>
+  <el-button 
+    @click="showPostModel" 
+    type="primary" 
+    :icon="Edit" 
+    circle 
+    class="edit" 
+    color="#626aef" 
+    size="large"
+  />
 </template>
 
 <script>
@@ -16,11 +37,16 @@ import { reactive, toRefs } from '@vue/reactivity'
 import { Edit } from '@element-plus/icons-vue'
 import { useStore } from 'vuex'
 import { isAccountLoggedIn } from '../utils/auth'
+import LeftSideBar from '@/components/LeftSideBar.vue'
+import RightSideBar from '@/components/RightSideBar.vue'
+
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Home",
   components: {
-    PostList
+    PostList,
+    LeftSideBar,
+    RightSideBar
   },
   setup(){
     const store = useStore()
@@ -66,23 +92,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.home-container{
-  display: flex;
-  justify-content: center;
-  .edit{
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    transform: scale(1.5);
-    font-size: 20px;
-  }
-  .postlist{
-    width: 70%;
-  }
-  @media screen and (max-width: 1200px){
-    .postlist{
-      width: 80%;
-    }
-  } 
+.home{
+  width: 1200px;
+  margin: 0 auto;
 }
+
+@media screen and (max-width: 1200px) {
+  .home{
+    width: 100vw;
+    border: 1px solid red;
+    margin: 0 auto;
+  }
+}
+
 </style>

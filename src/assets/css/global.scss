@@ -1,20 +1,34 @@
 :root{
+  --top-nav-bg: #16161a;
+  --post-card-bg: #16161a;
+  --post-card-border: #202025;
+  --secondary-bg: #25252c;
+  --main-text: #d3d3d3;
+  --main-bg: #111114;
+  --body-bg: #0c0c0c;
   --comment-text: white;
   --comment-bg: rgba(51, 39, 58, 0.425);
   --footer-bg:  rgba(51, 39, 58, 0.425);
   --footer-text: white;
   --color-topNavBar-title: #8b6161 ;
+
+  --post-card-font-size: 1rem;
+  --post-card-footer-font-size: .2rem;
 }
 *{
   /* 去除移动端蓝色阴影 */
   -webkit-tap-highlight-color: transparent; 
   margin: 0;
   padding: 0;
-
+}
+html{
+  font-size: 14px;
 }
 
+
 body{
-  background: linear-gradient(45deg, #ebfaef 0%, #f8ecf5 100%);
+  color: #ebfaef;
+  background: var(--body-bg); 
   cursor: url(https://cdn.jsdelivr.net/gh/sviptzk/HexoStaticFile@latest/Hexo/img/default.cur),default;
   // 滚动条
   &::-webkit-scrollbar{
@@ -36,4 +50,17 @@ body{
 a{
   text-decoration: none;
   user-select: none;
+}
+input{      
+
+  background:none;    
+
+  outline:none;   
+
+  border:1px solid #ccc;
+
+}input:focus{   
+
+  border:none;
+
 }

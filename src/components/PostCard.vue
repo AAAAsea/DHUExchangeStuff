@@ -23,15 +23,16 @@ export default {
 
 <style lang="scss" scoped>
 .post-card{
-  background: rgba(37, 26, 74, 0.425);
-  border-radius: 15px;
+  border: 1px solid var(--post-card-border);
+  background: var(--post-card-bg);
+  border-radius: 5px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   padding: 20px 30px 25px 30px;
   box-sizing: border-box;
-  color: white;
   transition: 0.2s ease;
+  color: var(--main-text);
   &:hover{
     box-shadow: 0 5px 15px -5px rgba(0,0,0,.5);
     transform: translateY(-3px);
@@ -49,13 +50,14 @@ export default {
   }
   .sub{
     p{
+      font-size: var(--post-card-font-size);
       margin: 10px 0;
       letter-spacing: 1px;
       word-wrap:break-word
     }
   }
   .footer{
-    font-size: 14px;
+    font-size: var(--post-card-footer-font-size);
     display: flex;
     justify-content: flex-end;
   }

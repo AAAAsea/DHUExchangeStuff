@@ -38,10 +38,12 @@ const	routes=[
         },
 				{
 					path: 'post',
+					name: '我发布的',
 					component: ()=>import("@/components/MinePost"),
 				},
 				{
 					path: 'info',
+					name: '个人信息',
 					component:  ()=>import("@/components/MineInfo"),
 				},
 			],

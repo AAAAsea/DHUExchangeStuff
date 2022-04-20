@@ -1,7 +1,7 @@
 <template>
 
-  <el-row class="container">
-    <el-col :span="20"><div class="grid-content left" ><router-view></router-view></div></el-col>
+  <el-row class="container" justify="space-around">
+    <el-col :span="18" ><div class="grid-content left" ><router-view></router-view></div></el-col>
     <el-col :span="4">
       <div class="grid-content right" >
         <router-link to="/mine/post">
@@ -37,7 +37,7 @@ export default{
 .container{
   width: 70vw;
   margin: 0 auto;
-  background-color: rgb(255, 255, 255);
+
 }
 .grid-content {
   border-radius: 4px;
@@ -45,10 +45,16 @@ export default{
 }
 .left{
   // height: 20px;
+  padding: 20px;
+  border-radius: 10px;
   display: flex;
   justify-content: center;
 }
 .right{
+  color: white;
+  border-radius: 10px;
+  padding: 20px;
+
   height: 20px;
   display: flex;
   flex-direction: column;
