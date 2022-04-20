@@ -1,31 +1,40 @@
 <template>
   <div class="container">
-    <div class="nav">
-      <h1>
-        <img src="https://www.dhu.edu.cn/_upload/tpl/0b/3f/2879/template2879/image/login_mini.png" alt="">
-      </h1>
-      <div class="nav-titles" ref='titles'>
-        <router-link 
-          to='/' 
-          :class="{ active: route.path === '/' }"
-        >
-          <div ref="home">
-            <el-icon color="#eee" size="40px" ><home-filled /></el-icon>
-          </div>
-        </router-link>
-      </div>
-      <div class="user-info">
-        <div class="search-box" tabindex="111">
-          <el-icon class="search-icon"><search /></el-icon>
-          <input type="text" :placeholder="$t('nav.search') "/>
-        </div>
-        <div class="avatar">
-          <router-link to="/mine">
-            <img :src="userInfo?.avatarUrl ?? avatarDefaultImg">
+      <el-row  justify="center" align="middle" class="nav">
+        <!-- 左侧 -->
+        <el-col  :xs="8" :sm="9" :md="9">
+          <h1>
+            <img src="https://www.dhu.edu.cn/_upload/tpl/0b/3f/2879/template2879/image/login_mini.png" alt="">
+          </h1>
+        </el-col>
+        <!-- 主体 -->
+        <el-col  :xs="0" :sm="4" :md="4">        
+          <div class="nav-titles" ref='titles'>
+          <router-link 
+            to='/' 
+            :class="{ active: route.path === '/' }"
+          >
+            <div ref="home">
+              <el-icon color="#eee" size="35px" ><home-filled /></el-icon>
+            </div>
           </router-link>
         </div>
-      </div>
-    </div>
+        </el-col>
+        <!-- 右侧 -->
+        <el-col  :xs="16" :sm="10" :md="10" >
+          <div class="user-info">
+          <div class="search-box" tabindex="111">
+            <el-icon class="search-icon"><search /></el-icon>
+            <input type="text" :placeholder="$t('nav.search') "/>
+          </div>
+          <div class="avatar">
+            <router-link to="/mine">
+              <img :src="userInfo?.avatarUrl ?? avatarDefaultImg">
+            </router-link>
+          </div>
+        </div>
+        </el-col>
+      </el-row>
   </div>
 </template>
 
@@ -170,6 +179,8 @@ h1{
       overflow: hidden;
     }
   }
+
+
 }
 
 </style>

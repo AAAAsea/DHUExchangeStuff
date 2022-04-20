@@ -2,11 +2,11 @@
   <div class="home">
     <el-row :gutter="10" justify="center">
       <!-- 左侧 -->
-      <el-col  :xs="6" :sm="4" :md="4" :lg="4" :xl="4">
+      <el-col  :xs="0" :sm="4" :md="4" :lg="4" :xl="4">
         <LeftSideBar/>
       </el-col>
       <!-- 主体 -->
-      <el-col  :xs="18" :sm="14" :md="14" :lg="14" :xl="14">        
+      <el-col  :xs="23" :sm="14" :md="14" :lg="14" :xl="14">        
         <PostList
           :postList="postList"
           :isLoading="isLoading"
@@ -101,7 +101,6 @@ export default {
 @media screen and (max-width: 1200px) {
   .home{
     width: 100vw;
-    border: 1px solid red;
     margin: 0 auto;
   }
 }

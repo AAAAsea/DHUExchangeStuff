@@ -11,8 +11,8 @@
     class="rule-form"
     label-position="top"
     >
-      <el-form-item :label="$t('login.account')" label-width="auto" prop="mail" >
-        <el-input v-model="ruleForm.mail" autocomplete="off"   :placeholder="$t('login.accountPlace')"/>
+      <el-form-item :label="$t('login.account')" label-width="auto" prop="account" >
+        <el-input v-model="ruleForm.account" autocomplete="off"   :placeholder="$t('login.accountPlace')"/>
       </el-form-item>
       <el-form-item :label="$t('login.password')" label-width="auto" prop="password" >
         <el-input v-model="ruleForm.password"  autocomplete="off"  :placeholder="$t('login.passwordPlace')" show-password/>
@@ -69,7 +69,7 @@ const ruleForm = reactive({
 const dialogWidth = computed(()=>document.documentElement.clientWidth > 1000 ? '400px' : '90VW')
 
 const loginRules = reactive({
-  mail: [
+  account: [
     { required: true, message: '邮箱不能为空', trigger: 'blur' },
     { validator: validateMail, trigger: 'blur'}
   ],
@@ -94,10 +94,10 @@ function validateMail(rule, value, callback){
   }else if(!reg.test(value)){
     callback(new Error('邮箱格式不正确'))
   }else {
-    if (ruleForm.mail !== '') {
-      if (!registerRuleFormRef.value) return
-      registerRuleFormRef.value.validateField('mail', () => null)
-    }
+    // if (ruleForm.mail !== '') {
+    //   if (!registerRuleFormRef.value) return
+    //   registerRuleFormRef.value.validateField('mail', () => null)
+    // }
     callback()
   }
 }
@@ -156,7 +156,6 @@ function submit(formEl){
         console.log("登录还没写")
       }
     } else {
-      console.log('hhh')
       store.commit('showToast',{
         type: 'error',
         message: '数据格式错误',
