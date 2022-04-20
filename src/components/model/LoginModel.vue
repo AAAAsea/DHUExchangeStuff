@@ -124,7 +124,7 @@ const registRules = reactive({
 })
 
 // 提交
-import { getMailCode, regist } from '@/api/auth'
+import { getMailCode, regist, login } from '@/api/auth'
 // 处理验证码
 function handleCodeClick(){
   sendCodeButtonFlag.value = true;
@@ -153,7 +153,11 @@ function submit(formEl){
           console.log("注册返回信息：",res)
         })
       }else{
-        console.log("登录还没写")
+        login(ruleForm.account, ruleForm.password)
+        .then(res=>{
+        console.log("登录返回信息:",res)
+
+        })
       }
     } else {
       store.commit('showToast',{
