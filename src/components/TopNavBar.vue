@@ -32,6 +32,7 @@
               <img :src="userInfo?.headerUrl ?? avatarDefaultImg">
             </router-link>
           </div>
+          <el-button type="text" @click="logOut" v-show="store?.state?.data?.isLoggedIn">登出</el-button>
         </div>
         </el-col>
       </el-row>
@@ -41,7 +42,7 @@
 <script>
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
-import {  reactive, ref } from 'vue'
+import {  reactive, ref, computed } from 'vue'
 import { HomeFilled,Search } from '@element-plus/icons-vue'
 import avatarDefaultImg from '@/assets/img/unlogin.png'
 export default {
@@ -54,7 +55,7 @@ export default {
     const store = useStore()
     const route = useRoute()
     const router = useRouter();
-    const userInfo = store.state.data.user
+    const userInfo = computed(()=>store.state.data.user)
     const titles = ref(null)  // 绑定DOM
     const gunOffset = reactive({
       offsetX: 0,
@@ -63,13 +64,23 @@ export default {
     const go = (num)=>{
       router.go(num)
     }
+    function logOut(){
+      store.state.data.isLoggedIn = false;
+      store.state.data.user = null;
+      store.commit('showToast',{
+        type: "info",
+        title: "已登出账号"
+      })
+    }
     return{
       go,
       userInfo,
       route,
       gunOffset,
       titles,
-      avatarDefaultImg
+      avatarDefaultImg,
+      logOut,
+      store
     }
   }
 }
