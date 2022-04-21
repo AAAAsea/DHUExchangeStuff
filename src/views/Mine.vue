@@ -16,16 +16,21 @@
 </template>
 
 <script>
-import { onBeforeUnmount } from '@vue/runtime-core'
+import { onBeforeUnmount } from 'vue'
 import { useStore } from 'vuex'
 export default{
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'Mine',
   setup(props, context){
+    const store = useStore()
     onBeforeUnmount(()=>{
       store.state.data.routePath = ''
     })
-    const store = useStore()
+    // 获取用户信息
+    store.dispatch('fetchUserProfile')
+    .then(res=>{
+      console.log(res)
+    })
     store.state.data.routePath = 'mine'
     console.log(props)
     context.emit("toMine")

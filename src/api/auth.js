@@ -34,7 +34,7 @@ export function regist(username, password, code) {
 export function login(username, password) {
   return request({
     url: '/login',
-    method: 'post',
+    method: 'get',
     params: {
       username,
       password,

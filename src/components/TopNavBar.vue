@@ -29,7 +29,7 @@
           </div>
           <div class="avatar">
             <router-link to="/mine">
-              <img :src="userInfo?.avatarUrl ?? avatarDefaultImg">
+              <img :src="userInfo?.headerUrl ?? avatarDefaultImg">
             </router-link>
           </div>
         </div>

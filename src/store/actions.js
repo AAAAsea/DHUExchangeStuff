@@ -18,10 +18,12 @@ export default {
   // 获取用户信息
   fetchUserProfile: ({ commit }) => {
     // if (!isAccountLoggedIn()) return;
+    console.log("profile")
     return getUserInfo().then(result => {
-      if (result.code === 20000) {
-        commit('updateData', { key: 'user', value: result.profile });
-      }
+    console.log(result)
+    if (result.code === 20000) {
+      commit('updateData', { key: 'user', value: result.data.user });
+    }
     });
   },
 }

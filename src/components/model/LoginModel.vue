@@ -183,6 +183,7 @@ function submit(formEl){
         .then(res=>{
           console.log("登录返回信息:",res)
           handleRes(res,()=>{
+            store.state.data.isLoggedIn = true;
             store.dispatch('fetchUserProfile').then(()=>{store.state.model.loginModelFlag = false;})
           })
         })
