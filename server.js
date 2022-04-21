@@ -1285,8 +1285,9 @@ let postList = {
 }
 
 app.get('/postlist', (req, res) => {
-  console.log("postlist")
-  res.send(postList);
+  console.log("postlist", req.query)
+  console.log(req.query.limit, req.query.offset)
+  res.send({data:postList.data.slice(req.query.offset, +req.query.limit + +req.query.offset)});
 });
 
 app.get('/postdetail', (req, res) => {

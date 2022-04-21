@@ -11,8 +11,8 @@
     class="rule-form"
     label-position="top"
     >
-      <el-form-item :label="$t('login.account')" label-width="auto" prop="mail" >
-        <el-input v-model="ruleForm.mail" autocomplete="off"   :placeholder="$t('login.accountPlace')"/>
+      <el-form-item :label="$t('login.account')" label-width="auto" prop="account" >
+        <el-input v-model="ruleForm.account" autocomplete="off"   :placeholder="$t('login.accountPlace')"/>
       </el-form-item>
       <el-form-item :label="$t('login.password')" label-width="auto" prop="password" >
         <el-input v-model="ruleForm.password"  autocomplete="off"  :placeholder="$t('login.passwordPlace')" show-password/>
@@ -69,7 +69,7 @@ const ruleForm = reactive({
 const dialogWidth = computed(()=>document.documentElement.clientWidth > 1000 ? '400px' : '90VW')
 
 const loginRules = reactive({
-  mail: [
+  account: [
     { required: true, message: '邮箱不能为空', trigger: 'blur' },
     { validator: validateMail, trigger: 'blur'}
   ],
@@ -95,9 +95,7 @@ function validateMail(rule, value, callback){
     callback(new Error('邮箱格式不正确'))
   }else {
     // if (ruleForm.mail !== '') {
-    //   alert('error')
     //   if (!registerRuleFormRef.value) return
-      
     //   registerRuleFormRef.value.validateField('mail', () => null)
     // }
     callback()
@@ -126,7 +124,7 @@ const registRules = reactive({
 })
 
 // 提交
-import { getMailCode, regist } from '@/api/auth'
+import { getMailCode, regist, login } from '@/api/auth'
 // 处理验证码
 function handleCodeClick(){
   sendCodeButtonFlag.value = true;
@@ -140,25 +138,57 @@ function handleCodeClick(){
   }, 60000)
   getMailCode(registRuleForm.mail)
   .then((res)=>{
-    console.log("验证码返回信息：",res)
+    handleRes(res,()=>{},()=>{
+      sendCodeButtonFlag.value = false;
+      clearInterval(codeWaitTimeInterval)
+    })
   })
+}
+
+// 通用处理返回结果
+function handleRes(res, successCallback=()=>{}, errorCallback=()=>{}){
+  if(res?.code === 20000){
+    store.commit('showToast',{
+      type: 'success',
+      title: res.message
+    })
+    successCallback()
+  }else{
+    store.commit('showToast',{
+      type: 'error',
+      title: res?.message ?? '发生错误'
+    })
+    errorCallback()
+  }
 }
 // 提交
 function submit(formEl){
   if (!formEl) return
   formEl.validate((valid) => {
     if (valid) {
+      // 提交注册
       if(type.value === 'regist')
       {
         regist(registRuleForm.mail, registRuleForm.password, registRuleForm.code)
         .then(res=>{
           console.log("注册返回信息：",res)
+          handleRes(res, ()=>{
+            type.value = 'login'
+          })
         })
-      }else{
-        console.log("登录还没写")
+      }
+      // 提交登录
+      else{
+        login(ruleForm.account, ruleForm.password)
+        .then(res=>{
+          console.log("登录返回信息:",res)
+          handleRes(res,()=>{
+            store.state.data.isLoggedIn = true;
+            store.dispatch('fetchUserProfile').then(()=>{store.state.model.loginModelFlag = false;})
+          })
+        })
       }
     } else {
-      console.log('hhh')
       store.commit('showToast',{
         type: 'error',
         message: '数据格式错误',

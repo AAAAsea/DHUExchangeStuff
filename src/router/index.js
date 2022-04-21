@@ -10,7 +10,8 @@ const	routes=[
 			name: '广场',
 			component: ()=>import("@/views/Home"),
 			meta: {
-				index: 1
+				index: 1,
+				title:'🎈 DHU-广场',
 			}
 		},
     {
@@ -19,7 +20,8 @@ const	routes=[
 			component: ()=>import("@/views/Detail"),
 			props: true,
 			meta: {
-				index: 1
+				index: 1,
+				title:'🎲 DHU-讨论',
 			}
 		},
 		{
@@ -29,7 +31,9 @@ const	routes=[
 			props: true,
 			meta: {
 				index: 1,
-				requireAccountLogin: true
+				requireAccountLogin: true,
+				title:'🐖 DHU-你',
+
 			},
 			children: [
 				{//在地址为空时，直接跳转cell路由
@@ -70,5 +74,9 @@ router.beforeEach((to, from, next) => {
 	}
 	
 })
-
+// 全局后置首位
+router.afterEach(to => {
+	// 设置title
+	document.title = to.meta.title;
+})
 export default router;

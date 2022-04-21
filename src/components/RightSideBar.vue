@@ -1,6 +1,6 @@
 <template>
   <div class="home-right">
-
+    <h1>home-right</h1>
   </div>
 </template>
 
@@ -12,7 +12,9 @@ export default {
 
 <style lang="scss" scoped>
   .home-right{
-    height: 200px;
+    position: sticky;
+    top: -500px;
+    height: 1000px;
     background: var(--secondary-bg);
     border-radius: 5px;
   }
