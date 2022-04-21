@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="nav">
-      <h1>
+      <h1 class="test">
         <img src="https://www.dhu.edu.cn/_upload/tpl/0b/3f/2879/template2879/image/login_mini.png" alt="">
       </h1>
       <div class="nav-titles" ref='titles'>
@@ -170,6 +170,13 @@ h1{
       overflow: hidden;
     }
   }
+  @media screen and (max-width:1000px) {
+    *{
+      border: 1px solid red;
+      width: 0;
+    }
+  }
+
 }
 
 </style>

@@ -94,10 +94,12 @@ function validateMail(rule, value, callback){
   }else if(!reg.test(value)){
     callback(new Error('邮箱格式不正确'))
   }else {
-    if (ruleForm.mail !== '') {
-      if (!registerRuleFormRef.value) return
-      registerRuleFormRef.value.validateField('mail', () => null)
-    }
+    // if (ruleForm.mail !== '') {
+    //   alert('error')
+    //   if (!registerRuleFormRef.value) return
+      
+    //   registerRuleFormRef.value.validateField('mail', () => null)
+    // }
     callback()
   }
 }

@@ -100,7 +100,6 @@ export default {
 @media screen and (max-width: 1200px) {
   .home{
     width: 100vw;
-    border: 1px solid red;
     margin: 0 auto;
   }
 }
