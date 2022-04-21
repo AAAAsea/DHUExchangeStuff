@@ -5,11 +5,11 @@ export default {
   fetchPostList: ({ commit, state } ) => {``
     // if (!isAccountLoggedIn()) return;
     return getPostList(
-      5, // limit
+      15, // limit
       state.data.postList.length, // offset
     ).then(result => {
       // console.log("postList",result.data)
-      if (result.code !== 20000) {
+      if (result.code === 20000) {
         commit('addData', { key: 'postList', value: result.data });
       }
     });
