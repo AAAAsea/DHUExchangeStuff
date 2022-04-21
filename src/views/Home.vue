@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" >
     <el-row :gutter="10" justify="center">
       <!-- 左侧 -->
       <el-col  :xs="0" :sm="4" :md="4" :lg="4" :xl="4">
@@ -8,7 +8,7 @@
       <!-- 主体 -->
       <el-col  :xs="23" :sm="14" :md="14" :lg="14" :xl="14">        
         <PostList
-          :postList="postList"
+          :postList="store.state.data.postList"
           :isLoading="isLoading"
           class="postlist"
         />
@@ -34,7 +34,6 @@
 import PostList from '../components/PostList.vue'
 import LeftSideBar from '@/components/LeftSideBar.vue'
 import RightSideBar from '@/components/RightSideBar.vue'
-import { getPostList } from '../api/post.js'
 import { reactive, toRefs } from '@vue/reactivity'
 import { Edit } from '@element-plus/icons-vue'
 import { useStore } from 'vuex'
@@ -55,17 +54,11 @@ export default {
       postList: [],
       isLoading: true
     })
-    getPostList()
-    .then((res)=>{
-      res = res.data
-      data.postList.splice()
-      store.commit('updateData',{
-        key: "postList",
-        value: res
-      })
-      data.postList.push(...res)
-      data.isLoading = false
 
+    store.state.data.postList = []
+    store.dispatch('fetchPostList')
+    .then(()=>{
+      data.isLoading = false
     })
     .catch(err=>{
       console.log(err)

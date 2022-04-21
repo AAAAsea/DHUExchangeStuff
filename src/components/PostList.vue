@@ -1,5 +1,5 @@
 <template>
-  <div class="post-list" v-infinite-scroll="loadMorePost">
+  <div class="post-list" v-infinite-scroll="loadMorePost" infinite-scroll-distance="500" infinite-scroll-delay="500">
     <template v-if="isLoading">
       <div class="skeleton" v-for="(item, index) in [1,2,3,4,5]" :key="index">
         <br />
@@ -32,6 +32,7 @@
 <script>
 import { reactive, toRefs } from '@vue/reactivity'
 import PostCard from "./PostCard.vue"
+import { useStore } from 'vuex'
 export default {
   name: "PostList",
   props: ['postList','isLoading'],
@@ -40,8 +41,10 @@ export default {
   },
   setup(){
     const data = reactive({})
+    const store = useStore()
     function loadMorePost(){
-      console.log("继续加载")
+      console.log("触底加载")
+      store.dispatch('fetchPostList')
     }
     return{
       ...toRefs(data),

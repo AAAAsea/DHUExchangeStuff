@@ -2,12 +2,15 @@ import { getPostList } from '@/api/post'
 import { getUserInfo } from '@/api/user'
 export default {
   // 获取postList
-  fetchPostList: ({ commit }) => {``
+  fetchPostList: ({ commit, state } ) => {``
     // if (!isAccountLoggedIn()) return;
-    return getPostList().then(result => {
-      console.log("postList",result.data)
-      if (result.code === 200) {
-        commit('updateData', { key: 'user', value: result.profile });
+    return getPostList(
+      5, // limit
+      state.data.postList.length, // offset
+    ).then(result => {
+      // console.log("postList",result.data)
+      if (result.code !== 20000) {
+        commit('addData', { key: 'postList', value: result.data });
       }
     });
   },

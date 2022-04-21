@@ -1,9 +1,10 @@
 export default {
   data:{
     isLoggedIn: false,
-    postList: [],
     user: null,
-    ...JSON.parse(localStorage.getItem('data'))
+    ...JSON.parse(localStorage.getItem('data')),
+    postList: [],
+    
   },
   model:{
     postModelFlag: false,

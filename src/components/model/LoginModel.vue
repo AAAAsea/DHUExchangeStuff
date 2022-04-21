@@ -183,7 +183,7 @@ function submit(formEl){
         .then(res=>{
           console.log("登录返回信息:",res)
           handleRes(res,()=>{
-            store.dispatch('fetchUserProfile')
+            store.dispatch('fetchUserProfile').then(()=>{store.state.model.loginModelFlag = false;})
           })
         })
       }
