@@ -1,5 +1,5 @@
 <template>
-  <div class="post-list">
+  <div class="post-list" v-infinite-scroll="loadMorePost">
     <template v-if="isLoading">
       <div class="skeleton" v-for="(item, index) in [1,2,3,4,5]" :key="index">
         <br />
@@ -40,8 +40,12 @@ export default {
   },
   setup(){
     const data = reactive({})
+    function loadMorePost(){
+      console.log("继续加载")
+    }
     return{
-      ...toRefs(data)
+      ...toRefs(data),
+      loadMorePost
     }
   }
 }

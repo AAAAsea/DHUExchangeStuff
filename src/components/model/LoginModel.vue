@@ -138,25 +138,53 @@ function handleCodeClick(){
   }, 60000)
   getMailCode(registRuleForm.mail)
   .then((res)=>{
-    console.log("验证码返回信息：",res)
+    handleRes(res,()=>{},()=>{
+      sendCodeButtonFlag.value = false;
+      clearInterval(codeWaitTimeInterval)
+    })
   })
+}
+
+// 通用处理返回结果
+function handleRes(res, successCallback=()=>{}, errorCallback=()=>{}){
+  if(res?.code === 20000){
+    store.commit('showToast',{
+      type: 'success',
+      title: res.message
+    })
+    successCallback()
+  }else{
+    store.commit('showToast',{
+      type: 'error',
+      title: res?.message ?? '发生错误'
+    })
+    errorCallback()
+  }
 }
 // 提交
 function submit(formEl){
   if (!formEl) return
   formEl.validate((valid) => {
     if (valid) {
+      // 提交注册
       if(type.value === 'regist')
       {
         regist(registRuleForm.mail, registRuleForm.password, registRuleForm.code)
         .then(res=>{
           console.log("注册返回信息：",res)
+          handleRes(res, ()=>{
+            type.value = 'login'
+          })
         })
-      }else{
+      }
+      // 提交登录
+      else{
         login(ruleForm.account, ruleForm.password)
         .then(res=>{
-        console.log("登录返回信息:",res)
-
+          console.log("登录返回信息:",res)
+          handleRes(res,()=>{
+            store.dispatch('fetchUserProfile')
+          })
         })
       }
     } else {

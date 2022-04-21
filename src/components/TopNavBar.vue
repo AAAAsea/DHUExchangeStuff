@@ -41,8 +41,9 @@
 <script>
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
-import { computed, reactive, ref } from 'vue'
+import {  reactive, ref } from 'vue'
 import { HomeFilled,Search } from '@element-plus/icons-vue'
+import avatarDefaultImg from '@/assets/img/unlogin.png'
 export default {
   name: "NavBar",
   components: {
@@ -53,7 +54,7 @@ export default {
     const store = useStore()
     const route = useRoute()
     const router = useRouter();
-    const userInfo = computed(()=>store.state.data.user)
+    const userInfo = store.state.data.user
     const titles = ref(null)  // 绑定DOM
     const gunOffset = reactive({
       offsetX: 0,
@@ -67,7 +68,8 @@ export default {
       userInfo,
       route,
       gunOffset,
-      titles
+      titles,
+      avatarDefaultImg
     }
   }
 }

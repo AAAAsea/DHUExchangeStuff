@@ -1,7 +1,8 @@
 export default {
   data:{
-    loginMode:'',
-    routePath: '',
+    isLoggedIn: false,
+    postList: [],
+    user: null,
     ...JSON.parse(localStorage.getItem('data'))
   },
   model:{
