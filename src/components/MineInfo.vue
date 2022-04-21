@@ -1,5 +1,5 @@
 <template>
-  MineInfo
+  <el-empty description="description" />
 </template>
 
 <script>

@@ -40,7 +40,6 @@ export default{
 
 <style lang="scss" scoped>
 .container{
-  width: 70vw;
   margin: 0 auto;
 
 }
@@ -50,7 +49,7 @@ export default{
 }
 .left{
   // height: 20px;
-  padding: 20px;
+
   border-radius: 10px;
   display: flex;
   justify-content: center;
@@ -58,8 +57,6 @@ export default{
 .right{
   color: white;
   border-radius: 10px;
-  padding: 20px;
-
   height: 20px;
   display: flex;
   flex-direction: column;

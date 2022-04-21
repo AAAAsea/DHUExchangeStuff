@@ -1,7 +1,7 @@
 <template>
 
   <!-- Form -->
-  <el-dialog v-model="store.state.model.loginModelFlag"   :title="type === 'login' ? '登录' : '注册'" custom-class="dialog" :width="dialogWidth">
+  <el-dialog v-model="store.state.model.loginModelFlag"  :title="type === 'login' ? '登录' : '注册'" custom-class="dialog" :width="dialogWidth">
     <!-- 登录 -->
     <el-form 
     v-if="type === 'login'"
@@ -10,6 +10,7 @@
     :rules="loginRules"
     class="rule-form"
     label-position="top"
+    @keyup='handleFormClick'
     >
       <el-form-item :label="$t('login.account')" label-width="auto" prop="account" >
         <el-input v-model="ruleForm.account" autocomplete="off"   :placeholder="$t('login.accountPlace')"/>
@@ -144,7 +145,13 @@ function handleCodeClick(){
     })
   })
 }
-
+// 回车提交
+function handleFormClick(e){
+  if(store.state.model.loginModelFlag && e.key === 'Enter')
+  {
+    submit(type.value === 'login' ? ruleFormRef.value : registerRuleFormRef.value )
+  }
+}
 // 通用处理返回结果
 function handleRes(res, successCallback=()=>{}, errorCallback=()=>{}){
   if(res?.code === 20000){
@@ -188,12 +195,6 @@ function submit(formEl){
           })
         })
       }
-    } else {
-      store.commit('showToast',{
-        type: 'error',
-        message: '数据格式错误',
-      })
-      return false
     }
   })
 }

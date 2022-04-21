@@ -51,6 +51,7 @@ export default {
   setup(props){
     const isFold = ref(true)
     const dynamicTags = ['泡面','啤酒','水','女朋友','HuaziHuazi']
+    // const dynamicTags = ['你好你好你好你好你好','你好你好你好你好你好','你好你好你好你好你好','你好你好你好你好你好','你好你好你好你好你好']
     return{
       dynamicTags,
       isFold,
@@ -128,8 +129,6 @@ export default {
   }
   .footer{
     font-size: var(--post-card-footer-font-size);
-    display: flex;
-    // justify-content: flex-star;
   }
 }
 </style>
