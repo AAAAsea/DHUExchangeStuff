@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-      <el-row  justify="center" align="middle" class="nav">
+      <el-row  justify="between" align="middle" class="nav">
         <!-- 左侧 -->
         <el-col  :xs="8" :sm="9" :md="9">
           <h1>
@@ -21,19 +21,19 @@
         </div>
         </el-col>
         <!-- 右侧 -->
-        <el-col  :xs="16" :sm="10" :md="10" >
-          <div class="user-info">
-          <div class="search-box" tabindex="111">
-            <el-icon class="search-icon"><search /></el-icon>
-            <input type="text" :placeholder="$t('nav.search') "/>
+        <el-col  :xs="16" :sm="11" :md="11" >
+          <div class="user-info" >
+            <div class="search-box" tabindex="111">
+              <el-icon class="search-icon"><search /></el-icon>
+              <input type="text" :placeholder="$t('nav.search') "/>
+            </div>
+            <div class="avatar">
+              <router-link to="/mine">
+                <img :src="userInfo?.headerUrl ?? avatarDefaultImg">
+              </router-link>
+            </div>
+            <el-button type="text" @click="logOut" v-show="store?.state?.data?.isLoggedIn"></el-button>
           </div>
-          <div class="avatar">
-            <router-link to="/mine">
-              <img :src="userInfo?.headerUrl ?? avatarDefaultImg">
-            </router-link>
-          </div>
-          <el-button type="text" @click="logOut" v-show="store?.state?.data?.isLoggedIn">登出</el-button>
-        </div>
         </el-col>
       </el-row>
   </div>
@@ -89,22 +89,24 @@ export default {
 <style lang="scss" scoped>
 // 占位
 .container{
-  height: 70px;
+  height: 68px;
 }
 // 整体样式
 .nav {
+  // border: 1px solid red;
   position: fixed;
   top: 0;
   right: 0;
   left: 0;
-  display: flex;
+  // display: flex;
   color: var(--color-text);
   height: 60px;
-  padding: 0 70px;
+  padding: 0 100px;
+  @media screen and(max-width: 1200px) {
+    padding: 0 20px;
+  }
   z-index: 100;
   background-color: var(--top-nav-bg);
-  backdrop-filter: saturate(100%) blur(40px);
-
 }
 
 // 头像
@@ -147,14 +149,14 @@ h1{
 
 // 搜索框和用户信息
 .user-info {
+  // border: 1px solid red;
   flex: 3;
-  justify-content: space-around;
+  justify-content: flex-end;
   display: flex;
   align-items: center;
   .search-box{
-    // border: 1px solid red;
-    margin-left: 20%;
-    width: 50%;
+    margin-right: 10px;
+    width: 200px;
     border-radius: 5px;
     overflow: hidden;
     display: flex;

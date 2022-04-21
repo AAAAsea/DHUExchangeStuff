@@ -1,4 +1,4 @@
-import { ElNotification } from 'element-plus'
+import {  ElMessage } from 'element-plus'
 
 export default {
   updateData(state, { key, value }) {
@@ -9,7 +9,8 @@ export default {
     state.data[key].push(...value)
   },
   showToast(state, payload){
-    ElNotification({
+    payload.message = payload.title
+    ElMessage({
       ...payload
     })
   }

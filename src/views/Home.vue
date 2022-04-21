@@ -1,12 +1,12 @@
 <template>
   <div class="home" >
-    <el-row :gutter="10" justify="center">
+    <el-row  justify="center">
       <!-- 左侧 -->
       <el-col  :xs="0" :sm="4" :md="4" :lg="4" :xl="4">
         <LeftSideBar/>
       </el-col>
       <!-- 主体 -->
-      <el-col  :xs="23" :sm="14" :md="14" :lg="14" :xl="14">        
+      <el-col  :xs="24" :sm="14" :md="14" :lg="14" :xl="14">        
         <PostList
           :postList="store.state.data.postList"
           :isLoading="isLoading"
@@ -54,7 +54,6 @@ export default {
       postList: [],
       isLoading: true
     })
-
     store.state.data.postList = []
     store.dispatch('fetchPostList')
     .then(()=>{
@@ -93,7 +92,7 @@ export default {
 
 @media screen and (max-width: 1200px) {
   .home{
-    width: 100vw;
+    width: 100%;
     margin: 0 auto;
   }
 }

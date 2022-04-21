@@ -4,7 +4,7 @@
   <el-dialog v-model="store.state.model.postModelFlag" title="发贴" custom-class="dialog" :width="dialogWidth">
     <el-form :model="form" :rules="rules" ref="ruleFormRef">
       <el-form-item label="标题" :label-width="auto" prop="title">
-        <el-input v-model="form.name" maxlength="10" show-word-limit autocomplete="off"  placeholder="输入你的标题"/>
+        <el-input v-model="form.title" maxlength="10" show-word-limit autocomplete="off"  placeholder="输入你的标题"/>
       </el-form-item>
       <!-- <el-form-item label="楼号" :label-width="formLabelWidth">
         <el-select v-model="form.region" placeholder="选择你的楼号">
@@ -12,8 +12,8 @@
           <el-option label="2" value="beijing" />
         </el-select>
       </el-form-item> -->
-      <el-form-item label="内容" :label-width="formLabelWidth"  prop="content">
-        <el-input v-model="form.textarea"  maxlength="280" show-word-limit autocomplete="off" type="textarea" :autosize="{ minRows: 2, maxRows: 50 }" placeholder="写点什么呢..."/>
+      <el-form-item label="内容" :label-width="formLabelWidth"  prop="content" required >
+        <el-input v-model="form.content"  maxlength="520" show-word-limit autocomplete="off" type="textarea" :autosize="{ minRows: 2, maxRows: 50 }" placeholder="写点什么呢..."/>
       </el-form-item>
     </el-form>
     <el-tag
@@ -64,11 +64,9 @@ const ruleFormRef = ref('')
 const rules = reactive({
   title: [
     { required: true, message: '标题不可为空', trigger: 'blur' },
-    { min: 1, max: 10, message: 'Length should be 1 to 10', trigger: 'blur' },
   ],
   content: [
-    { required: true, message: '内容不能为空', trigger: 'blur' },
-    { min:10, max: 280, message: 'Length should be 10 to 280', trigger: 'blur' },
+    // { min:1, max: 520, message: '最少5个字符', trigger: 'blur' },
   ],
 })
 function publish(){

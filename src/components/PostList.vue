@@ -11,21 +11,17 @@
         <el-skeleton animated :rows="1"/>
       </div>
     </template>
-    <router-link 
+    <div 
       v-for="post in postList"
-      :to="{ path: '/detail/' + post.post.id }"
       :key="post.post.id"
       class="post-list-card"
     >
       <PostCard
-        :title="post.post.title"
-        :content="post.post.content.substr(0, 50) + (post.post.content.length > 50 ? '...' : '')"
-        :avatarUrl="post.user.headerUrl"
-        :tagName="post.post.tagName"
-        :time="post.post.createTime"
+        :post="post.post"
+        :user="post.user"
         class="post"
       />
-    </router-link>
+    </div>
   </div>
 </template>
 
@@ -59,12 +55,15 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  @media screen and(min-width: 1200px) {
+    margin: 0 8px;
+  }
   .skeleton{
     color: var(--post-card-bg) !important;
     width: 90%;
   }
   .post-list-card{
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     box-sizing: border-box;
     width: 100%;
     .post{

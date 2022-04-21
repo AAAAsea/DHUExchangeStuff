@@ -1,11 +1,7 @@
 <template>
   <div class="container">
     <PostCard
-      :title="postDetail.title"
-      :content="postDetail.content"
-      :avatarUrl="postDetail.avatarUrl"
-      :time="postDetail.time"
-      :tagName="postDetail.tagName"
+      :post=postDetail
       class="post-card"
     />
       
