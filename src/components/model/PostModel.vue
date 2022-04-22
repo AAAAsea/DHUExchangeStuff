@@ -80,7 +80,7 @@ function publish(formEl){
         store.state.model.postModelFlag = false
       })
       .then(()=>{
-        window.location.reload()
+        // window.location.reload()
       })
     }
   })
