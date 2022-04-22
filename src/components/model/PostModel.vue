@@ -80,6 +80,7 @@ function publish(formEl){
         store.state.model.postModelFlag = false
       })
       .then(()=>{
+        store.state.data.postList = []
         store.dispatch('getPostList')
       })
     }

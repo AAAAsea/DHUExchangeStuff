@@ -3,11 +3,11 @@
       <el-row  justify="between" align="middle" class="nav">
         <!-- 左侧 -->
         <el-col  :xs="8" :sm="9" :md="9">
-          <router-link to="/">
-            <h1>
+          <!-- <router-link to="/"> -->
+            <h1 @click="store.state.model.LeftDrawerModelFlag = !store.state.model.LeftDrawerModelFlag">
               <img src="https://www.dhu.edu.cn/_upload/tpl/0b/3f/2879/template2879/image/login_mini.png" alt="">
             </h1>
-          </router-link>
+          <!-- </router-link> -->
         </el-col>
         <!-- 主体 -->
         <el-col  :xs="0" :sm="4" :md="4">        

@@ -8,7 +8,8 @@ export default {
   },
   model:{
     postModelFlag: false,
-    loginModelFlag: false
+    loginModelFlag: false,
+    leftDrawerModelFlag: false
   },
   user:{
     isLogin: false
