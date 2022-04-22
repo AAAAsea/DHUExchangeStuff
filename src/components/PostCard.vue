@@ -1,5 +1,5 @@
 <template>
-  <div class="post-card">
+  <div class="post-card" @click='handleRipples' ref='postCardRef'>
     <el-icon :style="{position: 'absolute', top: '15px', right: '10px', color:'#eee', transform: 'rotate('+ (isFold ? 0 : 180) +'deg)', transition: '0.3s'}" @click.stop="isFold = !isFold" ><arrow-down-bold /></el-icon>
     <div class="header">
       <img :src="headerUrl" alt="">
@@ -8,12 +8,12 @@
         <p>{{timeFormat(new Date(createTime).getTime())}}</p>
       </div>
     </div>
-    <router-link :to="'/detail/'+post.id">
+    <!-- <router-link :to="'/detail/'+post.id"> -->
       <div class="sub">
         <h3>{{title}}</h3>
         <p :class="{fold: isFold}">{{content}}</p>
       </div>
-    </router-link>
+    <!-- </router-link> -->
     <div class="footer">
       <el-tag
         v-for="tag in dynamicTags"
@@ -50,20 +50,42 @@ export default {
   },
   setup(props){
     const isFold = ref(true)
+    const postCardRef = ref('')
     const dynamicTags = ['泡面','啤酒','水','女朋友','HuaziHuazi']
+    // const dynamicTags = ['你好你好你好你好你好','你好你好你好你好你好','你好你好你好你好你好','你好你好你好你好你好','你好你好你好你好你好']
+    function handleRipples(e){
+      let scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
+      let scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+      let x = e.clientX + scrollX - postCardRef.value.offsetLeft;
+      let y = e.clientY + scrollY - postCardRef.value.offsetTop - 65;
+      let ripples = document.createElement('span')
+      ripples.classList.add("ripples");
+      ripples.style.left = x + 'px';
+      ripples.style.top = y + 'px';
+      postCardRef.value.appendChild(ripples)
+      console.log(e)
+      setTimeout(()=>{
+        ripples.remove()
+      },1000)
+    }
     return{
       dynamicTags,
       isFold,
       ...toRefs(props.user),
       ...toRefs(props.post),
-      timeFormat
+      timeFormat,
+      postCardRef,
+      handleRipples
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+
+
 .post-card{
+  overflow: hidden;
   position: relative;
   background: var(--post-card-bg);
   @media  screen and(min-width: 1200px) {
@@ -128,8 +150,6 @@ export default {
   }
   .footer{
     font-size: var(--post-card-footer-font-size);
-    display: flex;
-    // justify-content: flex-star;
   }
 }
 </style>

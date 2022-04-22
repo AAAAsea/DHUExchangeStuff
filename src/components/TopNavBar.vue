@@ -3,9 +3,11 @@
       <el-row  justify="between" align="middle" class="nav">
         <!-- 左侧 -->
         <el-col  :xs="8" :sm="9" :md="9">
-          <h1>
-            <img src="https://www.dhu.edu.cn/_upload/tpl/0b/3f/2879/template2879/image/login_mini.png" alt="">
-          </h1>
+          <router-link to="/">
+            <h1>
+              <img src="https://www.dhu.edu.cn/_upload/tpl/0b/3f/2879/template2879/image/login_mini.png" alt="">
+            </h1>
+          </router-link>
         </el-col>
         <!-- 主体 -->
         <el-col  :xs="0" :sm="4" :md="4">        
@@ -28,11 +30,28 @@
               <input type="text" :placeholder="$t('nav.search') "/>
             </div>
             <div class="avatar">
-              <router-link to="/mine">
-                <img :src="userInfo?.headerUrl ?? avatarDefaultImg">
-              </router-link>
+              <!-- <router-link to="/mine"> -->
+                <el-dropdown>
+                  <img :src="userInfo?.headerUrl ?? avatarDefaultImg">
+                  <template #dropdown>
+                    <el-dropdown-menu>
+                      <router-link to="/mine">
+                        <el-dropdown-item>个人主页</el-dropdown-item>
+                      </router-link>
+                      <el-dropdown-item @click="logOut" v-if="isAccountLoggedIn()">
+                        退出登录
+                      </el-dropdown-item>
+                      <el-dropdown-item @click="logIn"  v-else>
+                        登录
+                      </el-dropdown-item>
+                      <!-- <el-dropdown-item disabled>Action 4</el-dropdown-item>
+                      <el-dropdown-item divided>Action 5</el-dropdown-item> -->
+                    </el-dropdown-menu>
+                  </template>
+                </el-dropdown>
+              <!-- </router-link> -->
             </div>
-            <el-button type="text" @click="logOut" v-show="store?.state?.data?.isLoggedIn"></el-button>
+            <!-- <el-button type="text" @click="logOut" v-show="store?.state?.data?.isLoggedIn"></el-button> -->
           </div>
         </el-col>
       </el-row>
@@ -45,6 +64,7 @@ import { useStore } from 'vuex'
 import {  reactive, ref, computed } from 'vue'
 import { HomeFilled,Search } from '@element-plus/icons-vue'
 import avatarDefaultImg from '@/assets/img/unlogin.png'
+import { isAccountLoggedIn } from '@/utils/auth'
 export default {
   name: "NavBar",
   components: {
@@ -64,7 +84,11 @@ export default {
     const go = (num)=>{
       router.go(num)
     }
+    function logIn(){
+      store.state.model.loginModelFlag = true;
+    }
     function logOut(){
+      console.log("hh")
       store.state.data.isLoggedIn = false;
       store.state.data.user = null;
       store.commit('showToast',{
@@ -80,7 +104,9 @@ export default {
       titles,
       avatarDefaultImg,
       logOut,
-      store
+      logIn,
+      store,
+      isAccountLoggedIn
     }
   }
 }

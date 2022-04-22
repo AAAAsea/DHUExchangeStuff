@@ -12,7 +12,7 @@
           <el-option label="2" value="beijing" />
         </el-select>
       </el-form-item> -->
-      <el-form-item label="内容" :label-width="formLabelWidth"  prop="content" required >
+      <el-form-item label="内容" :label-width="formLabelWidth"  prop="content"  >
         <el-input v-model="form.content"  maxlength="520" show-word-limit autocomplete="off" type="textarea" :autosize="{ minRows: 2, maxRows: 50 }" placeholder="写点什么呢..."/>
       </el-form-item>
     </el-form>
@@ -27,6 +27,7 @@
       {{ tag }}
     </el-tag>
     <el-input
+      maxlength="10"
       v-if="inputVisible"
       ref="InputRef"
       v-model="inputValue"
@@ -41,7 +42,7 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="store.state.model.postModelFlag = false">取消</el-button>
-        <el-button type="primary" @click="publish"
+        <el-button type="primary" @click="publish(ruleFormRef)"
           >发布</el-button
         >
       </span>
@@ -66,17 +67,22 @@ const rules = reactive({
     { required: true, message: '标题不可为空', trigger: 'blur' },
   ],
   content: [
-    // { min:1, max: 520, message: '最少5个字符', trigger: 'blur' },
+    { required: true, message: '内容不可为空', trigger: 'blur' },
   ],
 })
-function publish(){
-  addPost(form.name, form.textarea, ~~(Math.random()*100))
-  .then(res=>{
-    console.log(res)
-    store.state.model.postModelFlag = false
-  })
-  .then(()=>{
-    store.dispatch('getPostList')
+
+function publish(formEl){
+  formEl.validate((valid) => {
+    if (valid) {
+      addPost(form.name, form.textarea, ~~(Math.random()*100))
+      .then(res=>{
+        console.log(res)
+        store.state.model.postModelFlag = false
+      })
+      .then(()=>{
+        store.dispatch('getPostList')
+      })
+    }
   })
 }
 

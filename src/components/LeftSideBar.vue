@@ -17,5 +17,6 @@ export default {
     height: 600px;
     background: var(--secondary-bg);
     border-radius: 5px;
+    margin-right: 8px;
   }
 </style>

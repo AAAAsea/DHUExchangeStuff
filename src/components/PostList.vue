@@ -1,6 +1,12 @@
 <template>
-  <div class="post-list" v-infinite-scroll="loadMorePost" infinite-scroll-distance="500" infinite-scroll-delay="500">
-    <template v-if="isLoading">
+  <div 
+  class="post-list" 
+  v-infinite-scroll="loadMorePost" 
+  infinite-scroll-distance="1000" 
+  infinite-scroll-delay="500"
+  v-loading="false"
+  >
+    <!-- <template v-if="isLoading">
       <div class="skeleton" v-for="(item, index) in [1,2,3,4,5]" :key="index">
         <br />
         <el-skeleton style="--el-skeleton-circle-size: 70px" animated>
@@ -10,7 +16,7 @@
         </el-skeleton>
         <el-skeleton animated :rows="1"/>
       </div>
-    </template>
+    </template> -->
     <div 
       v-for="post in postList"
       :key="post.post.id"
@@ -39,8 +45,11 @@ export default {
     const data = reactive({})
     const store = useStore()
     function loadMorePost(){
-      console.log("触底加载")
-      store.dispatch('fetchPostList')
+      // 防止首次加载多次请求
+      if(store.state.data.postList.length > 0)
+      {
+        store.dispatch('fetchPostList')
+      }
     }
     return{
       ...toRefs(data),
@@ -55,8 +64,8 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  @media screen and(min-width: 1200px) {
-    margin: 0 8px;
+  @media screen and(min-width: 1000px) {
+    // margin: 0 8px;
   }
   .skeleton{
     color: var(--post-card-bg) !important;
