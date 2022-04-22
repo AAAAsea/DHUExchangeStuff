@@ -45,8 +45,11 @@ export default {
     const data = reactive({})
     const store = useStore()
     function loadMorePost(){
-      console.log("触底加载")
-      store.dispatch('fetchPostList')
+      // 防止首次加载多次请求
+      if(store.state.data.postList.length > 0)
+      {
+        store.dispatch('fetchPostList')
+      }
     }
     return{
       ...toRefs(data),
