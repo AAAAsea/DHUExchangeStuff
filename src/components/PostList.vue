@@ -5,6 +5,7 @@
   infinite-scroll-distance="1000" 
   infinite-scroll-delay="500"
   v-loading="false"
+  @touchstart="handleTouchStart" @touchend="handleTouchEnd"
   >
     <!-- <template v-if="isLoading">
       <div class="skeleton" v-for="(item, index) in [1,2,3,4,5]" :key="index">
@@ -50,10 +51,24 @@ export default {
       {
         store.dispatch('fetchPostList')
       }
+      
+    }
+    let startX = 0;
+    function handleTouchStart(e){
+      startX = e.changedTouches[0].pageX
+    }
+    function handleTouchEnd(e){
+      console.log(e.changedTouches[0].pageX - startX)
+      if(e.changedTouches[0].pageX - startX > 100)
+        store.state.model.leftDrawerModelFlag = true;
+      else if(e.changedTouches[0].pageX - startX < -100)
+        store.state.model.leftDrawerModelFlag = false;
     }
     return{
       ...toRefs(data),
-      loadMorePost
+      loadMorePost,
+      handleTouchStart,
+      handleTouchEnd
     }
   }
 }

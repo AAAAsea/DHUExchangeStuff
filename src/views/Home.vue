@@ -25,8 +25,9 @@
     :icon="Edit" 
     circle 
     class="edit" 
-    color="#626aef" 
+    color="var(--primary-color)" 
     size="large"
+    :dark="true"
   />
 </template>
 
@@ -54,7 +55,7 @@ export default {
       postList: [],
       isLoading: true
     })
-    store.state.data.postList = []
+    store.state.data.postList.splice()
     store.dispatch('fetchPostList')
     .then(()=>{
       data.isLoading = false
@@ -78,7 +79,8 @@ export default {
       ...toRefs(data),
       Edit,
       store,
-      showPostModel
+      showPostModel,
+      // isDark
     }
   }
 }

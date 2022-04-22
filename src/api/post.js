@@ -31,14 +31,14 @@ export function getPostDetail(id) {
 /**
  * 发布新的post
  */
-export function addPost(title, content, userId) {
+export function addPost(title, content, tags) {
   return request({
-    url: '/discuss/add',
+    url: '/post/add',
     method: 'post',
     params: {
       title,
       content,
-      userId,
+      tags,
       timestamp: new Date().getTime(),
     },
   });

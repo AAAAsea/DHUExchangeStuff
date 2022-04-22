@@ -57,8 +57,8 @@ import { useStore } from 'vuex'
 import { addPost } from '../../api/post'
 const store = useStore()
 const form = reactive({
-  name: '',
-  textarea: ''
+  title: '',
+  content: ''
 })
 const dialogWidth = computed(()=>document.documentElement.clientWidth > 1000 ? '400px' : '90VW')
 const ruleFormRef = ref('')
@@ -74,13 +74,13 @@ const rules = reactive({
 function publish(formEl){
   formEl.validate((valid) => {
     if (valid) {
-      addPost(form.name, form.textarea, ~~(Math.random()*100))
+      addPost(form.title, form.content, dynamicTags.value)
       .then(res=>{
         console.log(res)
         store.state.model.postModelFlag = false
       })
       .then(()=>{
-        store.dispatch('getPostList')
+        // window.location.reload()
       })
     }
   })
