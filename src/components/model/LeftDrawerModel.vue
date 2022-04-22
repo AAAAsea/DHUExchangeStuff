@@ -59,7 +59,7 @@ let  store = useStore()
       background: var(--primary-color);
     }
   }
-/deep/ .drawer{
+:deep() .drawer{
   background: var(--main-bg);
   width: 250px !important;
 }
