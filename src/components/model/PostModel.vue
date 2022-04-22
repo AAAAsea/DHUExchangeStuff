@@ -80,8 +80,9 @@ function publish(formEl){
         store.state.model.postModelFlag = false
       })
       .then(()=>{
-        // window.location.reload()
+        store.dispatch('fetchNewPostList')
       })
+      .then()
     }
   })
 }

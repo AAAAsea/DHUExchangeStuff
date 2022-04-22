@@ -9,7 +9,6 @@
       <el-col  :xs="24" :sm="14" :md="14" :lg="14" :xl="14">        
         <PostList
           :postList="store.state.data.postList"
-          :isLoading="isLoading"
           class="postlist"
         />
       </el-col>
@@ -35,11 +34,10 @@
 import PostList from '../components/PostList.vue'
 import LeftSideBar from '@/components/LeftSideBar.vue'
 import RightSideBar from '@/components/RightSideBar.vue'
-import { reactive, toRefs } from '@vue/reactivity'
+import {   } from '@vue/reactivity'
 import { Edit } from '@element-plus/icons-vue'
 import { useStore } from 'vuex'
 import { isAccountLoggedIn } from '../utils/auth'
-
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -51,14 +49,10 @@ export default {
   },
   setup(){
     const store = useStore()
-    const data = reactive({
-      postList: [],
-      isLoading: true
-    })
     store.state.data.postList.splice()
     store.dispatch('fetchPostList')
     .then(()=>{
-      data.isLoading = false
+      // data.isLoading = false
     })
     .catch(err=>{
       console.log(err)
@@ -69,14 +63,13 @@ export default {
         store.commit('showToast',{
         title: 'Error',
         message: '点击头像登录',
-        type: 'error'
+        type: 'error',
       })
       }else{
         store.state.model.postModelFlag = true
       }
     }
     return{
-      ...toRefs(data),
       Edit,
       store,
       showPostModel,

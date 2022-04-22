@@ -4,7 +4,6 @@
   v-infinite-scroll="loadMorePost" 
   infinite-scroll-distance="1000" 
   infinite-scroll-delay="500"
-  v-loading="false"
   @touchstart="handleTouchStart" @touchend="handleTouchEnd"
   >
     <!-- <template v-if="isLoading">
@@ -38,7 +37,7 @@ import PostCard from "./PostCard.vue"
 import { useStore } from 'vuex'
 export default {
   name: "PostList",
-  props: ['postList','isLoading'],
+  props: ['postList'],
   components: {
     PostCard
   },
