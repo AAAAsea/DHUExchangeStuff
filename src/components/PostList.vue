@@ -6,7 +6,7 @@
   infinite-scroll-delay="500"
   @touchstart="handleTouchStart" @touchend="handleTouchEnd" @touchmove ="handleTouchMove"
   >
-  <el-icon><refresh-right :style="refreshStyle" color="var(--main-bg)"/></el-icon>
+  <el-icon><refresh-right :style="refreshStyle" color="var(--primary-color)"/></el-icon>
     <!-- <template v-if="isLoading">
       <div class="skeleton" v-for="(item, index) in [1,2,3,4,5]" :key="index">
         <br />
@@ -56,7 +56,7 @@ export default {
       borderRadius: '50%',
       fontSize: '1.5em',
       transform: '',
-      transition: ''
+      transition: '',
     })
     function loadMorePost(){
       // 防止首次加载多次请求
@@ -69,23 +69,29 @@ export default {
     let startX = 0; // 导航栏
     let startY = 0; // 下拉刷新
     let scrollTop = 0;
+    let direction = 0; // 如果在顶部向下滑动，设置为1，用于判断一开始的滑动方向
+    // console.log(direction)
+    let directionFlag = true; // 
     function handleTouchStart(e){
       refreshStyle.transition = ''
-      startX = e.changedTouches[0].pageX
-      startY = e.changedTouches[0].pageY
+      startX = e.changedTouches[0].clientX
+      startY = e.changedTouches[0].clientY
       scrollTop = (document.documentElement.scrollTop || document.body.scrollTop);
     }
     function handleTouchEnd(e){
-      // console.log(e.changedTouches[0].pageX - startX)
-      if(e.changedTouches[0].pageX - startX > 100)
+      direction = 0;
+      directionFlag = true;
+      refreshStyle.transition = ' .2s ease-out'
+      // console.log(e.changedTouches[0].clientX - startX)
+      if(e.changedTouches[0].clientX - startX > 100)
         store.state.model.leftDrawerModelFlag = true;
-      else if(e.changedTouches[0].pageX - startX < -100)
+      else if(e.changedTouches[0].clientX - startX < -100)
         store.state.model.leftDrawerModelFlag = false;
-      if(e.changedTouches[0].pageY-startY>100 && scrollTop===0 )
+      if(e.changedTouches[0].clientY-startY>100 && scrollTop===0 )
       {
         store.dispatch('fetchNewPostList')
       }
-      if(e.changedTouches[0].pageY-startY > 200) 
+      if(e.changedTouches[0].clientY-startY > 200) 
       {
         refreshStyle.top = '20px';
         store.dispatch('fetchNewPostList')
@@ -93,27 +99,34 @@ export default {
           setTimeout(() => {
             refreshStyle.transform = 'scale(0)'
             refreshStyle.opacity = '0'
-            refreshStyle.top = '-70px'
+            refreshStyle.top = '0px'
           }, 500);
         })
         .catch(()=>{
-          refreshStyle.top = '-70px'
+          refreshStyle.top = '0px'
         })
       }else{
-        refreshStyle.top = '-70px'
+        refreshStyle.top = '0px'
         refreshStyle.opacity = '0'
         refreshStyle.transform = ''
       }
-      refreshStyle.transition = ' .2s ease'
+      
     }
     function handleTouchMove(e){
-      // console.log(Math.log(e.changedTouches[0].pageY-startY))
+      if(directionFlag && e.changedTouches[0].clientY-startY > 0)
+      {
+        direction = 1;
+        directionFlag = false;
+      }
+      // console.log(Math.log(e.changedTouches[0].clientY-startY))
       if(scrollTop !== 0){ return }
-      if(e.changedTouches[0].pageY-startY > 0) e.preventDefault();
-      if(e.changedTouches[0].pageY-startY > 300) { return }
-      refreshStyle.top = Math.pow(e.changedTouches[0].pageY-startY , 1/3)*30 - 70 + 'px'
-      refreshStyle.opacity = (e.changedTouches[0].pageY-startY)/150
-      refreshStyle.transform = 'rotate(' + (e.changedTouches[0].pageY-startY)/150 * 180 + 'deg)'
+      if(direction) {
+        e.preventDefault();
+      }
+      if(e.changedTouches[0].clientY-startY > 250) { return }
+      refreshStyle.top = Math.pow(e.changedTouches[0].clientY-startY , 1/3)*22 - 70 + 'px'
+      refreshStyle.opacity = (e.changedTouches[0].clientY-startY)/150
+      refreshStyle.transform = 'rotate(' + (e.changedTouches[0].clientY-startY)/150 * 180 + 'deg)'
     }
     return{
       ...toRefs(data),
