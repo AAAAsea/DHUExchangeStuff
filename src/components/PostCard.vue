@@ -1,5 +1,9 @@
 <template>
-  <div class="post-card" @click='handleRipples' ref='postCardRef'>
+  <div class="post-card"  
+    @touchstart="handleTouchStart"  
+    @touchmove="handleTouchMove" 
+    ref='postCardRef'
+  >
     <el-icon :style="{position: 'absolute', top: '15px', right: '10px', color:'#eee', transform: 'rotate('+ (isFold ? 0 : 180) +'deg)', transition: '0.3s'}" @click.stop="isFold = !isFold" ><arrow-down-bold /></el-icon>
     <div class="header">
       <img :src="headerUrl" alt="">
@@ -53,21 +57,38 @@ export default {
     const postCardRef = ref('')
     const dynamicTags = ['泡面','啤酒','水','女朋友','HuaziHuazi']
     // const dynamicTags = ['你好你好你好你好你好','你好你好你好你好你好','你好你好你好你好你好','你好你好你好你好你好','你好你好你好你好你好']
-    function handleRipples(e){
-      let scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
-      let scrollY = document.documentElement.scrollTop || document.body.scrollTop;
-      let x = e.clientX + scrollX - postCardRef.value.offsetLeft;
-      let y = e.clientY + scrollY - postCardRef.value.offsetTop - 65;
-      let ripples = document.createElement('span')
-      ripples.classList.add("ripples");
-      ripples.style.left = x + 'px';
-      ripples.style.top = y + 'px';
-      postCardRef.value.appendChild(ripples)
-      console.log(e)
-      setTimeout(()=>{
-        ripples.remove()
-      },1000)
+
+    let canRipplesFlag = true; // 每当点击发生禁止点击，防止点击过快以及多指点击
+    let isRipplesFlag = false; // 100ms内滑动取消不触发波纹效果
+    function handleTouchStart(e){
+      if(!canRipplesFlag) return;
+      isRipplesFlag = true;
+      setTimeout(() => {
+        if(isRipplesFlag && canRipplesFlag){
+          canRipplesFlag = false;
+          let scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
+          let scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+          let x = e.changedTouches[0].clientX + scrollX - postCardRef.value.offsetLeft;
+          let y = e.changedTouches[0].clientY + scrollY - postCardRef.value.offsetTop - 65;
+          let ripples = document.createElement('span')
+          ripples.classList.add("ripples");
+          ripples.style.left = x + 'px';
+          ripples.style.top = y + 'px';
+          postCardRef.value.appendChild(ripples)
+          setTimeout(() => {
+            canRipplesFlag = true;
+          }, 100);
+          setTimeout(()=>{
+            ripples.remove()
+          },1000)
+        }
+      }, 100);
     }
+
+    function handleTouchMove(){
+      isRipplesFlag = false;
+    }
+    
     return{
       dynamicTags,
       isFold,
@@ -75,7 +96,8 @@ export default {
       ...toRefs(props.post),
       timeFormat,
       postCardRef,
-      handleRipples
+      handleTouchStart,
+      handleTouchMove
     }
   }
 }
@@ -100,9 +122,11 @@ export default {
   box-sizing: border-box;
   transition: 0.2s ease;
   color: var(--main-text);
-  &:hover{
-    box-shadow: 0 5px 15px -5px rgba(0,0,0,.5);
-    transform: translateY(-3px);
+  @media screen and(min-width: 1200px) {
+      &:hover{
+      box-shadow: 0 5px 15px -5px rgba(0,0,0,.5);
+      transform: translateY(-3px);
+    }
   }
   .header{
     display: flex;
