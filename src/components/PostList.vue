@@ -53,8 +53,12 @@ export default {
       
     }
     let startX = 0;
+    let startY = 0;
+    let scrollTop = 0;
     function handleTouchStart(e){
       startX = e.changedTouches[0].pageX
+      startY = e.changedTouches[0].pageY
+      scrollTop = (document.documentElement.scrollTop || document.body.scrollTop);
     }
     function handleTouchEnd(e){
       console.log(e.changedTouches[0].pageX - startX)
@@ -62,7 +66,14 @@ export default {
         store.state.model.leftDrawerModelFlag = true;
       else if(e.changedTouches[0].pageX - startX < -100)
         store.state.model.leftDrawerModelFlag = false;
+      
+
+      if(e.changedTouches[0].pageY-startY>100 && scrollTop===0 )
+      {
+        store.dispatch('fetchNewPostList')
+      }
     }
+
     return{
       ...toRefs(data),
       loadMorePost,
