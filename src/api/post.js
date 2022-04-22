@@ -35,11 +35,10 @@ export function addPost(title, content, tags) {
   return request({
     url: '/post/add',
     method: 'post',
-    params: {
+    data: {
       title,
       content,
       tags,
-      timestamp: new Date().getTime(),
     },
   });
 }

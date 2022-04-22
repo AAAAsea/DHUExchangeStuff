@@ -13,5 +13,8 @@ export default {
     ElMessage({
       ...payload
     })
+  },
+  resetPostList(state){
+    state.data.postList.splice(0)
   }
 }
