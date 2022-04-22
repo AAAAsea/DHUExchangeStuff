@@ -11,7 +11,7 @@ export default {
     loginModelFlag: false
   },
   user:{
-    isLogin: false
+    isLogin: true
   },
   settings:{
     lang: 'zh-CN',
