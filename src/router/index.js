@@ -42,7 +42,7 @@ const	routes=[
         },
 				{
 					path: 'post',
-					name: '🐖 DHU-我发布的',
+					name: '🐖 DHU-我的',
 					component: ()=>import("@/components/MinePost"),
 				},
 				{

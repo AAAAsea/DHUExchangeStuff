@@ -134,7 +134,7 @@ export default {
   // display: flex;
   color: var(--color-text);
   height: 60px;
-  padding: 0 100px;
+  padding: 0 8%;
   @media screen and(max-width: 768px) {
     padding: 0 20px;
   }

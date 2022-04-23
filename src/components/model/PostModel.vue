@@ -1,7 +1,7 @@
 <template>
 
   <!-- Form -->
-  <el-dialog v-model="store.state.model.postModelFlag" title="发贴" custom-class="dialog" :width="dialogWidth">
+  <el-dialog v-model="store.state.model.postModelFlag" title="发贴" custom-class="dialog" :width="dialogWidth()">
     <el-form :model="form" :rules="rules" ref="ruleFormRef" @keydown.ctrl.enter="publish(ruleFormRef)">
       <el-form-item label="标题" :label-width="auto" prop="title">
         <el-input v-model="form.title" maxlength="10" show-word-limit autocomplete="off"  placeholder="输入你的标题"/>
@@ -60,7 +60,7 @@ const form = reactive({
   title: '',
   content: ''
 })
-const dialogWidth = ()=>document.documentElement.clientWidth > 1000 ? '400px' : '90VW'
+const dialogWidth = ()=>document.documentElement.clientWidth > 768 ? '400px' : '90VW'
 const ruleFormRef = ref('')
 const rules = reactive({
   title: [

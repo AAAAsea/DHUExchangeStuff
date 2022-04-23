@@ -8,7 +8,7 @@
     <div class="header">
       <img :src="headerUrl" alt="">
       <div class="title">
-        <h4>{{username}}</h4>
+        <h4>{{nickname ?? username}}</h4>
         <p>{{timeFormat(new Date(createTime).getTime())}}</p>
       </div>
     </div>

@@ -25,7 +25,7 @@
     :icon="Edit" 
     circle 
     class="edit" 
-    color="#626aef" 
+    color="#AA03B0" 
     size="large"
   />
 </template>

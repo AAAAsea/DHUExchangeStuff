@@ -24,7 +24,7 @@
     :icon="Edit" 
     circle 
     class="edit" 
-    color="var(--primary-color)" 
+    color="#AA03B0" 
     size="large"
     :dark="true"
   />

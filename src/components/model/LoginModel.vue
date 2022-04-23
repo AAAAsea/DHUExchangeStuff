@@ -68,7 +68,6 @@ const ruleForm = reactive({
   password: ''
 })
 const dialogWidth = computed(()=>document.documentElement.clientWidth > 1000 ? '400px' : '90VW')
-
 const loginRules = reactive({
   account: [
     { required: true, message: '邮箱不能为空', trigger: 'blur' },

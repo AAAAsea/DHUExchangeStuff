@@ -5,6 +5,18 @@
   <PostModel/>
   <LoginModel/>
   <LeftDrawerModel/>
+  <el-backtop :right="30" :bottom="100">
+    <el-button 
+    @click="showPostModel" 
+    type="primary" 
+    :icon="Pointer" 
+    circle 
+    class="pointer" 
+    color="#AA03B0" 
+    size="large"
+    :dark="true"
+  />
+  </el-backtop>
 </template>
 
 <script setup>
@@ -13,6 +25,7 @@ import PostModel from './components/model/PostModel.vue'
 import LoginModel from './components/model/LoginModel.vue'
 import LeftDrawerModel from './components/model/LeftDrawerModel.vue'
 import { useStore } from 'vuex'
+import { Pointer } from '@element-plus/icons-vue'
 
 const store = useStore()
 window.addEventListener('touchstart',handleTouchStart)
@@ -34,4 +47,8 @@ function handleTouchEnd(e){
 </script>
 
 <style scoped>
+.pointer{
+  font-size: 1.5rem;
+  transform: scale(1.2);
+}
 </style>
