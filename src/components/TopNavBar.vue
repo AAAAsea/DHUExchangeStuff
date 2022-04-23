@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="top-nav-bar-container">
       <el-row  justify="between" align="middle" class="nav">
         <!-- 左侧 -->
         <el-col  :xs="8" :sm="8" :md="8">
@@ -10,13 +10,13 @@
           <!-- </router-link> -->
         </el-col>
         <!-- 主体 -->
-        <el-col  :xs="0" :sm="7" :md="7">        
+        <el-col  :xs="0" :sm="8" :md="8" class="title">        
           <h2>
               {{route.name}}
           </h2>
         </el-col>
         <!-- 右侧 -->
-        <el-col  :xs="16" :sm="9" :md="9" >
+        <el-col  :xs="16" :sm="8" :md="8" >
           <div class="user-info" >
             <div class="search-box" tabindex="111">
               <el-icon class="search-icon"><search /></el-icon>
@@ -56,7 +56,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import {  reactive, ref, computed } from 'vue'
 import { Search } from '@element-plus/icons-vue'
-import avatarDefaultImg from '@/assets/img/unlogin.png'
+import avatarDefaultImg from '@/assets/img/unlogin.png' 
 import { isAccountLoggedIn } from '@/utils/auth'
 export default {
   name: "NavBar",
@@ -107,7 +107,7 @@ export default {
 
 <style lang="scss" scoped>
 // 占位
-.container{
+.top-nav-bar-container{
   height: 68px;
 }
 // 整体样式
@@ -140,6 +140,9 @@ h1{
   }
 }
 
+.title{
+  text-align: center;
+}
 // // 路由菜单
 // .nav-titles {
 //   // border: 1px solid red;

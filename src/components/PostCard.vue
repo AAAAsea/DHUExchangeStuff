@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { ArrowDownBold } from '@element-plus/icons-vue'
+import { ArrowDownBold } from '@element-plus/icons-vue' 
 import { ref } from '@vue/reactivity'
 import { timeFormat } from '@/utils/tools'
 import { toRefs } from 'vue'
