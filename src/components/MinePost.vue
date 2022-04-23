@@ -16,9 +16,7 @@ const postList = store.state.data.postList
 </script>
 
 <style scoped>
-  .postlist{
-    width: 70%;
-  }
+
   @media screen and (max-width: 1200px){
     .postlist{
       width: 80%;

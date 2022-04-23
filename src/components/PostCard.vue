@@ -8,7 +8,7 @@
     <div class="header">
       <img :src="headerUrl" alt="">
       <div class="title">
-        <h4>{{nickname ?? username}}</h4>
+        <h4>{{nickName ?? username}}</h4>
         <p>{{timeFormat(new Date(createTime).getTime())}}</p>
       </div>
     </div>
@@ -20,7 +20,7 @@
     <!-- </router-link> -->
     <div class="footer">
       <el-tag
-        v-for="tag in dynamicTags"
+        v-for="tag in tags"
         :key="tag"
         :style="{margin: '0  10px 10px 0'}"
         :disable-transitions="false"
@@ -34,7 +34,13 @@
         #{{ tag }}
       </el-tag>
       <div class="toolbar">
-
+        <span class="iconfont icon-like">
+          <span>{{likeCount}}</span>
+        </span>
+        <span class="iconfont icon-comment_light">
+          <span>{{commentCount}}</span>
+        </span>
+        <span class="iconfont icon-forward"></span>
       </div>
     </div>
   </div>
@@ -105,7 +111,6 @@ export default {
 
 <style lang="scss" scoped>
 
-
 .post-card{
   overflow: hidden;
   position: relative;
@@ -173,7 +178,42 @@ export default {
       }
   }
   .footer{
+    padding-bottom: 2px;
     font-size: var(--post-card-footer-font-size);
+    .tag{
+      transition: .2s;
+      border-color:  var(--secondary-border) !important;
+      color: var(--secondary-text) !important;
+      &:hover{
+      border-color: var(--main-text) !important ;
+      color: var(--main-text) !important ;
+      }
+    }
+    .toolbar{
+      align-items: center;
+      height: 33px;
+      display: flex;
+      justify-content: space-around;
+    }
+    .iconfont{
+      height: 100%;
+      display: flex;
+      flex: 1;
+      justify-content: center;
+      align-items: center;
+      font-size: 16px;
+      color: var(--toolbar-text);
+      transition: .1s;
+      &:hover{
+        // background: var(--primary-color);
+        color: var(--main-text);
+        text-shadow: 1px 1px 2px 4px var(--main-text);
+      }
+      span{
+        margin-left: 3px;
+        font-size: 13px;
+      }
+    }
   }
 }
 </style>

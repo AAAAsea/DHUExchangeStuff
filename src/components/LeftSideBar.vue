@@ -4,13 +4,19 @@
       <router-link to="/">
         <li>
           <span class="emoji">🎈</span>
-          <span class="title">DHU-广场</span>
+          <span class="title">DHU广场</span>
         </li>
       </router-link>
-      <router-link to="/mine" v-if="isAccountLoggedIn()">
+      <router-link to="/mine/post" v-if="isAccountLoggedIn()">
         <li>
-          <span class="emoji">😀</span>
-          <span class="title">DHU-我啊</span>
+          <span class="emoji">📑</span>
+          <span class="title">我的帖子</span>
+        </li>
+      </router-link>
+      <router-link to="/mine/info" v-if="isAccountLoggedIn()">
+        <li>
+          <span class="emoji">🔐</span>
+          <span class="title">账户设置</span>
         </li>
       </router-link>
     </ul>
@@ -51,7 +57,7 @@ import {isAccountLoggedIn} from '@/utils/auth'
       margin: 2px 0;
       background: var(--secondary-bg);
     }
-    .router-link-active{
+    .router-link-exact-active{
       background: var(--primary-color);
     }
   }

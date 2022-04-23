@@ -8,7 +8,7 @@
   --main-bg: #111114;
   --secondary-text: rgb(97,96,101);
   --secondary-border: rgb(75, 74, 78);
-  
+  --toolbar-text: #888;
   --body-bg: #0c0c0c;
   --comment-text: white;
   --comment-bg: rgba(51, 39, 58, 0.425);
@@ -65,10 +65,7 @@ input{
   border:none;
 }
 
-.tag{
-  border-color:  var(--secondary-border) !important;
-  color: var(--secondary-text) !important;
-}
+
 
 .ripples{
   border: none;

@@ -42,12 +42,12 @@ const	routes=[
         },
 				{
 					path: 'post',
-					name: '🐖 DHU-我的',
+					name: '📑 我的帖子',
 					component: ()=>import("@/components/MinePost"),
 				},
-				{
+				{	
 					path: 'info',
-					name: '🐖 DHU-我的信息',
+					name: '🔐 账户设置',
 					component:  ()=>import("@/components/MineInfo"),
 				},
 			],

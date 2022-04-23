@@ -28,8 +28,12 @@
       label-position="top"
       ref="registerRuleFormRef"
     >
-      <el-form-item :label="$t('login.account')" label-width="auto" prop="mail" >
-        <el-input v-model="registRuleForm.mail" autocomplete="off"  :placeholder="$t('login.accountPlace')"/>
+
+      <el-form-item :label="$t('login.account')" label-width="auto" prop="username" >
+        <el-input v-model="registRuleForm.username" autocomplete="off"  :placeholder="$t('login.accountPlace')"/>
+      </el-form-item>
+      <el-form-item :label="$t('login.nickName')" label-width="auto" prop="username" >
+        <el-input v-model="registRuleForm.nickName" autocomplete="off"  :placeholder="$t('login.nickNamePlace')"/>
       </el-form-item>
       <el-form-item :label="$t('login.code')" label-width="auto" prop="code"  >
         <div class="code">
@@ -39,6 +43,9 @@
       </el-form-item>
       <el-form-item :label="$t('login.password')" label-width="auto" prop="password" >
         <el-input v-model="registRuleForm.password"  autocomplete="off"  :placeholder="$t('login.passwordPlace')" show-password/>
+      </el-form-item>
+      <el-form-item :label="$t('login.password2')" label-width="auto" prop="password2" >
+        <el-input v-model="registRuleForm.password2"  autocomplete="off"  :placeholder="$t('login.password2Place')" show-password/>
       </el-form-item>
     </el-form>
     
@@ -78,6 +85,7 @@ const loginRules = reactive({
     { min: 6,  message: '最少6个字符', trigger: 'blur' },
     { max: 15,  message: '最多15个字符', trigger: 'blur' },
   ],
+
 })
 
 
@@ -101,14 +109,23 @@ function validateMail(rule, value, callback){
     callback()
   }
 }
+function validatePassword2(rule, value, callback){
+  if (value !== registRuleForm.password) {
+    callback(new Error('两次密码不一致'))
+  }else {
+    callback()
+  }
+}
 const registRuleForm = reactive({
-  mail: '',
+  username: '',
   code: '',
-  password: ''
+  password: '',
+  nickName: '',
+  password2: ''
 })
 
 const registRules = reactive({
-  mail: [
+  username: [
     { required: true, message: '邮箱不能为空', trigger: 'blur' },
     { validator: validateMail, trigger: 'blur'}
   ],
@@ -120,6 +137,16 @@ const registRules = reactive({
     { required: true, message: '密码不可为空', trigger: 'blur' },
     { min: 6,  message: '最少6个字符', trigger: 'blur' },
     { max: 15,  message: '最多15个字符', trigger: 'blur' },
+  ],
+  nickName: [
+    { required: true, message: '密码不可为空', trigger: 'blur' },
+    { min: 2,  message: '最少2个字符', trigger: 'blur' },
+    { max: 10,  message: '最多10个字符', trigger: 'blur' },
+  ],
+  password2:[
+    { required: true, message: '请再次输入密码', trigger: 'blur' },
+    { validator: validatePassword2, trigger: 'blur'}
+
   ],
 })
 
@@ -136,7 +163,7 @@ function handleCodeClick(){
     sendCodeButtonFlag.value = false;
     clearInterval(codeWaitTimeInterval)
   }, 60000)
-  getMailCode(registRuleForm.mail)
+  getMailCode(registRuleForm.username)
   .then((res)=>{
     handleRes(res,()=>{},()=>{
       sendCodeButtonFlag.value = false;
@@ -175,7 +202,7 @@ function submit(formEl){
       // 提交注册
       if(type.value === 'regist')
       {
-        regist(registRuleForm.mail, registRuleForm.password, registRuleForm.code)
+        regist(registRuleForm)
         .then(res=>{
           console.log("注册返回信息：",res)
           handleRes(res, ()=>{

@@ -1,10 +1,10 @@
 <template>
   <div class="top-nav-bar-container">
-      <el-row  justify="between" align="middle" class="nav">
+      <el-row align="middle" class="nav">
         <!-- 左侧 -->
         <el-col  :xs="18" :sm="8" :md="8">
           <!-- <router-link to="/"> -->
-          <h3 v-if="isMobile" :style="{display:'flex', alignItems: 'center'}">
+            <h3 v-if="isMobile" :style="{display:'flex', alignItems: 'center'}">
               <el-icon @click="store.state.model.leftDrawerModelFlag = !store.state.model.leftDrawerModelFlag"><Expand /></el-icon>
               {{route.name}}
             </h3>
@@ -16,9 +16,9 @@
         </el-col>
         <!-- 主体 -->
         <el-col  :xs="0" :sm="8" :md="8" class="title">        
-          <h2>
+          <h3>
               {{route.name}}
-          </h2>
+          </h3>
         </el-col>
         <!-- 右侧 -->
         <el-col  :xs="6" :sm="8" :md="8" >

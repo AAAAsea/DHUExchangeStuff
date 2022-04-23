@@ -7,7 +7,7 @@
       </el-col>
       <!-- 主体 -->
       <el-col  :xs="24" :sm="15" :md="15" :lg="15" :xl="15">     
-        <el-empty></el-empty>   
+        <router-view></router-view>
         <!-- <PostList
           :postList="store.state.data.postList"
           class="postlist"

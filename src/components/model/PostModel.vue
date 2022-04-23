@@ -92,6 +92,9 @@ function publish(formEl){
             type: 'success',
             message: '发布成功'
           })
+          form.title = '';
+          form.content = '';
+          dynamicTags.value.splice(0);
           store.dispatch('fetchNewPostList')
         }
         else{
@@ -105,7 +108,7 @@ function publish(formEl){
       })
       .catch((res)=>{
         console.log(res)
-        store.commit('resetUserInfo')
+        // store.commit('resetUserInfo')
         store.commit('showToast',{
             type: 'error',
             message: '发生错误'

@@ -16,14 +16,15 @@ export function getMailCode(username) {
 /**
  * 注册
  */
-export function regist(username, password, code) {
+export function regist({username, password, code, nickName}) {
   return request({
     url: '/register',
     method: 'post',
     params: {
       username,
       password,
-      code
+      code,
+      nickName
     },
   });
 }
