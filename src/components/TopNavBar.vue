@@ -2,11 +2,16 @@
   <div class="top-nav-bar-container">
       <el-row  justify="between" align="middle" class="nav">
         <!-- 左侧 -->
-        <el-col  :xs="8" :sm="8" :md="8">
+        <el-col  :xs="18" :sm="8" :md="8">
           <!-- <router-link to="/"> -->
-            <h1 @click="store.state.model.LeftDrawerModelFlag = !store.state.model.LeftDrawerModelFlag">
+          <h3 v-if="isMobile" :style="{display:'flex', alignItems: 'center'}">
+              <el-icon @click="store.state.model.leftDrawerModelFlag = !store.state.model.leftDrawerModelFlag"><Expand /></el-icon>
+              {{route.name}}
+            </h3>
+            <h1 v-else>
               <img src="https://www.dhu.edu.cn/_upload/tpl/0b/3f/2879/template2879/image/login_mini.png" alt="">
             </h1>
+            
           <!-- </router-link> -->
         </el-col>
         <!-- 主体 -->
@@ -16,11 +21,11 @@
           </h2>
         </el-col>
         <!-- 右侧 -->
-        <el-col  :xs="16" :sm="8" :md="8" >
+        <el-col  :xs="6" :sm="8" :md="8" >
           <div class="user-info" >
-            <div class="search-box" tabindex="111">
+            <div class="search-box" tabindex="111" v-if="!isMobile">
               <el-icon class="search-icon"><search /></el-icon>
-              <input type="text" :placeholder="$t('nav.search') "/>
+              <input type="text" :placeholder="$t('nav.search') " />
             </div>
             <div class="avatar">
               <!-- <router-link to="/mine"> -->
@@ -55,14 +60,15 @@
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import {  reactive, ref, computed } from 'vue'
-import { Search } from '@element-plus/icons-vue'
+import { Search,Expand } from '@element-plus/icons-vue'
 import avatarDefaultImg from '@/assets/img/unlogin.png' 
 import { isAccountLoggedIn } from '@/utils/auth'
 export default {
   name: "NavBar",
   components: {
     // HomeFilled,
-    Search
+    Search,
+    Expand
   },
   setup(){
     const store = useStore()
@@ -70,6 +76,10 @@ export default {
     const router = useRouter();
     const userInfo = computed(()=>store.state.data.user)
     const titles = ref(null)  // 绑定DOM
+    const isMobile = ref(document.documentElement.clientWidth < 768)
+    window.onresize = function() {
+        isMobile.value = document.documentElement.clientWidth < 768;
+    }
     const gunOffset = reactive({
       offsetX: 0,
       width: 1
@@ -99,7 +109,9 @@ export default {
       logOut,
       logIn,
       store,
-      isAccountLoggedIn
+      isAccountLoggedIn,
+      isMobile,
+      Expand
     }
   }
 }
@@ -109,6 +121,7 @@ export default {
 // 占位
 .top-nav-bar-container{
   height: 68px;
+
 }
 // 整体样式
 .nav {
@@ -122,7 +135,7 @@ export default {
   color: var(--color-text);
   height: 60px;
   padding: 0 100px;
-  @media screen and(max-width: 970px) {
+  @media screen and(max-width: 768px) {
     padding: 0 20px;
   }
   z-index: 100;

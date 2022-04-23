@@ -81,14 +81,15 @@ export default {
         refreshStyle.top = '20px';
         store.dispatch('fetchNewPostList')
         .then(()=>{
+        })
+        .catch(()=>{
+        })
+        .finally(()=>{
           setTimeout(() => {
             refreshStyle.transform = ''
             refreshStyle.opacity = '0'
             refreshStyle.top = '-70px'
           }, 500);
-        })
-        .catch(()=>{
-          refreshStyle.top = '0px'
         })
       }else{
         refreshStyle.top = '-70px'

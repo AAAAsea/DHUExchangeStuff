@@ -7,24 +7,15 @@
       :before-close="handleClose"
       custom-class="drawer"
     >
-      <el-dropdown class="user">
+      <div class="user">
         <img :src="userInfo?.headerUrl ?? avatarDefaultImg">
-        <template #dropdown>
-          <el-dropdown-menu>
-            <router-link to="/mine">
-              <el-dropdown-item v-if="isAccountLoggedIn()">个人主页</el-dropdown-item>
-            </router-link>
-            <el-dropdown-item @click="logOut" v-if="isAccountLoggedIn()">
-              退出登录
-            </el-dropdown-item>
-            <el-dropdown-item @click="logIn"  v-else>
-              登录
-            </el-dropdown-item>
-            <!-- <el-dropdown-item disabled>Action 4</el-dropdown-item>
-            <el-dropdown-item divided>Action 5</el-dropdown-item> -->
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
+        <div @click="logOut" v-if="isAccountLoggedIn()">
+          退出登录
+        </div>
+        <div @click="logIn"  v-else>
+          登录
+        </div>
+      </div>
       <LeftSideBar/>
     </el-drawer>
   </div>
@@ -64,7 +55,11 @@ function logOut(){
       border-radius: 50%;
     }
     margin-bottom: 100px;
-    margin-left: 75px;
+    text-align: center;
+    div{
+      margin-top: 10px;
+      
+    }
   }
 }
 </style>

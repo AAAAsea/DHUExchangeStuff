@@ -52,7 +52,7 @@
 
 <script setup>
 // form
-import { reactive, computed } from 'vue'
+import { reactive } from 'vue'
 import { useStore } from 'vuex'
 import { addPost } from '../../api/post'
 const store = useStore()
@@ -60,7 +60,7 @@ const form = reactive({
   title: '',
   content: ''
 })
-const dialogWidth = computed(()=>document.documentElement.clientWidth > 1000 ? '400px' : '90VW')
+const dialogWidth = ()=>document.documentElement.clientWidth > 1000 ? '400px' : '90VW'
 const ruleFormRef = ref('')
 const rules = reactive({
   title: [
