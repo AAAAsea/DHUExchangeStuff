@@ -91,7 +91,6 @@ export default {
     margin: 0 auto;
   }
 }
-
 .edit{
   position: fixed;
   right: 30px;

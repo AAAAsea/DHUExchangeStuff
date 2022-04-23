@@ -7,7 +7,7 @@ import { isAccountLoggedIn } from '../utils/auth'
 const	routes=[
 		{
 			path:'/',
-			name: '广场',
+			name: '🎈 DHU-广场',
 			component: ()=>import("@/views/Home"),
 			meta: {
 				index: 1,
@@ -16,7 +16,7 @@ const	routes=[
 		},
     {
 			path:'/detail/:id',	
-			name: 'Detail',
+			name: '🎲 DHU-讨论',
 			component: ()=>import("@/views/Detail"),
 			props: true,
 			meta: {
@@ -26,7 +26,7 @@ const	routes=[
 		},
 		{
 			path:'/mine',	
-			name: '我',
+			name: '🐖 DHU-你',
 			component: ()=>import("@/views/Mine"),
 			props: true,
 			meta: {
@@ -42,12 +42,12 @@ const	routes=[
         },
 				{
 					path: 'post',
-					name: '我发布的',
+					name: '🐖 DHU-我发布的',
 					component: ()=>import("@/components/MinePost"),
 				},
 				{
 					path: 'info',
-					name: '个人信息',
+					name: '🐖 DHU-我的信息',
 					component:  ()=>import("@/components/MineInfo"),
 				},
 			],

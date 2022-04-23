@@ -2,7 +2,7 @@
 
   <!-- Form -->
   <el-dialog v-model="store.state.model.postModelFlag" title="发贴" custom-class="dialog" :width="dialogWidth">
-    <el-form :model="form" :rules="rules" ref="ruleFormRef">
+    <el-form :model="form" :rules="rules" ref="ruleFormRef" @keydown.ctrl.enter="publish(ruleFormRef)">
       <el-form-item label="标题" :label-width="auto" prop="title">
         <el-input v-model="form.title" maxlength="10" show-word-limit autocomplete="off"  placeholder="输入你的标题"/>
       </el-form-item>
@@ -42,8 +42,8 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="store.state.model.postModelFlag = false">取消</el-button>
-        <el-button type="primary" @click="publish(ruleFormRef)"
-          >发布</el-button
+        <el-button type="primary" @click="publish(ruleFormRef)" 
+          >发布 Ctrl ↵</el-button
         >
       </span>
     </template>
@@ -64,25 +64,53 @@ const dialogWidth = computed(()=>document.documentElement.clientWidth > 1000 ? '
 const ruleFormRef = ref('')
 const rules = reactive({
   title: [
-    { required: true, message: '标题不可为空', trigger: 'blur' },
+    { required: true, message: '不能为空', trigger: 'blur' },
+    { validator: validateEmpty, trigger: 'blur'}
   ],
   content: [
-    { required: true, message: '内容不可为空', trigger: 'blur' },
+    { required: true, message: '不能为空', trigger: 'blur' },
+    { validator: validateEmpty, trigger: 'blur'}
   ],
 })
-
+function validateEmpty(rule, value, callback){
+  if(value.trim() === '')
+  {
+    callback(new Error('不能为空'))
+  }else{
+    callback()
+  }
+}
 function publish(formEl){
   formEl.validate((valid) => {
     if (valid) {
       addPost(form.title, form.content, dynamicTags.value)
       .then(res=>{
-        console.log(res)
         store.state.model.postModelFlag = false
+        if(res.code === 20000)
+        {
+          store.commit('showToast',{
+            type: 'success',
+            message: '发布成功'
+          })
+          store.dispatch('fetchNewPostList')
+        }
+        else{
+          store.commit('resetUserInfo')
+          console.log(res.message)
+            store.commit('showToast',{
+              type: 'info',
+              message: res.message
+            })
+          }
       })
-      .then(()=>{
-        store.dispatch('fetchNewPostList')
+      .catch((res)=>{
+        console.log(res)
+        store.commit('resetUserInfo')
+        store.commit('showToast',{
+            type: 'error',
+            message: '发生错误'
+          })
       })
-      .then()
     }
   })
 }
@@ -103,7 +131,7 @@ const showInput = () => {
   })
 }
 const handleInputConfirm = () => {
-  if (inputValue.value) {
+  if (inputValue.value.trim()) {
     if(dynamicTags.value.length > 4){
       store.commit('showToast',{
         type:"warning",

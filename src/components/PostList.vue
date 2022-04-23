@@ -6,18 +6,8 @@
   infinite-scroll-delay="500"
   @touchstart="handleTouchStart" @touchend="handleTouchEnd" @touchmove ="handleTouchMove"
   >
-  <el-icon><refresh-right :style="refreshStyle" color="var(--primary-color)"/></el-icon>
-    <!-- <template v-if="isLoading">
-      <div class="skeleton" v-for="(item, index) in [1,2,3,4,5]" :key="index">
-        <br />
-        <el-skeleton style="--el-skeleton-circle-size: 70px" animated>
-          <template #template>
-            <el-skeleton-item variant="circle" />
-          </template>
-        </el-skeleton>
-        <el-skeleton animated :rows="1"/>
-      </div>
-    </template> -->
+  <el-icon :style="refreshStyle" color="var(--primary-color)"><refresh-right/></el-icon>
+  <el-empty v-if="store.state.data.postList.length === 0"></el-empty>
     <div 
       v-for="post in postList"
       :key="post.post.id"
@@ -81,12 +71,14 @@ export default {
     function handleTouchEnd(e){
       direction = 0;
       directionFlag = true;
-      refreshStyle.transition = ' .2s ease-out'
+      refreshStyle.transition = '0.15s ease-out'
       // console.log(e.changedTouches[0].clientX - startX)
+      // 右滑呼出导航栏
       if(e.changedTouches[0].clientX - startX > 100)
         store.state.model.leftDrawerModelFlag = true;
       else if(e.changedTouches[0].clientX - startX < -100)
         store.state.model.leftDrawerModelFlag = false;
+      // 下拉刷新
       if(e.changedTouches[0].clientY-startY>100 && scrollTop===0 )
       {
         store.dispatch('fetchNewPostList')
@@ -97,16 +89,16 @@ export default {
         store.dispatch('fetchNewPostList')
         .then(()=>{
           setTimeout(() => {
-            refreshStyle.transform = 'scale(0)'
+            refreshStyle.transform = ''
             refreshStyle.opacity = '0'
-            refreshStyle.top = '0px'
+            refreshStyle.top = '-70px'
           }, 500);
         })
         .catch(()=>{
           refreshStyle.top = '0px'
         })
       }else{
-        refreshStyle.top = '0px'
+        refreshStyle.top = '-70px'
         refreshStyle.opacity = '0'
         refreshStyle.transform = ''
       }
@@ -130,6 +122,7 @@ export default {
     }
     return{
       ...toRefs(data),
+      store,
       loadMorePost,
       handleTouchStart,
       handleTouchEnd,

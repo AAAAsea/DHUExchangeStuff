@@ -29,7 +29,6 @@ export default {
       }
     });
   },
-
   // 获取用户信息
   fetchUserProfile: ({ commit }) => {
     // if (!isAccountLoggedIn()) return;

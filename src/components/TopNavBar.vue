@@ -2,7 +2,7 @@
   <div class="container">
       <el-row  justify="between" align="middle" class="nav">
         <!-- 左侧 -->
-        <el-col  :xs="8" :sm="9" :md="9">
+        <el-col  :xs="8" :sm="8" :md="8">
           <!-- <router-link to="/"> -->
             <h1 @click="store.state.model.LeftDrawerModelFlag = !store.state.model.LeftDrawerModelFlag">
               <img src="https://www.dhu.edu.cn/_upload/tpl/0b/3f/2879/template2879/image/login_mini.png" alt="">
@@ -10,20 +10,13 @@
           <!-- </router-link> -->
         </el-col>
         <!-- 主体 -->
-        <el-col  :xs="0" :sm="4" :md="4">        
-          <div class="nav-titles" ref='titles'>
-          <router-link 
-            to='/' 
-            :class="{ active: route.path === '/' }"
-          >
-            <div ref="home">
-              <el-icon color="#eee" size="35px" ><home-filled /></el-icon>
-            </div>
-          </router-link>
-        </div>
+        <el-col  :xs="0" :sm="7" :md="7">        
+          <h2>
+              {{route.name}}
+          </h2>
         </el-col>
         <!-- 右侧 -->
-        <el-col  :xs="16" :sm="11" :md="11" >
+        <el-col  :xs="16" :sm="9" :md="9" >
           <div class="user-info" >
             <div class="search-box" tabindex="111">
               <el-icon class="search-icon"><search /></el-icon>
@@ -36,7 +29,7 @@
                   <template #dropdown>
                     <el-dropdown-menu>
                       <router-link to="/mine">
-                        <el-dropdown-item>个人主页</el-dropdown-item>
+                        <el-dropdown-item v-if="isAccountLoggedIn()">个人主页</el-dropdown-item>
                       </router-link>
                       <el-dropdown-item @click="logOut" v-if="isAccountLoggedIn()">
                         退出登录
@@ -62,13 +55,13 @@
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import {  reactive, ref, computed } from 'vue'
-import { HomeFilled,Search } from '@element-plus/icons-vue'
+import { Search } from '@element-plus/icons-vue'
 import avatarDefaultImg from '@/assets/img/unlogin.png'
 import { isAccountLoggedIn } from '@/utils/auth'
 export default {
   name: "NavBar",
   components: {
-    HomeFilled,
+    // HomeFilled,
     Search
   },
   setup(){
@@ -120,6 +113,7 @@ export default {
 // 整体样式
 .nav {
   // border: 1px solid red;
+  transition: 0.3s;
   position: fixed;
   top: 0;
   right: 0;
@@ -128,7 +122,7 @@ export default {
   color: var(--color-text);
   height: 60px;
   padding: 0 100px;
-  @media screen and(max-width: 1200px) {
+  @media screen and(max-width: 970px) {
     padding: 0 20px;
   }
   z-index: 100;
@@ -146,32 +140,32 @@ h1{
   }
 }
 
-// 路由菜单
-.nav-titles {
-  // border: 1px solid red;
-  flex: 1;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  margin: 0 50px;
-  position: relative;
-  .active{
-    border-bottom: 2px solid var(--color-text);
-  }
+// // 路由菜单
+// .nav-titles {
+//   // border: 1px solid red;
+//   flex: 1;
+//   display: flex;
+//   justify-content: space-around;
+//   align-items: center;
+//   margin: 0 50px;
+//   position: relative;
+//   .active{
+//     border-bottom: 2px solid var(--color-text);
+//   }
 
-  a{
-    text-decoration: none;
-    font-weight: bold;
-    transition: 0.2s;
-    padding: 10px 15px;
-    border-bottom: 2px solid transparent;
-    // border-radius: 10px;
-    &:hover{
-      background: var(--color-secondary-bg);
-    }
-  }
+//   a{
+//     text-decoration: none;
+//     font-weight: bold;
+//     transition: 0.2s;
+//     padding: 10px 15px;
+//     border-bottom: 2px solid transparent;
+//     // border-radius: 10px;
+//     &:hover{
+//       background: var(--color-secondary-bg);
+//     }
+//   }
   
-}
+// }
 
 // 搜索框和用户信息
 .user-info {

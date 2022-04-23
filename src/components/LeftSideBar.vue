@@ -7,7 +7,7 @@
           <span class="title">DHU-广场</span>
         </li>
       </router-link>
-      <router-link to="/mine">
+      <router-link to="/mine" v-if="isAccountLoggedIn()">
         <li>
           <span class="emoji">😀</span>
           <span class="title">DHU-我啊</span>
@@ -18,9 +18,7 @@
 </template>
 
 <script setup>
-
-
-
+import {isAccountLoggedIn} from '@/utils/auth'
 </script>
 
 <style lang="scss" scoped>
