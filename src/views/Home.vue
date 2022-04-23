@@ -6,14 +6,14 @@
         <LeftSideBar/>
       </el-col>
       <!-- 主体 -->
-      <el-col  :xs="24" :sm="14" :md="14" :lg="14" :xl="14">        
+      <el-col  :xs="24" :sm="15" :md="15" :lg="15" :xl="15">        
         <PostList
           :postList="store.state.data.postList"
           class="postlist"
         />
       </el-col>
       <!-- 右侧 -->
-      <el-col  :xs="0" :sm="6" :md="6" :lg="6" :xl="6">
+      <el-col  :xs="0" :sm="5" :md="5" :lg="5" :xl="5">
         <RightSideBar/>
       </el-col>
     </el-row>

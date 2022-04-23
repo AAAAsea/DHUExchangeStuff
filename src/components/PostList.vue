@@ -56,11 +56,11 @@ export default {
       }
       
     }
-    let startX = 0; // 导航栏
     let startY = 0; // 下拉刷新
+    // eslint-disable-next-line no-unused-vars
+    let startX = 0; // 导航栏
     let scrollTop = 0;
     let direction = 0; // 如果在顶部向下滑动，设置为1，用于判断一开始的滑动方向
-    // console.log(direction)
     let directionFlag = true; // 
     function handleTouchStart(e){
       refreshStyle.transition = ''
@@ -72,13 +72,6 @@ export default {
       direction = 0;
       directionFlag = true;
       refreshStyle.transition = '0.15s ease-out'
-      // console.log(e.changedTouches[0].clientX - startX)
-      // 右滑呼出导航栏
-      if(e.changedTouches[0].clientX - startX > 100)
-        store.state.model.leftDrawerModelFlag = true;
-      else if(e.changedTouches[0].clientX - startX < -100)
-        store.state.model.leftDrawerModelFlag = false;
-      // 下拉刷新
       if(e.changedTouches[0].clientY-startY>100 && scrollTop===0 )
       {
         store.dispatch('fetchNewPostList')

@@ -78,5 +78,6 @@ router.beforeEach((to, from, next) => {
 router.afterEach(to => {
 	// 设置title
 	document.title = to.meta.title;
+	store.state.model.leftDrawerModelFlag = false
 })
 export default router;
