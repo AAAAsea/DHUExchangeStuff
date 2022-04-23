@@ -1,9 +1,11 @@
 <template>
   <PostList
+    v-if="false"
     :postList="postList"
     :isLoading="false"
     class="postlist"
   />
+  <el-empty></el-empty>
 </template>
 
 <script setup>

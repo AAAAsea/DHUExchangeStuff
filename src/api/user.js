@@ -11,4 +11,18 @@ export function getUserInfo(){
       timestamp: new Date().getTime(),
     },
   })
+} 
+
+/**
+ * 修改用户信息
+ */
+export function changeUserInfo({nickName, introduce}){
+  return request({
+    url: '/users/info',
+    method: 'post',
+    data: {
+      nickName,
+      introduce
+    },
+  })
 }

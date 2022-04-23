@@ -33,7 +33,7 @@
                   <img :src="userInfo?.headerUrl ?? avatarDefaultImg">
                   <template #dropdown>
                     <el-dropdown-menu>
-                      <router-link to="/mine">
+                      <router-link to="/mine/info">
                         <el-dropdown-item v-if="isAccountLoggedIn()">个人主页</el-dropdown-item>
                       </router-link>
                       <el-dropdown-item @click="logOut" v-if="isAccountLoggedIn()">
