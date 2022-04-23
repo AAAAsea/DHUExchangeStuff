@@ -37,10 +37,14 @@
         <span class="iconfont icon-like">
           <span>{{likeCount}}</span>
         </span>
-        <span class="iconfont icon-comment_light">
+        <span class="iconfont icon-comment_light" @click="isComment = !isComment">
           <span>{{commentCount}}</span>
         </span>
         <span class="iconfont icon-forward"></span>
+      </div>
+      <div class="comment" v-if="isComment">
+        <el-input v-model="comment" placeholder="发布你的评论" type="textarea"  :minlength="1" :maxlength="140" :autosize="{ minRows: 1, maxRows: 5 }" show-word-limit></el-input>
+        <el-button style="float: right; margin: 10px 0">评论</el-button>
       </div>
     </div>
   </div>
@@ -60,7 +64,9 @@ export default {
   },
   setup(props){
     const isFold = ref(true)
+    const isComment = ref(false)
     const postCardRef = ref('')
+    const comment = ref('')
     const dynamicTags = ['泡面','啤酒','水','女朋友','HuaziHuazi']
     // const dynamicTags = ['你好你好你好你好你好','你好你好你好你好你好','你好你好你好你好你好','你好你好你好你好你好','你好你好你好你好你好']
 
@@ -103,13 +109,15 @@ export default {
       timeFormat,
       postCardRef,
       handleTouchStart,
-      handleTouchMove
+      handleTouchMove,
+      isComment,
+      comment
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
 
 .post-card{
   overflow: hidden;
@@ -215,5 +223,26 @@ export default {
       }
     }
   }
+.comment{
+  .el-input__count{
+      background: transparent;
+    }
+  .el-textarea__inner {
+    box-shadow: none;
+    background-color: var(--secondary-bg);
+    color: var(--main-text);
+    
+    &:focus{
+      box-shadow: 0 0 0 1px var(--primary-color);
+    }
+  }
+  .el-button{
+    background: var(--primary-color);
+    color: var(--main-text);
+    border: none;
+  }
+  
+}
+
 }
 </style>
