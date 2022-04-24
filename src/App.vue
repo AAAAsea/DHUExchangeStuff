@@ -15,7 +15,7 @@
     :icon="Pointer" 
     circle 
     class="pointer" 
-    color="#AA03B0" 
+    color="rgb(255,195,0)" 
     size="large"
     :dark="true"
   />

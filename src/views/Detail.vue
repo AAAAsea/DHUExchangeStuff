@@ -1,63 +1,101 @@
 <template>
-  <template v-if="isLoading">
-    <div class="skeleton" v-for="(item, index) in [1,2,3,4,5]" :key="index">
-      <br />
-      <el-skeleton style="--el-skeleton-circle-size: 100px">
-        <template #template>
-          <el-skeleton-item variant="circle" />
-        </template>
-      </el-skeleton>
-      <el-skeleton />
-    </div>
-  </template>
-  <PostDetail
-    v-else
-    class="detail"
-    :postDetail="postDetail"
+  <div class="home" >
+    <el-row  justify="center">
+      <!-- 左侧 -->
+      <el-col  :xs="0" :sm="4" :md="4" :lg="4" :xl="4">
+        <LeftSideBar/>
+      </el-col>
+      <!-- 主体 -->
+      <el-col  :xs="24" :sm="15" :md="15" :lg="15" :xl="15">        
+        <PostList
+          :postList="store.state.data.postList"
+          class="postlist"
+        />
+      </el-col>
+      <!-- 右侧 -->
+      <el-col  :xs="0" :sm="5" :md="5" :lg="5" :xl="5">
+        <RightSideBar/>
+      </el-col>
+    </el-row>
+  </div>
+  <el-button 
+    @click="showPostModel" 
+    type="primary" 
+    :icon="Edit" 
+    circle 
+    class="edit" 
+    color="#AA03B0" 
+    size="large"
+    :dark="true"
   />
 </template>
 
 <script>
-import PostDetail from "../components/PostDetail.vue"
-import { getPostDetail } from '../api/post.js'
-import { reactive, toRefs } from 'vue'
+import PostList from '../components/PostList.vue'
+import LeftSideBar from '@/components/LeftSideBar.vue'
+import RightSideBar from '@/components/RightSideBar.vue'
+import {   } from '@vue/reactivity'
+import { Edit } from '@element-plus/icons-vue'
+import { useStore } from 'vuex'
+import { isAccountLoggedIn } from '../utils/auth'
+
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: "Detail",
-  props: ['id'],
+  name: "Home",
   components: {
-    PostDetail
+    PostList,
+    LeftSideBar,
+    RightSideBar
   },
-  setup(props){
-    const data = reactive({
-      postDetail: {},
-      isLoading: true
-    })
-    getPostDetail(props.id)
-    .then((res)=>{
-      data.postDetail = res
-      data.isLoading = false
+  setup(){
+    const store = useStore()
+    store.state.data.postList.splice()
+    store.dispatch('fetchPostList')
+    .then(()=>{
+      // data.isLoading = false
     })
     .catch(err=>{
       console.log(err)
     })
 
+    function showPostModel(){
+      if(!isAccountLoggedIn()){
+        store.commit('showToast',{
+        title: 'Error',
+        message: '点击头像登录',
+        type: 'error',
+      })
+      }else{
+        store.state.model.postModelFlag = true
+      }
+    }
     return{
-      ...toRefs(data)
+      Edit,
+      store,
+      showPostModel,
+      // isDark
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  .detail, .skeleton
-  {
-    width: 70%;
+.home{
+  width: 1200px;
+  margin: 0 auto;
+}
+
+@media screen and (max-width: 1200px) {
+  .home{
+    width: 100%;
     margin: 0 auto;
   }
-  @media screen and (max-width: 1200px){
-    .detail, .skeleton{
-      width: 80%;
-    }
-  } 
+}
+.edit{
+  position: fixed;
+  right: 30px;
+  bottom: 40px;
+  font-size: 1.5rem;
+  transform: scale(1.2);
+}
 </style>

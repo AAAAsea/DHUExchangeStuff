@@ -59,6 +59,7 @@ import {isAccountLoggedIn} from '@/utils/auth'
     }
     .router-link-exact-active{
       background: var(--primary-color);
+      color: var(--main-bg);
     }
   }
 

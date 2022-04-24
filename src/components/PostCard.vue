@@ -13,10 +13,10 @@
       </div>
     </div>
     <!-- <router-link :to="'/detail/'+post.id"> -->
-      <div class="sub">
-        <h3>{{title}}</h3>
-        <p :class="{fold: isFold}">{{content}}</p>
-      </div>
+    <div class="sub">
+      <h3>{{title}}</h3>
+      <p :class="{fold: isFold}">{{content}}</p>
+    </div>
     <!-- </router-link> -->
     <div class="footer">
       <el-tag
@@ -42,11 +42,16 @@
         </span>
         <span class="iconfont icon-forward"></span>
       </div>
-      <div class="comment" v-if="isComment">
-        <el-input v-model="comment" placeholder="发布你的评论" type="textarea"  :minlength="1" :maxlength="140" :autosize="{ minRows: 1, maxRows: 5 }" show-word-limit></el-input>
-        <el-button style="float: right; margin: 10px 0">评论</el-button>
+      <div v-if="isComment">
+        <div class="comment" >
+          <el-input v-model="comment" placeholder="发布你的评论" type="textarea"  :minlength="1" :maxlength="140" :autosize="{ minRows: 1, maxRows: 5 }" show-word-limit></el-input>
+          <el-button style="float: right; margin: 10px 0" @click="replyToPost" :disabled="comment.trim() === ''">评论</el-button>
+        </div>
+        <CommentCard :comments="postDetail.comments" :postId="post.id" @on-reply="initComment"/>
       </div>
     </div>
+    
+
   </div>
 </template>
 
@@ -55,18 +60,24 @@ import { ArrowDownBold } from '@element-plus/icons-vue'
 import { ref } from '@vue/reactivity'
 import { timeFormat } from '@/utils/tools'
 import { toRefs } from 'vue'
+import CommentCard from '@/components/CommentCard.vue'
+import { getPostDetail, addComment } from '@/api/post'
+import { useStore } from 'vuex'
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Post",
   props: ['post','user'],
   components: {
-    ArrowDownBold
+    ArrowDownBold,
+    CommentCard
   },
   setup(props){
     const isFold = ref(true)
     const isComment = ref(false)
     const postCardRef = ref('')
     const comment = ref('')
+    const postDetail = ref([])
+    const store = useStore()
     const dynamicTags = ['泡面','啤酒','水','女朋友','HuaziHuazi']
     // const dynamicTags = ['你好你好你好你好你好','你好你好你好你好你好','你好你好你好你好你好','你好你好你好你好你好','你好你好你好你好你好']
 
@@ -101,6 +112,34 @@ export default {
       isRipplesFlag = false;
     }
     
+    function initComment(){
+      getPostDetail({id:props.post.id, offset: 0, limit: 10})
+      .then(res=>{
+        postDetail.value = res.data;
+        postDetail.value.comments.sort((a,b)=>new Date(b.comment.createTime) - new Date(a.comment.createTime))
+        postDetail.value.comments.forEach(element => {
+          element.replys.sort((a,b)=>new Date(b.reply.createTime) - new Date(a.reply.createTime))
+        });
+      })
+    }
+    initComment()
+    function replyToPost(){
+      addComment({
+        id: props.post.id,
+        entityId: props.post.id,
+        entityType: 1,
+        content: comment.value
+      }).then(res=>{
+        if(res.code === 20000){
+          store.commit('showToast',{
+            type: "success",
+            message: "评论成功",
+          })
+          initComment()
+        }
+      })
+    }
+    
     return{
       dynamicTags,
       isFold,
@@ -111,7 +150,10 @@ export default {
       handleTouchStart,
       handleTouchMove,
       isComment,
-      comment
+      comment,
+      postDetail,
+      replyToPost,
+      initComment
     }
   }
 }
@@ -193,8 +235,8 @@ export default {
       border-color:  var(--secondary-border) !important;
       color: var(--secondary-text) !important;
       &:hover{
-      border-color: var(--main-text) !important ;
-      color: var(--main-text) !important ;
+      border-color: var(--primary-color) !important ;
+      color: var(--primary-color) !important ;
       }
     }
     .toolbar{
@@ -213,9 +255,8 @@ export default {
       color: var(--toolbar-text);
       transition: .1s;
       &:hover{
-        // background: var(--primary-color);
-        color: var(--main-text);
-        text-shadow: 1px 1px 2px 4px var(--main-text);
+        text-shadow: 1px 1px 2px 4px var(--primary-color);
+        color: var(--primary-color) !important ;
       }
       span{
         margin-left: 3px;
@@ -224,6 +265,13 @@ export default {
     }
   }
 .comment{
+  overflow: hidden;
+  width: 100%;
+  padding-top: 10px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top: 1px solid var(--secondary-bg);
+  border-bottom: 1px solid var(--secondary-bg);
   .el-input__count{
       background: transparent;
     }
@@ -238,10 +286,9 @@ export default {
   }
   .el-button{
     background: var(--primary-color);
-    color: var(--main-text);
+    color: var(--main-bg);
     border: none;
   }
-  
 }
 
 }

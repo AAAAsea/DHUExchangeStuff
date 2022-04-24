@@ -18,12 +18,14 @@ export function getPostList(limit=20, offset=0) {
 /**
  * 获取post详细信息
  */
-export function getPostDetail(id) {
+export function getPostDetail({id, offset = 0, limit = 10}) {
   return request({
-    url: '/postdetail',
+    url: '/post/detail/'+id,
     method: 'get',
     params: {
-      id
+      id,
+      offset,
+      limit
     },
   });
 }
@@ -42,3 +44,21 @@ export function addPost(title, content, tags) {
     },
   });
 }
+
+/**
+ * 发布新的post
+ */
+export function addComment({id, entityType, content, entityId = 0, targetId = 0}) {
+  console.log(arguments)
+  return request({
+    url: '/comment/add/' + id,
+    method: 'post',
+    data: {
+      entityType,
+      entityId,
+      targetId,
+      content
+    },
+  });
+}
+

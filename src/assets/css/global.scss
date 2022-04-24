@@ -1,5 +1,6 @@
 :root{
-  --primary-color:  #AA03B0  ;
+  --primary-color:  rgb(255,195,0)  ;
+  --secondary-primary-color:  rgb(204, 159, 12)  ;
   --top-nav-bg: #16161a;
   --post-card-bg: #16161a;
   --post-card-border: #202025;
@@ -26,7 +27,7 @@
   padding: 0;
 }
 html{
-  font-size: 15px;
+  font-size: 15px !important;
   cursor: url(https://cdn.jsdelivr.net/gh/sviptzk/HexoStaticFile@latest/Hexo/img/default.cur),default;
 }
 
@@ -90,5 +91,3 @@ input{
     padding-bottom: 500%;
   }
 } 
-
-

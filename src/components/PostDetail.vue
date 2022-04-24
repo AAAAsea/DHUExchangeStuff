@@ -6,24 +6,24 @@
     />
       
     <div class="comment-container"> 
-      <CommentCard
+      <!-- <CommentCard
       v-for="comment in postDetail.comments"
       :key="comment.id"
       :comment="comment"
-      class="comment"/>
+      class="comment"/> -->
     </div>
   </div>
 </template>
 
 <script>
-import CommentCard from './CommentCard.vue'
+// import CommentCard from './CommentCard.vue'
 import PostCard from './PostCard.vue'
 
 export default {
   name: 'PostDetail',
   props: ['id', 'postDetail'],
   components: {
-    CommentCard,
+    // CommentCard,
     PostCard
   },
   setup(props){
