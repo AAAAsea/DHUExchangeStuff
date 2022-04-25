@@ -3,15 +3,15 @@ import { getUserInfo } from '@/api/user'
 
 export default {
   // 获取postList
-  fetchPostList: ({ commit, state } ) => {
+  fetchPostList: ({ commit, state }, userId = 0 ) => {
     // if (!isAccountLoggedIn()) return;
     return getPostList(
       15, // limit
       state.data.postList.length, // offset
     ).then(result => {
-      // console.log("postList",result.data)
+      console.log("postList",result.data.postList[0])
       if (result.code === 20000) {
-        commit('addData', { key: 'postList', value: result.data });
+        commit('addData', { key: userId === 0 ?  'postList' : 'userPostList', value: result.data.postList });
       }
     });
   },
@@ -25,7 +25,7 @@ export default {
       // console.log("postList",result.data)
       if (result.code === 20000) {
         commit('resetPostList');
-        commit('addData', { key: 'postList', value: result.data });
+        commit('addData', { key: 'postList', value: result.data.postlist });
       }
     });
   },

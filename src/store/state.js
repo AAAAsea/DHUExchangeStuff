@@ -4,6 +4,7 @@ export default {
     user: null,
     ...JSON.parse(localStorage.getItem('data')),
     postList: [],
+    userPostList: []
     
   },
   model:{

@@ -3,11 +3,12 @@ import request from '../utils/request'
 /**
  * 获取post列表
  */
-export function getPostList(limit=20, offset=0) {
+export function getPostList(limit=20, offset=0, userId = 0) {
   return request({
     url: '/postlist',
     method: 'get',
     params: {
+      userId,
       limit,
       offset,
       timestamp: new Date().getTime(),
@@ -46,7 +47,7 @@ export function addPost(title, content, tags) {
 }
 
 /**
- * 发布新的post
+ * 发布新的评论
  */
 export function addComment({id, entityType, content, entityId = 0, targetId = 0}) {
   console.log(arguments)
@@ -61,4 +62,21 @@ export function addComment({id, entityType, content, entityId = 0, targetId = 0}
     },
   });
 }
+
+/**
+ * 发布新的点赞
+ */
+export function changeLikeStatus({entityType, entityId, entityUserId}) {
+  console.log(arguments)
+  return request({
+    url: '/like',
+    method: 'post',
+    params: {
+      entityType,
+      entityId,
+      entityUserId
+    },
+  });
+}
+
 

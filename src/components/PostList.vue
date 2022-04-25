@@ -16,6 +16,8 @@
       <PostCard
         :post="post.post"
         :user="post.user"
+        :likeStatus="post.likeStatus"
+        @on-changeLikeStatus="post.likeStatus = !post.likeStatus"
         class="post"
       />
     </div>

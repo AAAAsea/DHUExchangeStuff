@@ -1,11 +1,11 @@
 <template>
   <PostList
-    v-if="false"
+    v-if="postList && postList.length > 0"
     :postList="postList"
     :isLoading="false"
     class="postlist"
   />
-  <el-empty></el-empty>
+  <el-empty v-else></el-empty>
 </template>
 
 <script setup>
@@ -13,15 +13,10 @@ import { useStore } from 'vuex'
 import PostList from '@/components/PostList.vue'
 
 const store = useStore()
-const postList = store.state.data.postList
+store.dispatch('fetchPostList', store.state.data.user.id)
+const postList = store.state.data.userPostList
 
 </script>
 
 <style scoped>
-
-  @media screen and (max-width: 1200px){
-    .postlist{
-      width: 80%;
-    }
-  } 
 </style>
