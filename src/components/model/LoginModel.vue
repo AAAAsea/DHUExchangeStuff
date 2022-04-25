@@ -1,7 +1,7 @@
 <template>
 
   <!-- Form -->
-  <el-dialog v-model="store.state.model.loginModelFlag"  :title="type === 'login' ? '登录' : '注册'" custom-class="dialog" :width="dialogWidth">
+  <el-dialog v-model="store.state.model.loginModelFlag"  :title="type === 'login' ? '登录' : '注册'" custom-class="dialog" :width="store.state.model.modelWidth">
     <!-- 登录 -->
     <el-form 
     v-if="type === 'login'"
@@ -38,7 +38,7 @@
       <el-form-item :label="$t('login.code')" label-width="auto" prop="code"  >
         <div class="code">
           <el-input v-model="registRuleForm.code" autocomplete="off"  :placeholder="$t('login.codePlace')" :style="{width:   '50%'}" />
-          <el-button type="primary" @click="handleCodeClick" :disabled="sendCodeButtonFlag">发送{{sendCodeButtonFlag ? ' ' + codeWaitTime + 's' : ''}}</el-button>
+          <el-button type="primary" @click="handleCodeClick" :disabled="sendCodeButtonFlag" style="backgroundColor:var(--primary-color); color: var(--main-bg); border: none;">发送{{sendCodeButtonFlag ? ' ' + codeWaitTime + 's' : ''}}</el-button>
         </div>
       </el-form-item>
       <el-form-item :label="$t('login.password')" label-width="auto" prop="password" >
@@ -51,10 +51,10 @@
     
     <template #footer>
       <span class="dialog-footer">
-        <el-button type="text" @click="type = type === 'login' ? 'regist' : 'login'">{{type === 'login' ? '前往注册' : '已有帐号，点击登录'}}</el-button>
+        <el-button type="text" @click="type = type === 'login' ? 'regist' : 'login'" style="color:var(--primary-color);">{{type === 'login' ? '前往注册' : '已有帐号，点击登录'}}</el-button>
         <el-button @click="store.state.model.loginModelFlag = false">取消</el-button>
         <el-button type="primary" @click="submit(type === 'login' ? ruleFormRef : registerRuleFormRef )"
-          >{{type === 'login' ? '登录' : '注册'}}</el-button
+          style="backgroundColor:var(--primary-color); color: var(--main-bg); border: none;">{{type === 'login' ? '登录' : '注册'}}</el-button
         >
       </span>
     </template>
@@ -62,7 +62,7 @@
 </template>
 
 <script setup>
-import { computed, reactive, ref } from 'vue'
+import {  reactive, ref } from 'vue'
 import { useStore } from 'vuex'
 
 const type = ref('login');
@@ -74,7 +74,6 @@ const ruleForm = reactive({
   account: '',
   password: ''
 })
-const dialogWidth = computed(()=>document.documentElement.clientWidth > 1000 ? '400px' : '90VW')
 const loginRules = reactive({
   account: [
     { required: true, message: '邮箱不能为空', trigger: 'blur' },
@@ -204,7 +203,6 @@ function submit(formEl){
       {
         regist(registRuleForm)
         .then(res=>{
-          console.log("注册返回信息：",res)
           handleRes(res, ()=>{
             type.value = 'login'
           })
@@ -214,7 +212,6 @@ function submit(formEl){
       else{
         login(ruleForm.account, ruleForm.password)
         .then(res=>{
-          console.log("登录返回信息:",res)
           handleRes(res,()=>{
             store.state.data.isLoggedIn = true;
             store.dispatch('fetchUserProfile').then(()=>{store.state.model.loginModelFlag = false;})

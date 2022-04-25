@@ -37,7 +37,7 @@
         <span class="iconfont icon-like">
           <span>{{likeCount}}</span>
         </span>
-        <span class="iconfont icon-comment_light" @click="isComment = !isComment">
+        <span class="iconfont icon-comment_light" @click="changeFold">
           <span>{{commentCount}}</span>
         </span>
         <span class="iconfont icon-forward"></span>
@@ -47,11 +47,17 @@
           <el-input v-model="comment" placeholder="发布你的评论" type="textarea"  :minlength="1" :maxlength="140" :autosize="{ minRows: 1, maxRows: 5 }" show-word-limit></el-input>
           <el-button style="float: right; margin: 10px 0" @click="replyToPost" :disabled="comment.trim() === ''">评论</el-button>
         </div>
-        <CommentCard :comments="postDetail.comments" :postId="post.id" @on-reply="initComment"/>
+        <CommentCard 
+          :comments="postDetail.comments" 
+          v-if="postDetail.comments" 
+          :postId="post.id"
+          @on-reply="initComment"
+        />
+        <div class="loading-comment" v-if="commentCount > 0 && !postDetail.comments" >
+            <div v-loading="true" element-loading-background="transparent" element-loading-text="正在获取" ></div>
+        </div>
       </div>
     </div>
-    
-
   </div>
 </template>
 
@@ -76,11 +82,9 @@ export default {
     const isComment = ref(false)
     const postCardRef = ref('')
     const comment = ref('')
+    const isFirstComment = ref(true)
     const postDetail = ref([])
     const store = useStore()
-    const dynamicTags = ['泡面','啤酒','水','女朋友','HuaziHuazi']
-    // const dynamicTags = ['你好你好你好你好你好','你好你好你好你好你好','你好你好你好你好你好','你好你好你好你好你好','你好你好你好你好你好']
-
     let canRipplesFlag = true; // 每当点击发生禁止点击，防止点击过快以及多指点击
     let isRipplesFlag = false; // 100ms内滑动取消不触发波纹效果
     function handleTouchStart(e){
@@ -107,22 +111,33 @@ export default {
         }
       }, 100);
     }
-
     function handleTouchMove(){
       isRipplesFlag = false;
     }
-    
     function initComment(){
       getPostDetail({id:props.post.id, offset: 0, limit: 10})
       .then(res=>{
-        postDetail.value = res.data;
-        postDetail.value.comments.sort((a,b)=>new Date(b.comment.createTime) - new Date(a.comment.createTime))
-        postDetail.value.comments.forEach(element => {
-          element.replys.sort((a,b)=>new Date(b.reply.createTime) - new Date(a.reply.createTime))
-        });
+        if(res.code === 20000)
+        {
+          postDetail.value = res.data;
+          postDetail.value.comments.sort((a,b)=>new Date(b.comment.createTime) - new Date(a.comment.createTime))
+          postDetail.value.comments.forEach(element => {
+            element.replys.sort((a,b)=>new Date(b.reply.createTime) - new Date(a.reply.createTime))
+          });
+        }else{
+          postDetail.value.comments = []
+          store.commit('showToast',{
+            type: 'error',
+            message: res.message ?? "加载失败"
+          })
+        }
       })
     }
-    initComment()
+    function changeFold(){
+      isComment.value = !isComment.value;
+      if(isFirstComment.value && props.post.commentCount > 0) initComment() // 第一次展开发送请求获取评论
+      isFirstComment.value = false;
+    }
     function replyToPost(){
       addComment({
         id: props.post.id,
@@ -141,15 +156,15 @@ export default {
     }
     
     return{
-      dynamicTags,
       isFold,
       ...toRefs(props.user),
       ...toRefs(props.post),
+      isComment,
       timeFormat,
       postCardRef,
       handleTouchStart,
       handleTouchMove,
-      isComment,
+      changeFold,
       comment,
       postDetail,
       replyToPost,
@@ -244,24 +259,28 @@ export default {
       height: 33px;
       display: flex;
       justify-content: space-around;
+      .iconfont{
+        height: 100%;
+        display: flex;
+        flex: 1;
+        justify-content: center;
+        align-items: center;
+        font-size: 16px;
+        color: var(--toolbar-text);
+        transition: .1s;
+        &:hover{
+          text-shadow: 1px 1px 2px 4px var(--primary-color);
+          color: var(--primary-color) !important ;
+        }
+        span{
+          margin-left: 3px;
+          font-size: 13px;
+        }
+      }
     }
-    .iconfont{
-      height: 100%;
-      display: flex;
-      flex: 1;
-      justify-content: center;
-      align-items: center;
-      font-size: 16px;
-      color: var(--toolbar-text);
-      transition: .1s;
-      &:hover{
-        text-shadow: 1px 1px 2px 4px var(--primary-color);
-        color: var(--primary-color) !important ;
-      }
-      span{
-        margin-left: 3px;
-        font-size: 13px;
-      }
+    .loading-comment{
+      height: 50px;
+      margin: 20px 0;
     }
   }
 .comment{

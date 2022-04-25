@@ -55,15 +55,19 @@ export default {
       // data.isLoading = false
     })
     .catch(err=>{
-      console.log(err)
-    })
+        console.log(err)
+        store.commit('showToast',{
+          type: "error",
+          message: "加载失败"
+        })    
+      })
 
     function showPostModel(){
       if(!isAccountLoggedIn()){
         store.commit('showToast',{
         title: 'Error',
         message: '点击头像登录',
-        type: 'error',
+        type: 'warning',
       })
       }else{
         store.state.model.postModelFlag = true

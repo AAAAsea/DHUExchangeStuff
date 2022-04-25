@@ -6,8 +6,8 @@
   infinite-scroll-delay="500"
   @touchstart="handleTouchStart" @touchend="handleTouchEnd" @touchmove ="handleTouchMove"
   >
-  <el-icon :style="refreshStyle" color="var(--primary-color)"><refresh-right/></el-icon>
-  <el-empty v-if="store.state.data.postList.length === 0"></el-empty>
+    <el-icon :style="refreshStyle" color="var(--primary-color)"><refresh-right/></el-icon>
+    <el-empty v-if="store.state.data.postList.length === 0"></el-empty>
     <div 
       v-for="post in postList"
       :key="post.post.id"

@@ -1,7 +1,7 @@
 <template>
 
   <!-- Form -->
-  <el-dialog v-model="store.state.model.postModelFlag" title="发贴" custom-class="dialog" :width="dialogWidth()">
+  <el-dialog v-model="store.state.model.postModelFlag" title="发贴" custom-class="dialog" :width="store.state.model.modelWidth">
     <el-form :model="form" :rules="rules" ref="ruleFormRef" @keydown.ctrl.enter="publish(ruleFormRef)">
       <el-form-item label="标题" :label-width="auto" prop="title">
         <el-input v-model="form.title" maxlength="10" show-word-limit autocomplete="off"  placeholder="输入你的标题"/>
@@ -12,7 +12,7 @@
           <el-option label="2" value="beijing" />
         </el-select>
       </el-form-item> -->
-      <el-form-item label="内容" :label-width="formLabelWidth"  prop="content"  >
+      <el-form-item label="内容" prop="content"  >
         <el-input v-model="form.content"  maxlength="520" show-word-limit autocomplete="off" type="textarea" :autosize="{ minRows: 2, maxRows: 50 }" placeholder="写点什么呢..."/>
       </el-form-item>
     </el-form>
@@ -42,7 +42,7 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="store.state.model.postModelFlag = false">取消</el-button>
-        <el-button type="primary" @click="publish(ruleFormRef)" 
+        <el-button type="primary" @click="publish(ruleFormRef)"  style="backgroundColor:var(--primary-color); color: var(--main-bg); border: none;"
           >发布 Ctrl ↵</el-button
         >
       </span>
@@ -60,7 +60,6 @@ const form = reactive({
   title: '',
   content: ''
 })
-const dialogWidth = ()=>document.documentElement.clientWidth > 768 ? '400px' : '90VW'
 const ruleFormRef = ref('')
 const rules = reactive({
   title: [
@@ -98,7 +97,10 @@ function publish(formEl){
           store.dispatch('fetchNewPostList')
         }
         else{
-          store.commit('resetUserInfo')
+          if(res.code === 52008 || res.code === 52007)
+          {
+            store.commit('resetUserInfo')
+          }
           console.log(res.message)
             store.commit('showToast',{
               type: 'info',

@@ -88,6 +88,18 @@ const beforeAvatarUpload= (rawFile) => {
       box-sizing: border-box;
       letter-spacing: 1px;
     }
+    .el-input__count{
+      background: transparent;
+    }
+    .el-input_inner {
+      box-shadow: none;
+      background-color: var(--secondary-bg) !important;
+      color: var(--main-text);
+      &:focus{
+        box-shadow: 0 0 0 1px var(--primary-color);
+      }
+    }
+
     .el-input {
       width: 200px;
     }
@@ -110,6 +122,9 @@ const beforeAvatarUpload= (rawFile) => {
 .savebtn{
   display: block;
   margin: 0 auto;
+  background: var(--primary-color);
+  color: var(--main-bg);
+  border: none;
 }
 .avatar-uploader .el-upload {
   border: 1px dashed var(--el-border-color);
@@ -137,4 +152,5 @@ const beforeAvatarUpload= (rawFile) => {
   height: 72px;
   text-align: center;
 }
+
 </style>

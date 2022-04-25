@@ -4,7 +4,6 @@
       v-model="store.state.model.leftDrawerModelFlag"
       title=""
       direction="ltr"
-      :before-close="handleClose"
       custom-class="drawer"
     >
       <div class="user">

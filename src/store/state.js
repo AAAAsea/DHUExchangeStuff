@@ -9,7 +9,8 @@ export default {
   model:{
     postModelFlag: false,
     loginModelFlag: false,
-    leftDrawerModelFlag: false
+    leftDrawerModelFlag: false,
+    modelWidth: '500px'
   },
   user:{
     isLogin: true

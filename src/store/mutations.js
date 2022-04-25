@@ -11,6 +11,8 @@ export default {
   showToast(state, payload){
     payload.message = payload.message ?? payload.title
     ElMessage({
+      'show-close': true,
+      offset: 40,
       ...payload
     })
   },
@@ -20,8 +22,6 @@ export default {
   resetUserInfo(state){
     state.data.isLoggedIn = false;
     state.data.user = null;
-    var expires = new Date();
-    expires.setTime(expires.getTime() - 10);
-    document.cookie = 'ticket='+decodeURI('echo')+';expires=' + expires.toGMTString();
+    document.cookie = "ticket=;path=/";
   }
 }

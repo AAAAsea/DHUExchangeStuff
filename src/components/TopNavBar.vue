@@ -5,7 +5,7 @@
         <el-col  :xs="18" :sm="8" :md="8">
           <!-- <router-link to="/"> -->
             <h3 v-if="isMobile" :style="{display:'flex', alignItems: 'center'}">
-              <el-icon @click="store.state.model.leftDrawerModelFlag = !store.state.model.leftDrawerModelFlag"><Expand /></el-icon>
+              <el-icon @click="store.state.model.leftDrawerModelFlag = !store.state.model.leftDrawerModelFlag" style="margin: 0 5px;  "><Expand /></el-icon>
               {{route.name}}
             </h3>
             <h1 v-else>
@@ -91,9 +91,7 @@ export default {
       store.state.model.loginModelFlag = true;
     }
     function logOut(){
-      console.log("hh")
-      store.state.data.isLoggedIn = false;
-      store.state.data.user = null;
+      store.commit('resetUserInfo')
       store.commit('showToast',{
         type: "info",
         title: "已登出账号"
