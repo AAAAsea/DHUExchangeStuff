@@ -34,8 +34,8 @@
         #{{ tag }}
       </el-tag>
       <div class="toolbar">
-        <span class="iconfont icon-like">
-          <span>{{likeCount}}</span>
+        <span class="iconfont icon-like" :style="{color: likeStatus ? 'var(--primary-color)' : ''}" @click="handleLike">
+          <span>{{likeCount + likeStatus}}</span>
         </span>
         <span class="iconfont icon-comment_light" @click="changeFold">
           <span>{{commentCount}}</span>
@@ -67,17 +67,17 @@ import { ref } from '@vue/reactivity'
 import { timeFormat } from '@/utils/tools'
 import { toRefs } from 'vue'
 import CommentCard from '@/components/CommentCard.vue'
-import { getPostDetail, addComment } from '@/api/post'
+import { getPostDetail, addComment, changeLikeStatus } from '@/api/post'
 import { useStore } from 'vuex'
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Post",
-  props: ['post','user'],
+  props: ['post','user','likeStatus'],
   components: {
     ArrowDownBold,
     CommentCard
   },
-  setup(props){
+  setup(props, context){
     const isFold = ref(true)
     const isComment = ref(false)
     const postCardRef = ref('')
@@ -154,7 +154,20 @@ export default {
         }
       })
     }
-    
+    function handleLike(){
+      
+      changeLikeStatus({
+        entityType: 1,
+        entityId: props.post.id,
+        entityUserId: props.user.id
+      })
+      .then(res=>{
+        if(res.code === 20000)
+        {
+          context.emit('on-changeLikeStatus');
+        }
+      })
+    }
     return{
       isFold,
       ...toRefs(props.user),
@@ -168,7 +181,8 @@ export default {
       comment,
       postDetail,
       replyToPost,
-      initComment
+      initComment,
+      handleLike
     }
   }
 }
