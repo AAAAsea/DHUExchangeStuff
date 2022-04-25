@@ -17,7 +17,7 @@
         :post="post.post"
         :user="post.user"
         :likeStatus="post.likeStatus"
-        @on-changeLikeStatus="post.likeStatus = !post.likeStatus"
+        @on-changeLikeStatus="()=>{post.likeStatus = !post.likeStatus; post.post.likeCount += post.likeStatus || -1}"
         class="post"
       />
     </div>

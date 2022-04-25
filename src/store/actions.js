@@ -7,9 +7,10 @@ export default {
     // if (!isAccountLoggedIn()) return;
     return getPostList(
       15, // limit
-      state.data.postList.length, // offset
+      userId === 0 ? state.data.postList.length : state.data.userPostList.length, // offset
+      userId
     ).then(result => {
-      console.log("postList",result.data.postList[0])
+      console.log("postList",result)
       if (result.code === 20000) {
         commit('addData', { key: userId === 0 ?  'postList' : 'userPostList', value: result.data.postList });
       }

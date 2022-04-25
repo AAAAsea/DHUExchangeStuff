@@ -7,10 +7,12 @@
       </el-col>
       <!-- 主体 -->
       <el-col  :xs="24" :sm="15" :md="15" :lg="15" :xl="15">        
-        <PostList
-          :postList="store.state.data.postList"
-          class="postlist"
-        />
+      <PostCard
+        :post="postDetail.post"
+        :user="postDetail.user"
+        :likeStatus="postDetail.likeStatus"
+        @on-changeLikeStatus="()=>{postDetail.likeStatus = !postDetail.likeStatus; postDetail.post.likeCount += postDetail.likeStatus || -1}"
+      />
       </el-col>
       <!-- 右侧 -->
       <el-col  :xs="0" :sm="5" :md="5" :lg="5" :xl="5">
@@ -30,53 +32,47 @@
   />
 </template>
 
-<script>
-import PostList from '../components/PostList.vue'
+<script setup>
+import PostCard from '../components/PostCard.vue'
 import LeftSideBar from '@/components/LeftSideBar.vue'
 import RightSideBar from '@/components/RightSideBar.vue'
-import {   } from '@vue/reactivity'
 import { Edit } from '@element-plus/icons-vue'
 import { useStore } from 'vuex'
-import { isAccountLoggedIn } from '../utils/auth'
+import { useRoute } from 'vue-router'
+import { getPostDetail } from '@/api/post'
+import { ref } from '@vue/reactivity'
+const store = useStore()
+const route = useRoute()
+const postDetail = ref('')
 
-export default {
-  // eslint-disable-next-line vue/multi-word-component-names
-  name: "Home",
-  components: {
-    PostList,
-    LeftSideBar,
-    RightSideBar
-  },
-  setup(){
-    const store = useStore()
-    store.state.data.postList.splice()
-    store.dispatch('fetchPostList')
-    .then(()=>{
-      // data.isLoading = false
-    })
-    .catch(err=>{
-      console.log(err)
-    })
-
-    function showPostModel(){
-      if(!isAccountLoggedIn()){
-        store.commit('showToast',{
-        title: 'Error',
-        message: '点击头像登录',
+console.log(route.path)
+function initPostDetail(){
+  getPostDetail({id:route.params.id, offset: 0, limit: 5})
+  .then(res=>{
+    console.log(res.data)
+    if(res.code === 20000)
+    {
+      postDetail.value = res.data;
+      postDetail.value.comments.sort((a,b)=>new Date(b.comment.createTime) - new Date(a.comment.createTime))
+      postDetail.value.comments.forEach(element => {
+        element.replys.sort((a,b)=>new Date(b.reply.createTime) - new Date(a.reply.createTime))
+      });
+    }else{
+      postDetail.value.comments = []
+      store.commit('showToast',{
         type: 'error',
+        message: res.message ?? "加载失败"
       })
-      }else{
-        store.state.model.postModelFlag = true
-      }
     }
-    return{
-      Edit,
-      store,
-      showPostModel,
-      // isDark
-    }
-  }
+  })
+  .catch(err=>{
+    console.log(err)
+  })
 }
+initPostDetail()
+
+
+
 </script>
 
 <style lang="scss" scoped>

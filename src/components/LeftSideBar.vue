@@ -1,7 +1,7 @@
 <template>
   <div class="home-left">
     <ul>
-      <router-link to="/">
+      <router-link to="/home">
         <li>
           <span class="emoji">🎈</span>
           <span class="title">DHU广场</span>
@@ -57,7 +57,7 @@ import {isAccountLoggedIn} from '@/utils/auth'
       margin: 2px 0;
       background: var(--secondary-bg);
     }
-    .router-link-exact-active{
+    .router-link-active{
       background: var(--primary-color);
       color: var(--main-bg);
     }

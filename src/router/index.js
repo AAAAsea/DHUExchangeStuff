@@ -7,15 +7,19 @@ import { isAccountLoggedIn } from '../utils/auth'
 const	routes=[
 		{
 			path:'/',
+			redirect: '/home'
+		},
+		{
+			path:'/home',
 			name: '🎈 DHU-广场',
 			component: ()=>import("@/views/Home"),
 			meta: {
 				index: 1,
 				title:'🎈 DHU-广场',
-			}
+			},
 		},
-    {
-			path:'/detail/:id',	
+    { 
+			path:'/home/:id',	
 			name: '🎲 DHU-讨论',
 			component: ()=>import("@/views/Detail"),
 			props: true,

@@ -35,7 +35,7 @@
       </el-tag>
       <div class="toolbar">
         <span class="iconfont icon-like" :style="{color: likeStatus ? 'var(--primary-color)' : ''}" @click="handleLike">
-          <span>{{likeCount + likeStatus}}</span>
+          <span>{{likeCount}}</span>
         </span>
         <span class="iconfont icon-comment_light" @click="changeFold">
           <span>{{commentCount}}</span>
@@ -51,6 +51,7 @@
           :comments="postDetail.comments" 
           v-if="postDetail.comments" 
           :postId="post.id"
+          :handleLike="handleLike"
           @on-reply="initComment"
         />
         <div class="loading-comment" v-if="commentCount > 0 && !postDetail.comments" >
@@ -65,6 +66,7 @@
 import { ArrowDownBold } from '@element-plus/icons-vue' 
 import { ref } from '@vue/reactivity'
 import { timeFormat } from '@/utils/tools'
+import { isAccountLoggedIn } from '@/utils/auth'
 import { toRefs } from 'vue'
 import CommentCard from '@/components/CommentCard.vue'
 import { getPostDetail, addComment, changeLikeStatus } from '@/api/post'
@@ -85,6 +87,8 @@ export default {
     const isFirstComment = ref(true)
     const postDetail = ref([])
     const store = useStore()
+    let likeTimeOut; // 点赞定时器
+    let isLikeChange = false; // 是否在发送请求之前改变了点赞，发送之后置为false
     let canRipplesFlag = true; // 每当点击发生禁止点击，防止点击过快以及多指点击
     let isRipplesFlag = false; // 100ms内滑动取消不触发波纹效果
     function handleTouchStart(e){
@@ -115,7 +119,7 @@ export default {
       isRipplesFlag = false;
     }
     function initComment(){
-      getPostDetail({id:props.post.id, offset: 0, limit: 10})
+      getPostDetail({id:props.post.id, offset: 0, limit: 5})
       .then(res=>{
         if(res.code === 20000)
         {
@@ -155,18 +159,38 @@ export default {
       })
     }
     function handleLike(){
-      
-      changeLikeStatus({
-        entityType: 1,
-        entityId: props.post.id,
-        entityUserId: props.user.id
-      })
-      .then(res=>{
-        if(res.code === 20000)
-        {
-          context.emit('on-changeLikeStatus');
-        }
-      })
+      if(!isAccountLoggedIn())
+      {
+        store.commit('showToast',{
+          type: 'warning',
+          message: '请先点击头像登录'
+        })
+        return;
+      }
+      clearTimeout(likeTimeOut);
+      isLikeChange = !isLikeChange;
+      context.emit('on-changeLikeStatus'); //本地修改点赞状态
+      if(isLikeChange){
+        likeTimeOut = setTimeout(() => {
+          isLikeChange = false;
+          changeLikeStatus({
+            entityType: 1,
+            entityId: props.post.id,
+            entityUserId: props.user.id
+          })
+          .then(res=>{
+            if(res.code === 20000)
+            {
+              console.log("改变点赞成功")
+            }else{
+              context.emit('on-changeLikeStatus'); // 请求失败，本地改回来
+            }
+          })
+          .catch(()=>{
+            context.emit('on-changeLikeStatus'); // 请求失败，本地改回来
+          })
+        }, 1000);
+      }
     }
     return{
       isFold,
