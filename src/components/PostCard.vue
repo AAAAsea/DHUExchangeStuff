@@ -4,23 +4,35 @@
     @touchmove="handleTouchMove" 
     ref='postCardRef'
   >
-    <el-icon :style="{position: 'absolute', top: '15px', right: '10px', color:'#eee', transform: 'rotate('+ (isFold ? 0 : 180) +'deg)', transition: '0.3s'}" @click.stop="isFold = !isFold" ><arrow-down-bold /></el-icon>
+    <!-- 折叠展开 -->
+    <el-icon
+    v-if="!isDetail"
+    :style="{
+      position: 'absolute', 
+      top: '15px', 
+      right: '10px', 
+      color:'#eee', 
+      transform: 'rotate('+ (isFold ? 0 : 180) +'deg)',
+      transition: '0.3s'
+      }" 
+    @click.stop="isFold = !isFold" 
+    >
+      <arrow-down-bold />
+    </el-icon>
     <div class="header">
-      <img :src="headerUrl" alt="">
+      <img :src="user.headerUrl" alt="">
       <div class="title">
-        <h4>{{nickName ?? username}}</h4>
-        <p>{{timeFormat(new Date(createTime).getTime())}}</p>
+        <h4>{{user.nickName ?? user.username}}</h4>
+        <p>{{timeFormat(new Date(post.createTime).getTime())}}</p>
       </div>
     </div>
-    <!-- <router-link :to="'/detail/'+post.id"> -->
     <div class="sub">
-      <h3>{{title}}</h3>
-      <p :class="{fold: isFold}">{{content}}</p>
+      <h3>{{post.title}}</h3>
+      <p :class="{fold: isFold}">{{post.content}}</p>
     </div>
-    <!-- </router-link> -->
     <div class="footer">
       <el-tag
-        v-for="tag in tags"
+        v-for="tag in post.tags"
         :key="tag"
         :style="{margin: '0  10px 10px 0'}"
         :disable-transitions="false"
@@ -34,28 +46,54 @@
         #{{ tag }}
       </el-tag>
       <div class="toolbar">
-        <span class="iconfont icon-like" :style="{color: likeStatus ? 'var(--primary-color)' : ''}" @click="handleLike">
-          <span>{{likeCount}}</span>
+        <span 
+          class="iconfont icon-like" 
+          :style="{color: post.likeStatus ? 'var(--primary-color)' : ''}" 
+          @click="handleLike"
+        >
+          <span>{{post.likeCount}}</span>
         </span>
         <span class="iconfont icon-comment_light" @click="changeFold">
-          <span>{{commentCount}}</span>
+          <span>{{post.commentCount}}</span>
         </span>
         <span class="iconfont icon-forward"></span>
       </div>
-      <div v-if="isComment">
+      <div v-if="isComment || isDetail">
         <div class="comment" >
-          <el-input v-model="comment" placeholder="发布你的评论" type="textarea"  :minlength="1" :maxlength="140" :autosize="{ minRows: 1, maxRows: 5 }" show-word-limit></el-input>
-          <el-button style="float: right; margin: 10px 0" @click="replyToPost" :disabled="comment.trim() === ''">评论</el-button>
+          <el-input 
+            v-model="comment" 
+            placeholder="发布你的评论" 
+            type="textarea"  
+            :minlength="1" 
+            :maxlength="140" 
+            :autosize="{ minRows: 1, maxRows: 5 }" 
+            show-word-limit   
+          />
+          <el-button 
+          style="float: right; margin: 10px 0" 
+          @click="replyToPost" 
+          :disabled="comment.trim() === ''">
+            评论
+          </el-button>
         </div>
         <CommentCard 
           :comments="postDetail.comments" 
-          v-if="postDetail.comments" 
-          :postId="post.id"
+          v-if="postDetail.comments && postDetail.comments.length > 0" 
+          :post="post"
           :handleLike="handleLike"
           @on-reply="initComment"
+          @on-bottom="initComment(postDetail.comments.length, 5)"
         />
-        <div class="loading-comment" v-if="commentCount > 0 && !postDetail.comments" >
-            <div v-loading="true" element-loading-background="transparent" element-loading-text="正在获取" ></div>
+        <!-- 加载动画 -->
+        <div 
+          class="loading-comment" 
+          v-if="post.commentCount > 0 && !postDetail.comments" 
+        >
+            <div 
+              v-loading="true"
+              element-loading-background="transparent" 
+              element-loading-text="正在获取" 
+            />
         </div>
       </div>
     </div>
@@ -67,10 +105,11 @@ import { ArrowDownBold } from '@element-plus/icons-vue'
 import { ref } from '@vue/reactivity'
 import { timeFormat } from '@/utils/tools'
 import { isAccountLoggedIn } from '@/utils/auth'
-import { toRefs } from 'vue'
 import CommentCard from '@/components/CommentCard.vue'
 import { getPostDetail, addComment, changeLikeStatus } from '@/api/post'
 import { useStore } from 'vuex'
+import { useRoute } from 'vue-router'
+import { computed } from '@vue/runtime-core'
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Post",
@@ -80,13 +119,18 @@ export default {
     CommentCard
   },
   setup(props, context){
-    const isFold = ref(true)
     const isComment = ref(false)
     const postCardRef = ref('')
     const comment = ref('')
     const isFirstComment = ref(true)
     const postDetail = ref([])
     const store = useStore()
+    const route = useRoute()
+    const isDetail = computed(()=>route.path.length > 5) // 判断是否是详情页
+    const isFold = ref(!isDetail.value) // 详情页默认展开且不允许折叠
+    if(isDetail.value){  // 详情页默认加载评论
+      initComment()
+    } 
     let likeTimeOut; // 点赞定时器
     let isLikeChange = false; // 是否在发送请求之前改变了点赞，发送之后置为false
     let canRipplesFlag = true; // 每当点击发生禁止点击，防止点击过快以及多指点击
@@ -118,16 +162,23 @@ export default {
     function handleTouchMove(){
       isRipplesFlag = false;
     }
-    function initComment(){
-      getPostDetail({id:props.post.id, offset: 0, limit: 5})
+    function initComment(offset = 0, limit = 3){
+      console.log(offset, limit)
+      getPostDetail({id:props.post.id, offset, limit})
       .then(res=>{
         if(res.code === 20000)
         {
-          postDetail.value = res.data;
-          postDetail.value.comments.sort((a,b)=>new Date(b.comment.createTime) - new Date(a.comment.createTime))
-          postDetail.value.comments.forEach(element => {
-            element.replys.sort((a,b)=>new Date(b.reply.createTime) - new Date(a.reply.createTime))
-          });
+          if(postDetail?.value?.comments?.length > 0)
+          {
+            postDetail.value.comments.push(...res.data.comments)
+            console.log("postDetail.value.comments", postDetail.value.comments)
+          }else{
+            postDetail.value = res.data;
+          }
+          // postDetail.value.comments.sort((a,b)=>new Date(b.comment.createTime) - new Date(a.comment.createTime))
+          // postDetail.value.comments.forEach(element => {
+          //   element.replys.sort((a,b)=>new Date(b.reply.createTime) - new Date(a.reply.createTime))
+          // });
         }else{
           postDetail.value.comments = []
           store.commit('showToast',{
@@ -143,6 +194,14 @@ export default {
       isFirstComment.value = false;
     }
     function replyToPost(){
+      if(!isAccountLoggedIn())
+      {
+        store.commit('showToast',{
+          type: 'warning',
+          message: '请先点击头像登录'
+        })
+        return;
+      }
       addComment({
         id: props.post.id,
         entityId: props.post.id,
@@ -155,7 +214,18 @@ export default {
             message: "评论成功",
           })
           initComment()
+          comment.value = ''
+        }else if(res){
+          store.commit('showToast',{
+            type: "error",
+            message: res.message ??  "评论失败",
+          })
         }
+      }).catch(()=>{
+        store.commit('showToast',{
+            type: "error",
+            message: "出错了",
+          })
       })
     }
     function handleLike(){
@@ -182,20 +252,28 @@ export default {
             if(res.code === 20000)
             {
               console.log("改变点赞成功")
-            }else{
+            }else if(res){
+              store.commit('showToast',{
+                type: "error",
+                message: res.message ?? "点赞失败",
+              })
               context.emit('on-changeLikeStatus'); // 请求失败，本地改回来
             }
           })
           .catch(()=>{
             context.emit('on-changeLikeStatus'); // 请求失败，本地改回来
+            store.commit('showToast',{
+              type: "error",
+              message: "出错了",
+            })
           })
         }, 1000);
       }
     }
     return{
       isFold,
-      ...toRefs(props.user),
-      ...toRefs(props.post),
+      // ...toRefs(props.user),
+      // ...toRefs(props.post),
       isComment,
       timeFormat,
       postCardRef,
@@ -206,7 +284,9 @@ export default {
       postDetail,
       replyToPost,
       initComment,
-      handleLike
+      handleLike,
+      route,
+      isDetail
     }
   }
 }
@@ -233,7 +313,7 @@ export default {
   @media screen and(min-width: 1200px) {
       &:hover{
       box-shadow: 0 5px 15px -5px rgba(0,0,0,.5);
-      transform: translateY(-3px);
+      // transform: translateY(-3px);
     }
   }
   .header{

@@ -1,9 +1,15 @@
 <template>
-  <div class="comment-container" v-if="comments">
+  <div 
+    class="comment-container" 
+    v-if="comments" 
+    v-infinite-scroll="isDetail ? loadMoreComment : ()=>{}" 
+    infinite-scroll-distance="100" 
+    infinite-scroll-delay="500"
+  >
     <!-- 最外层评论区 -->
     <div 
       class="comment-box" 
-      v-for="item in comments.slice(0,3)" 
+      v-for="item in comments" 
       :key="item.comment.id" 
     >
       <!-- 头像 -->
@@ -54,7 +60,7 @@
           <!-- 每个子评论 -->
           <div 
             class="reply-item" 
-            v-for="subItem in item.replys.slice(0,3)" 
+            v-for="subItem in item.replys" 
             :key="subItem.reply.id"
           >
             <!-- 头像 -->
@@ -108,10 +114,10 @@
           <!-- 子评论区最后提示语 -->
           <div 
           class="reply-total" 
-          v-if="item.replys.length > 3"
+          v-if="item.replyCount > 3"
           @click="toDetail"
           >
-            共{{item.replys.length}}条回复
+            共{{item.replyCount}}条回复
           </div>
         </div>
       </div>
@@ -119,17 +125,22 @@
     <!-- 主评论区最后提示语 -->
     <div 
     class="comment-footer" 
-    v-if="comments.length > 3"
+    v-if="post.commentCount > 3"
     @click="toDetail"
     >
-      <span>
-        查看全部{{comments.length}}条回复
+      <div v-if="!isDetail">
+        <span >
+          查看全部{{post.commentCount}}条回复
+        </span>
+        <span class="iconfont icon-cc-right"></span>
+      </div>
+      <span v-if="isDetail">
+        {{post.commentCount === comments.length ? '到底了...' : '下滑加载更多'}}
       </span>
-      <span class="iconfont icon-cc-right"></span>
     </div>
     <!-- 评论回复弹窗 -->
     <teleport to='body' >
-      <el-dialog
+      <el-dialog 
         v-model="dialogVisible"
         title="评论"
         :width="store.state.model.modelWidth"
@@ -164,31 +175,41 @@
 </template>
 
 <script>
-import { reactive, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { timeFormat } from '@/utils/tools'
 import { isAccountLoggedIn } from '@/utils/auth'
 import { addComment, changeLikeStatus  } from '@/api/post'
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 export default{
-  emits: ['on-reply'],
-  props: ['comments', 'postId'],
+  emits: ['on-reply','on-bottom'],
+  props: ['comments', 'post'],
   setup(props, context){
     const store = useStore()
     const dialogVisible = ref(false)
     const router = useRouter()
     const replyInputPlaceHolder = ref('')
+    const route = useRoute()
+    let canLoadComment = true;
+    const isDetail = computed(()=>route.path.length > 5) // 判断是否是详情页
     // let likeTimeOut; // 点赞定时器(优化为item。likeTimeOut)
     // let isLikeChange = false; // 是否在发送请求之前改变了点赞，发送之后置为false（同上）
     const comment = reactive({
-      id: props.postId, 
+      id: props.post.id, 
       entityType: '',
       entityId: '',
       targetId: '',
       content: ''
     })
     function showCommentInput(placeHolder, entityType,entityId,targetId=0){
+      if(!isAccountLoggedIn()){
+        store.commit('showToast',{
+            type: "warning",
+            message: "请先点击头像登录",
+        })
+        return
+      }
       comment.entityType = entityType;
       comment.entityId = entityId;
       comment.targetId = targetId;
@@ -196,7 +217,6 @@ export default{
       dialogVisible.value = true;
     }
     function replyToComment(){
-      dialogVisible.value = false
       addComment(comment).then(res=>{
         console.log(res)
         if(res.code === 20000){
@@ -204,9 +224,21 @@ export default{
             type: "success",
             message: "评论成功",
           })
+          dialogVisible.value = false
           context.emit('on-reply')
           comment.content = ''
+        }else if(res){
+          store.commit('showToast',{
+            type: "error",
+            message: res.message ??  "评论失败",
+          })
         }
+      })
+      .catch(()=>{
+        store.commit('showToast',{
+            type: "error",
+            message: "出错了",
+          })
       })
     }
     function handleLike(entityType, entityId, entityUserId, item){
@@ -248,8 +280,17 @@ export default{
     }
     function toDetail(){
       router.push({
-        path: '/home/'+props.postId
+        path: '/home/'+props.post.id
       })
+    }
+    function loadMoreComment(){
+      if(isDetail.value && props.post.commentCount > props.comments.length && canLoadComment){
+        context.emit('on-bottom')
+        canLoadComment = false;
+        setTimeout(() => {
+          canLoadComment = true; // 防止过快加载
+        }, 200);
+      }
     }
     return {
       store,
@@ -260,7 +301,9 @@ export default{
       replyToComment,
       replyInputPlaceHolder,
       handleLike,
-      toDetail
+      toDetail,
+      isDetail,
+      loadMoreComment
     }
   }
 }

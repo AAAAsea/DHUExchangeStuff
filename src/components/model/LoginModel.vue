@@ -215,6 +215,7 @@ function submit(formEl){
           handleRes(res,()=>{
             store.state.data.isLoggedIn = true;
             store.dispatch('fetchUserProfile').then(()=>{store.state.model.loginModelFlag = false;})
+            store.dispatch('fetchNewPostList')
           })
         })
       }

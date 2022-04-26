@@ -20,12 +20,11 @@ const	routes=[
 		},
     { 
 			path:'/home/:id',	
-			name: '🎲 DHU-讨论',
-			component: ()=>import("@/views/Detail"),
+			name: '详情',
+			component: ()=>import("@/views/PostDetail"),
 			props: true,
 			meta: {
 				index: 1,
-				title:'🎲 DHU-讨论',
 			}
 		},
 		{

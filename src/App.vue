@@ -3,7 +3,7 @@
   <TopNavBar/>
   <!-- 主页面 -->
   <router-view v-slot="{ Component }">
-    <keep-alive>
+    <keep-alive exclude="PostDetail">
       <component :is="Component"></component>
     </keep-alive>
   </router-view>

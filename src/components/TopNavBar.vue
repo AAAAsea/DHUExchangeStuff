@@ -92,6 +92,7 @@ export default {
     }
     function logOut(){
       store.commit('resetUserInfo')
+      store.dispatch('fetchNewPostList')
       store.commit('showToast',{
         type: "info",
         title: "已登出账号"
@@ -124,6 +125,7 @@ export default {
 // 整体样式
 .nav {
   // border: 1px solid red;
+  border-bottom: 1px solid var(--secondary-bg);
   transition: 0.3s;
   position: fixed;
   top: 0;

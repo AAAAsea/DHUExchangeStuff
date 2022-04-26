@@ -1,10 +1,10 @@
 <template>
   <div class="home-left">
     <ul>
-      <router-link to="/home">
+      <router-link to="/home" :class="{'router-link-active': route.path.startsWith('/home')}">
         <li>
           <span class="emoji">🎈</span>
-          <span class="title">DHU广场</span>
+          <span class="title" >DHU广场</span>
         </li>
       </router-link>
       <router-link to="/mine/post" v-if="isAccountLoggedIn()">
@@ -25,13 +25,16 @@
 
 <script setup>
 import {isAccountLoggedIn} from '@/utils/auth'
+import { useRoute } from 'vue-router'
+const route = useRoute()
+
 </script>
 
 <style lang="scss" scoped>
   .home-left{
     position: sticky;
     top: 60px;
-    height: 600px;
+    height: fit-content;
     border-radius: 5px;
     margin-right: 8px;
     ul{
@@ -54,7 +57,7 @@ import {isAccountLoggedIn} from '@/utils/auth'
       height: 2.5em;
       width: 100%;
       border-radius: 4px;
-      margin: 2px 0;
+      margin-bottom: 4px;
       background: var(--secondary-bg);
     }
     .router-link-active{

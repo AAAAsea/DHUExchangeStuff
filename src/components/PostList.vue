@@ -16,8 +16,11 @@
       <PostCard
         :post="post.post"
         :user="post.user"
-        :likeStatus="post.likeStatus"
-        @on-changeLikeStatus="()=>{post.likeStatus = !post.likeStatus; post.post.likeCount += post.likeStatus || -1}"
+        :likeStatus="post.likeStatus" 
+        @on-changeLikeStatus="()=>{ 
+          post.likeStatus = !post.likeStatus; 
+          post.post.likeCount += post.likeStatus || -1
+        }"
         class="post"
       />
     </div>
@@ -25,7 +28,7 @@
 </template>
 
 <script>
-import { reactive, toRefs } from '@vue/reactivity'
+import { reactive,  toRefs } from '@vue/reactivity'
 import PostCard from "./PostCard.vue"
 import { useStore } from 'vuex'
 import { RefreshRight  }  from '@element-plus/icons-vue'
@@ -59,14 +62,11 @@ export default {
       
     }
     let startY = 0; // 下拉刷新
-    // eslint-disable-next-line no-unused-vars
-    let startX = 0; // 导航栏
     let scrollTop = 0;
     let direction = 0; // 如果在顶部向下滑动，设置为1，用于判断一开始的滑动方向
     let directionFlag = true; // 
     function handleTouchStart(e){
       refreshStyle.transition = ''
-      startX = e.changedTouches[0].clientX
       startY = e.changedTouches[0].clientY
       scrollTop = (document.documentElement.scrollTop || document.body.scrollTop);
     }

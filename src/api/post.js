@@ -67,7 +67,6 @@ export function addComment({id, entityType, content, entityId = 0, targetId = 0}
  * 发布新的点赞
  */
 export function changeLikeStatus({entityType, entityId, entityUserId}) {
-  console.log(arguments)
   return request({
     url: '/like',
     method: 'post',

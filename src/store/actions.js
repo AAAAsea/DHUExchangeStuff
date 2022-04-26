@@ -10,7 +10,7 @@ export default {
       userId === 0 ? state.data.postList.length : state.data.userPostList.length, // offset
       userId
     ).then(result => {
-      console.log("postList",result)
+      // console.log("postList",result)
       if (result.code === 20000) {
         commit('addData', { key: userId === 0 ?  'postList' : 'userPostList', value: result.data.postList });
       }
@@ -23,10 +23,9 @@ export default {
       15, // limit
       0, // offset
     ).then(result => {
-      // console.log("postList",result.data)
       if (result.code === 20000) {
         commit('resetPostList');
-        commit('addData', { key: 'postList', value: result.data.postlist });
+        commit('addData', { key: 'postList', value: result.data.postList });
       }
     });
   },

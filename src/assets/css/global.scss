@@ -36,6 +36,7 @@ html{
 body{
   color: #ebfaef;
   background: var(--body-bg); 
+  overflow: scroll;
   // 滚动条
   &::-webkit-scrollbar{
     width: 6px;
