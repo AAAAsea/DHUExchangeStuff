@@ -36,11 +36,10 @@ import PostList from '../components/PostList.vue'
 import LeftSideBar from '@/components/LeftSideBar.vue'
 import RightSideBar from '@/components/RightSideBar.vue'
 import { isOnBottom } from '@/utils/tools'
-import { ref } from '@vue/reactivity'
 import { Edit } from '@element-plus/icons-vue'
 import { useStore } from 'vuex'
 import { isAccountLoggedIn } from '../utils/auth'
-import { onDeactivated, onUnmounted } from '@vue/runtime-core'
+import { computed, onDeactivated, onUnmounted } from '@vue/runtime-core'
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -53,14 +52,13 @@ export default {
   setup(){
     const store = useStore()
     const data = store.state.data
-    const haveMorePost = ref(true)
+    const haveMorePost = computed(()=>data.postCount > data.postList.length) 
     data.postList.splice()
     function initPostList(){
       store.dispatch('fetchPostList')
       .then(()=>{
         if(data.postCount === data.postList.length){
           window.onscroll = null; // 没有更多数据了关闭监听
-          haveMorePost.value = false;
         }
       })
       .catch(err=>{

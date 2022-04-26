@@ -22,15 +22,21 @@ export default {
     });
   },
     // 更新postList
-  fetchNewPostList: ({ commit } ) => {
+  fetchNewPostList: ({ commit, state }, userId = 0 ) => {
 
     return getPostList(
       15, // limit
-      0, // offset
+      0, // offset, 
+      userId
     ).then(result => {
       if (result.code === 20000) {
-        commit('resetPostList');
-        commit('addData', { key: 'postList', value: result.data.postList });
+        if(userId === 0)
+        {
+          state.data.postCount = result.data.postCount; // 保存一下总post数量
+        }else{
+          state.data.userPostCount = result.data.postCount; // 保存一下总post数量
+        }
+        commit('updateData', { key: userId === 0 ?  'postList' : 'userPostList', value: result.data.postList });
       }
     });
   },

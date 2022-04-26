@@ -26,10 +26,11 @@
 </template>
 
 <script>
-import { reactive,  toRefs } from '@vue/reactivity'
+import { reactive } from '@vue/reactivity'
 import PostCard from "./PostCard.vue"
 import { useStore } from 'vuex'
 import { RefreshRight  }  from '@element-plus/icons-vue'
+import { useRoute } from 'vue-router'
 export default {
   name: "PostList",
   props: ['postList'],
@@ -38,7 +39,6 @@ export default {
     RefreshRight
   },
   setup(){
-    const data = reactive({})
     const store = useStore()
     const refreshStyle = reactive({
       position: 'absolute',
@@ -51,6 +51,7 @@ export default {
       transform: '',
       transition: '',
     })
+    const route = useRoute()
     let startY = 0; // 下拉刷新
     let scrollTop = 0;
     let direction = 0; // 如果在顶部向下滑动，设置为1，用于判断一开始的滑动方向
@@ -80,7 +81,7 @@ export default {
       if(e.changedTouches[0].clientY-startY > 200) 
       {
         refreshStyle.top = '20px';
-        store.dispatch('fetchNewPostList')
+        store.dispatch('fetchNewPostList', route.path.startsWith('/mine') ? store.state.data.user.id : 0 )
         .then(()=>{
         })
         .catch(()=>{
@@ -116,7 +117,6 @@ export default {
       refreshStyle.transform = 'rotate(' + (e.changedTouches[0].clientY-startY)/150 * 180 + 'deg)'
     }
     return{
-      ...toRefs(data),
       store,
       handleTouchStart,
       handleTouchEnd,

@@ -3,7 +3,6 @@
     v-if="data.userPostList?.length > 0"
     :postList="data.userPostList"
     :isLoading="false"
-
   />
   <div class="no-more-post" v-if="!haveMorePost" style="color: var(--secondary-bg)">——到底了——</div>
 </template>

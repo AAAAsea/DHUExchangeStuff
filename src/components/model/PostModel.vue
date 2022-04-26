@@ -56,6 +56,7 @@ import { reactive } from 'vue'
 import { useStore } from 'vuex'
 import { addPost } from '../../api/post'
 const store = useStore()
+const route = useRoute()
 const form = reactive({
   title: '',
   content: ''
@@ -94,7 +95,7 @@ function publish(formEl){
           form.title = '';
           form.content = '';
           dynamicTags.value.splice(0);
-          store.dispatch('fetchNewPostList')
+          store.dispatch('fetchNewPostList', route.path.startsWith('/mine') ? store.state.data.user.id : 0)
         }
         else{
           if(res.code === 52008 || res.code === 52007)
@@ -122,6 +123,7 @@ function publish(formEl){
 
 // tag
 import { nextTick, ref } from 'vue'
+import { useRoute } from 'vue-router'
 const inputValue = ref('')
 const dynamicTags = ref([])
 const inputVisible = ref(false)
