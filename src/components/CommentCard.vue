@@ -2,9 +2,6 @@
   <div 
     class="comment-container" 
     v-if="comments" 
-    v-infinite-scroll="isDetail ? loadMoreComment : ()=>{}" 
-    infinite-scroll-distance="100" 
-    infinite-scroll-delay="500"
   >
     <!-- 最外层评论区 -->
     <div 
@@ -134,8 +131,8 @@
         </span>
         <span class="iconfont icon-cc-right"></span>
       </div>
-      <span v-if="isDetail">
-        {{post.commentCount === comments.length ? '到底了...' : '下滑加载更多'}}
+      <span v-else style="color: var(--secondary-bg)">
+        {{post.commentCount === comments.length ? '——到底了——' : '···'}}
       </span>
     </div>
     <!-- 评论回复弹窗 -->
@@ -175,8 +172,8 @@
 </template>
 
 <script>
-import { computed, reactive, ref } from 'vue'
-import { timeFormat } from '@/utils/tools'
+import { computed, onUnmounted, reactive, ref } from 'vue'
+import { timeFormat, isOnBottom } from '@/utils/tools'
 import { isAccountLoggedIn } from '@/utils/auth'
 import { addComment, changeLikeStatus  } from '@/api/post'
 import { useStore } from 'vuex'
@@ -192,7 +189,7 @@ export default{
     const replyInputPlaceHolder = ref('')
     const route = useRoute()
     let canLoadComment = true;
-    const isDetail = computed(()=>route.path.length > 5) // 判断是否是详情页
+    const isDetail = computed(()=>route.name === '详情') // 判断是否是详情页
     // let likeTimeOut; // 点赞定时器(优化为item。likeTimeOut)
     // let isLikeChange = false; // 是否在发送请求之前改变了点赞，发送之后置为false（同上）
     const comment = reactive({
@@ -283,13 +280,28 @@ export default{
         path: '/home/'+props.post.id
       })
     }
+    // 详情页监听滚动
+    if(isDetail.value){
+      window.onscroll = loadMoreComment
+    }
+    // 离开页面时取消监听
+    onUnmounted(()=>{window.onscroll = null})
+    // 滚动时判断是否到底部，并且500ms之内未触发更新，且还有数据
     function loadMoreComment(){
-      if(isDetail.value && props.post.commentCount > props.comments.length && canLoadComment){
+      // 加载完毕关闭监听
+      if(props.post.commentCount <= props.comments.length)
+      {
+        window.onscroll = null;
+      }
+      if(isDetail.value && canLoadComment && isOnBottom())
+      {
+        console.log("loadMoreComment")
         context.emit('on-bottom')
         canLoadComment = false;
         setTimeout(() => {
           canLoadComment = true; // 防止过快加载
-        }, 200);
+          loadMoreComment() // 防止一秒内到底后不动导致不加载，所以自动多判断一次
+        }, 1000);
       }
     }
     return {

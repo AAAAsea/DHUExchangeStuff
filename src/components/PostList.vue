@@ -1,26 +1,24 @@
 <template>
   <div 
   class="post-list" 
-  v-infinite-scroll="loadMorePost" 
-  infinite-scroll-distance="1000" 
-  infinite-scroll-delay="500"
   @touchstart="handleTouchStart" @touchend="handleTouchEnd" @touchmove ="handleTouchMove"
   >
     <el-icon :style="refreshStyle" color="var(--primary-color)"><refresh-right/></el-icon>
     <el-empty v-if="store.state.data.postList.length === 0"></el-empty>
     <div 
-      v-for="post in postList"
-      :key="post.post.id"
+      v-for="item in postList"
+      :key="item.post.id"
       class="post-list-card"
     >
       <PostCard
-        :post="post.post"
-        :user="post.user"
-        :likeStatus="post.likeStatus" 
+        :post="item.post"
+        :user="item.user"
+        :likeStatus="item.likeStatus" 
         @on-changeLikeStatus="()=>{ 
-          post.likeStatus = !post.likeStatus; 
-          post.post.likeCount += post.likeStatus || -1
+          item.post.likeStatus = !item.post.likeStatus; 
+          item.post.likeCount += item.post.likeStatus || -1
         }"
+        @on-mainReply="item.post.commentCount++"
         class="post"
       />
     </div>
@@ -53,14 +51,6 @@ export default {
       transform: '',
       transition: '',
     })
-    function loadMorePost(){
-      // 防止首次加载多次请求
-      if(store.state.data.postList.length > 0)
-      {
-        store.dispatch('fetchPostList')
-      }
-      
-    }
     let startY = 0; // 下拉刷新
     let scrollTop = 0;
     let direction = 0; // 如果在顶部向下滑动，设置为1，用于判断一开始的滑动方向
@@ -77,6 +67,15 @@ export default {
       if(e.changedTouches[0].clientY-startY>100 && scrollTop===0 )
       {
         store.dispatch('fetchNewPostList')
+        .then(res=>{
+          if(res === 'all')
+          {
+            store.commit('showToast',{
+              type: 'success',
+              message: '没有更新的数据了'
+            })
+          }
+        })
       }
       if(e.changedTouches[0].clientY-startY > 200) 
       {
@@ -119,7 +118,6 @@ export default {
     return{
       ...toRefs(data),
       store,
-      loadMorePost,
       handleTouchStart,
       handleTouchEnd,
       refreshStyle,

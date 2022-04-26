@@ -11,6 +11,7 @@
           :postList="store.state.data.postList"
           class="postlist"
         />
+        <div class="no-more-post" v-if="!haveMorePost" style="color: var(--secondary-bg)">——到底了——</div>
       </el-col>
       <!-- 右侧 -->
       <el-col  :xs="0" :sm="5" :md="5" :lg="5" :xl="5">
@@ -34,10 +35,12 @@
 import PostList from '../components/PostList.vue'
 import LeftSideBar from '@/components/LeftSideBar.vue'
 import RightSideBar from '@/components/RightSideBar.vue'
-import {   } from '@vue/reactivity'
+import { isOnBottom } from '@/utils/tools'
+import { ref } from '@vue/reactivity'
 import { Edit } from '@element-plus/icons-vue'
 import { useStore } from 'vuex'
 import { isAccountLoggedIn } from '../utils/auth'
+import { onDeactivated, onUnmounted } from '@vue/runtime-core'
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -49,19 +52,26 @@ export default {
   },
   setup(){
     const store = useStore()
-    store.state.data.postList.splice()
-    store.dispatch('fetchPostList')
-    .then(()=>{
-      // data.isLoading = false
-    })
-    .catch(err=>{
-        console.log(err)
-        store.commit('showToast',{
-          type: "error",
-          message: "加载失败"
-        })    
+    const data = store.state.data
+    const haveMorePost = ref(true)
+    data.postList.splice()
+    function initPostList(){
+      store.dispatch('fetchPostList')
+      .then(()=>{
+        if(data.postCount === data.postList.length){
+          window.onscroll = null; // 没有更多数据了关闭监听
+          haveMorePost.value = false;
+        }
       })
-
+      .catch(err=>{
+          console.log(err)
+          store.commit('showToast',{
+            type: "error",
+            message: "加载失败"
+          })    
+      })
+    }
+    initPostList()
     function showPostModel(){
       if(!isAccountLoggedIn()){
         store.commit('showToast',{
@@ -73,11 +83,31 @@ export default {
         store.state.model.postModelFlag = true
       }
     }
+    // 监听滚动
+    window.onscroll = loadMorePost
+    // 默认可以加载
+    let canLoadMorePost = true;
+    // 离开页面时取消监听
+    onUnmounted(()=>{window.onscroll = null})
+    onDeactivated(()=>{window.onscroll = null})
+    // 滚动时判断是否到底部，并且500ms之内未触发更新，且还有数据
+    function loadMorePost(){
+      // 加载完毕关闭监听
+      if(canLoadMorePost && isOnBottom(1000))
+      {
+        console.log("loadMorePost")
+        canLoadMorePost = false;
+        setTimeout(() => {
+          canLoadMorePost = true; // 防止过快加载
+          initPostList() // 防止一秒内到底后不动导致不加载，所以自动多判断一次
+        }, 1000);
+      }
+    }
     return{
       Edit,
       store,
       showPostModel,
-      // isDark
+      haveMorePost
     }
   }
 }
@@ -101,5 +131,10 @@ export default {
   bottom: 40px;
   font-size: 1.5rem;
   transform: scale(1.2);
+}
+.no-more-post{
+  padding-bottom: 20px;
+  text-align: center;
+  width: 100%;
 }
 </style>

@@ -10,15 +10,20 @@ export default {
       userId === 0 ? state.data.postList.length : state.data.userPostList.length, // offset
       userId
     ).then(result => {
-      // console.log("postList",result)
       if (result.code === 20000) {
+        if(userId === 0)
+        {
+          state.data.postCount = result.data.postCount; // 保存一下总post数量
+        }else{
+          state.data.userPostCount = result.data.postCount; // 保存一下总post数量
+        }
         commit('addData', { key: userId === 0 ?  'postList' : 'userPostList', value: result.data.postList });
       }
     });
   },
     // 更新postList
   fetchNewPostList: ({ commit } ) => {
-    // if (!isAccountLoggedIn()) return;
+
     return getPostList(
       15, // limit
       0, // offset

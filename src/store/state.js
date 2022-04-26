@@ -2,10 +2,11 @@ export default {
   data:{
     isLoggedIn: false,
     user: null,
+    postCount: 99,
+    userPostCount: 99,
     ...JSON.parse(localStorage.getItem('data')),
     postList: [],
     userPostList: []
-    
   },
   model:{
     postModelFlag: false,

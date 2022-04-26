@@ -82,7 +82,7 @@
           :post="post"
           :handleLike="handleLike"
           @on-reply="initComment"
-          @on-bottom="initComment(postDetail.comments.length, 5)"
+          @on-bottom="initComment(postDetail.comments.length, 5, 'add')"
         />
         <!-- 加载动画 -->
         <div 
@@ -119,14 +119,14 @@ export default {
     CommentCard
   },
   setup(props, context){
-    const isComment = ref(false)
     const postCardRef = ref('')
     const comment = ref('')
     const isFirstComment = ref(true)
     const postDetail = ref([])
     const store = useStore()
     const route = useRoute()
-    const isDetail = computed(()=>route.path.length > 5) // 判断是否是详情页
+    const isDetail = computed(()=>route.name === '详情') // 判断是否是详情页
+    const isComment = ref(isDetail.value)
     const isFold = ref(!isDetail.value) // 详情页默认展开且不允许折叠
     if(isDetail.value){  // 详情页默认加载评论
       initComment()
@@ -162,23 +162,18 @@ export default {
     function handleTouchMove(){
       isRipplesFlag = false;
     }
-    function initComment(offset = 0, limit = 3){
+    function initComment(offset = 0, limit = 3, type = 'init'){
       console.log(offset, limit)
       getPostDetail({id:props.post.id, offset, limit})
       .then(res=>{
         if(res.code === 20000)
         {
-          if(postDetail?.value?.comments?.length > 0)
+          if(type === 'init')
           {
-            postDetail.value.comments.push(...res.data.comments)
-            console.log("postDetail.value.comments", postDetail.value.comments)
-          }else{
             postDetail.value = res.data;
+          }else if(type === 'add'){
+            postDetail.value.comments.push(...res.data.comments);
           }
-          // postDetail.value.comments.sort((a,b)=>new Date(b.comment.createTime) - new Date(a.comment.createTime))
-          // postDetail.value.comments.forEach(element => {
-          //   element.replys.sort((a,b)=>new Date(b.reply.createTime) - new Date(a.reply.createTime))
-          // });
         }else{
           postDetail.value.comments = []
           store.commit('showToast',{
@@ -214,6 +209,7 @@ export default {
             message: "评论成功",
           })
           initComment()
+          context.emit('on-mainReply')
           comment.value = ''
         }else if(res){
           store.commit('showToast',{

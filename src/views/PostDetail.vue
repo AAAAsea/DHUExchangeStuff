@@ -56,10 +56,6 @@ function initPostDetail(){
     {
       postDetail.value = res.data;
       document.title = '🎲 '+ postDetail.value?.post?.title
-      postDetail.value.comments.sort((a,b)=>new Date(b.comment.createTime) - new Date(a.comment.createTime))
-      postDetail.value.comments.forEach(element => {
-        element.replys.sort((a,b)=>new Date(b.reply.createTime) - new Date(a.reply.createTime))
-      });
     }else{
       postDetail.value.comments = []
       store.commit('showToast',{
