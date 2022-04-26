@@ -18,49 +18,44 @@ const	routes=[
 				title:'🎈 DHU-广场',
 			},
 		},
-    { 
+		{
 			path:'/home/:id',	
 			name: '详情',
 			component: ()=>import("@/views/PostDetail"),
 			props: true,
 			meta: {
-				index: 1,
-			}
+				title:'详情'
+			},
 		},
 		{
-			path:'/mine',	
+			path:'/user',
 			name: '🐖 DHU-你',
-			component: ()=>import("@/views/Mine"),
-			props: true,
+			component: ()=>import("@/views/User"),
 			meta: {
 				index: 1,
-				requireAccountLogin: true,
-				title:'🐖 DHU-你',
-
+				title:'🐖 DHU-你'
 			},
-			children: [
-				{//在地址为空时，直接跳转cell路由
-          path:'',
-          redirect:'/mine/post',
-        },
+			children:[
 				{
-					path: 'post',
-					name: '📑 我的帖子',
+					path:'/user/:id',	
+					name: '账号主页',
 					component: ()=>import("@/components/MinePost"),
-					meta:{
-						requireAccountLogin: true,
-					}
+					meta: {
+						title:'账号主页'
+					},
 				},
-				{	
-					path: 'info',
-					name: '🔐 账户设置',
-					component:  ()=>import("@/components/MineInfo"),
-					meta:{
-						requireAccountLogin: true,
-					}
-				},
-			],
+				{
+					path:'/user/set',	
+					name: '账号设置',
+					component: ()=>import("@/components/MineInfo"),
+					props: true,
+					meta: {
+						title:'账号设置'
+					},
+				}
+			]
 		},
+
 ]
 		
 //创建router

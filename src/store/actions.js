@@ -23,7 +23,6 @@ export default {
   },
     // 更新postList
   fetchNewPostList: ({ commit, state }, userId = 0 ) => {
-
     return getPostList(
       15, // limit
       0, // offset, 
@@ -41,10 +40,10 @@ export default {
     });
   },
   // 获取用户信息
-  fetchUserProfile: ({ commit }) => {
+  fetchUserProfile: ({ commit, state }) => {
     // if (!isAccountLoggedIn()) return;
     console.log("profile")
-    return getUserInfo().then(result => {
+    return getUserInfo(state.data.user.id).then(result => {
     console.log(result)
     if (result.code === 20000) {
       commit('updateData', { key: 'user', value: result.data.user });

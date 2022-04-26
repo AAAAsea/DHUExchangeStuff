@@ -3,11 +3,12 @@
     <div id="avatar">
       <el-upload
         class="avatar-uploader"
-        action="http://localhost:8081/upload"
+        action="/api/users/upload"
         :show-file-list="false"
         :on-success="handleAvatarSuccess"
         :before-upload="beforeAvatarUpload"
         :disabled="!isEdit"
+        name="headerImage"
       >
         <img  :src="form.headerUrl" class="avatar" />
         <el-icon v-if="isEdit" class="avatar-uploader-icon"><Plus /></el-icon>
@@ -25,11 +26,11 @@
       </li>
       <li>
         <div class="label"> 介绍:</div>
-        <div v-if="!isEdit">{{form.introduce ?? '这个人很懒，什么也没写...'}}</div>
-        <el-input v-else v-model="form.introduce" :readonly="!isEdit" type="textarea" show-word-limit :maxlength="300" :autosize="{ minRows: 3, maxRows: 8 }" placeholder="在这里写下你的介绍"></el-input>
+        <div v-if="!isEdit">{{form.description ?? '这个人很懒，什么也没写...'}}</div>
+        <el-input v-else v-model="form.description" :readonly="!isEdit" type="textarea" show-word-limit :maxlength="300" :autosize="{ minRows: 3, maxRows: 8 }" placeholder="在这里写下你的介绍"></el-input>
       </li>
     </ul>
-    <el-button class="savebtn" @click="isEdit = !isEdit">{{isEdit ? '保存' : '编辑'}}</el-button>
+    <el-button class="savebtn" @click="saveInfo">{{isEdit ? '保存' : '编辑'}}</el-button>
   </div>
 </template>
 
@@ -37,12 +38,12 @@
 import { reactive, ref } from "vue";
 import { useStore } from "vuex";
 import { Plus } from '@element-plus/icons-vue'
-
+import { changeNickName, changeDescription } from '@/api/user'
 const store = useStore()
 const user = store.state.data.user
 const form = reactive({
   nickName: user.nickName,
-  introduce: user.introduce,
+  description: user.description,
   headerUrl: user.headerUrl
 })
 const isEdit = ref(false)
@@ -51,7 +52,11 @@ const handleAvatarSuccess = (
   response,
   uploadFile
 ) => {
-  form.headerUrl.value = URL.createObjectURL(uploadFile.raw)
+  console.log(response, uploadFile)
+  form.headerUrl = URL.createObjectURL(uploadFile.raw)
+  console.log(form.headerUrl)
+  store.dispatch('fetchUserProfile')
+
 }
 
 const beforeAvatarUpload= (rawFile) => {
@@ -63,6 +68,33 @@ const beforeAvatarUpload= (rawFile) => {
     return false
   }
   return true
+}
+function saveInfo(){
+  if(isEdit.value)
+  {
+    Promise.all([changeNickName(form.nickName), changeDescription(form.description) ])
+    .then( res => {
+      let status = 1;
+      res.map((x)=>{status & x === 20000})
+      if(status)
+      {
+        store.commit('showToast',{
+          type: 'success',
+          message: '修改成功~'
+        })
+        store.dispatch('fetchUserProfile')
+        isEdit.value = false;
+      }else{
+        store.commit('showToast',{
+          type: 'error',
+          message: '修改失败'
+        })
+      }
+      
+    });
+  }else{
+    isEdit.value = true
+  }
 }
 </script>
 
@@ -115,6 +147,7 @@ const beforeAvatarUpload= (rawFile) => {
   padding-bottom: 30px;
   img{
     width: 72px;
+    height: 72px;
     border-radius: 50%;
     border: 2px solid var(--post-card-bg);
   } 

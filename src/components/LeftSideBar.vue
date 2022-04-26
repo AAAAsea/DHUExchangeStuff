@@ -7,13 +7,13 @@
           <span class="title" >DHU广场</span>
         </li>
       </router-link>
-      <router-link to="/mine/post" v-if="isAccountLoggedIn()">
+      <router-link :to='"/user/"+user.id' v-if="isAccountLoggedIn()">
         <li>
           <span class="emoji">📑</span>
-          <span class="title">我的帖子</span>
+          <span class="title">我的主页</span>
         </li>
       </router-link>
-      <router-link to="/mine/info" v-if="isAccountLoggedIn()">
+      <router-link to="/user/set" v-if="isAccountLoggedIn()">
         <li>
           <span class="emoji">🔐</span>
           <span class="title">账户设置</span>
@@ -26,8 +26,10 @@
 <script setup>
 import {isAccountLoggedIn} from '@/utils/auth'
 import { useRoute } from 'vue-router'
+import { useStore } from 'vuex'
 const route = useRoute()
-
+const store = useStore()
+const user = store.state.data.user
 </script>
 
 <style lang="scss" scoped>

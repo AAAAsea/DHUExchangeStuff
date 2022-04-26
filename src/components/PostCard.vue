@@ -20,9 +20,13 @@
       <arrow-down-bold />
     </el-icon>
     <div class="header">
-      <img :src="user.headerUrl" alt="">
+      <router-link :to="/user/+user.id">
+        <img :src="user.headerUrl" alt="">
+      </router-link>
       <div class="title">
-        <h4>{{user.nickName ?? user.username}}</h4>
+        <router-link :to="/user/+user.id">
+          <h4>{{user.nickName ?? user.username}}</h4>
+        </router-link>
         <p>{{timeFormat(new Date(post.createTime).getTime())}}</p>
       </div>
     </div>
@@ -320,6 +324,7 @@ export default {
     margin-bottom: 18px;
     img{
       width: 45px;
+      height: 45px;
       border-radius: 50%;
       margin-right: 2%;
       &:hover{
@@ -327,7 +332,7 @@ export default {
       }
     }
     .title{
-      
+      margin-left: 10px;
       display: flex;
       flex-direction: column;
       justify-content: space-around;

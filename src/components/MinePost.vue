@@ -1,4 +1,5 @@
 <template>
+  <UserInfoCard/>
   <PostList
     v-if="data.userPostList?.length > 0"
     :postList="data.userPostList"
@@ -12,15 +13,18 @@ import { useStore } from 'vuex'
 import PostList from '@/components/PostList.vue'
 import { onDeactivated, onUnmounted, ref } from '@vue/runtime-core'
 import { isOnBottom } from '@/utils/tools'
+import UserInfoCard from '@/components/UserInfoCard.vue'
+import { useRoute } from 'vue-router'
 
-
+const route = useRoute()
 const store = useStore()
 const data = store.state.data
 
 const haveMorePost = ref(true)
 
 function initUserPostList(){
-  store.dispatch('fetchPostList', data.user.id)
+  store.state.data.userPostList.splice(0)
+  store.dispatch('fetchPostList', route.params.id)
   .then(()=>{
     if(data.userPostCount === data.userPostList.length){
       window.onscroll = null; // 没有更多数据了关闭监听

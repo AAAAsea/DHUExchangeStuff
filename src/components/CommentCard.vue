@@ -11,13 +11,17 @@
     >
       <!-- 头像 -->
       <div class="user-face">
-        <img :src="item.user.headerUrl" alt="">
+        <router-link :to="/user/+item.user.id">
+          <img :src="item.user.headerUrl" alt="">
+        </router-link>
       </div>
       <!-- 评论区内容（包含子评论） -->
       <div class="con" >
         <!-- 用户昵称 -->
         <div class="user">
-          {{item.user.nickName ?? item.user.username}}
+          <router-link :to="/user/+item.user.id">
+            {{item.user.nickName ?? item.user.username}}
+          </router-link>
         </div>
         <!-- 主评论内容 -->
         <p>{{item.comment.content}}</p>
@@ -61,7 +65,9 @@
             :key="subItem.reply.id"
           >
             <!-- 头像 -->
-            <img :src="subItem.user.headerUrl">
+            <router-link :to="/user/+subItem.user.id">
+              <img :src="subItem.user.headerUrl">
+            </router-link>
             <!-- 子评论区内容区 -->
             <div class="reply-con">
               <!--  子评论内容点击回复-->
@@ -71,13 +77,17 @@
               >
                 <!-- 子评论用户昵称 -->
                 <span @click.stop="">
-                  {{subItem.user.nickName ?? subItem.user.username}}:
+                  <router-link :to="/user/+subItem.user.id">
+                    {{subItem.user.nickName ?? subItem.user.username}}:
+                  </router-link>
                 </span> 
                 <!-- @用户 -->
                 <span 
                   v-if="subItem.target"
                 >
-                  @{{subItem.target.nickName ?? subItem.target.username}}
+                  <router-link :to="/user/+subItem.target.id">
+                    @{{subItem.target.nickName ?? subItem.target.username}}
+                  </router-link>
                 </span>
                 <!-- 子评论内容 -->
                 {{subItem.reply.content}}
@@ -182,7 +192,7 @@ import { useRoute, useRouter } from 'vue-router'
 export default{
   emits: ['on-reply','on-bottom'],
   props: ['comments', 'post'],
-  setup(props, context){
+  setup(props, context){  
     const store = useStore()
     const dialogVisible = ref(false)
     const router = useRouter()
@@ -295,7 +305,7 @@ export default{
       }
       if(isDetail.value && canLoadComment && isOnBottom())
       {
-        console.log("loadMoreComment")
+        // console.log("loadMoreComment")
         context.emit('on-bottom')
         canLoadComment = false;
         setTimeout(() => {
@@ -332,6 +342,7 @@ export default{
     img{
       border-radius: 50%;
       width: 40px;
+      height: 40px;
     }
   }
 
@@ -398,7 +409,9 @@ export default{
             span{
               padding-right: 5px;
               // font-weight: bold;
-              color: var(--secondary-primary-color)
+              a{
+                color: var(--secondary-primary-color)
+              }
             }
           }
         } 
