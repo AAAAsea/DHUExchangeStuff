@@ -17,12 +17,11 @@
         </div>
       </div>
       <el-button 
-        v-if="item.user.id !== store.state.data.user.id"
         class="follow-btn"
         :color="item.hasFollowed ? '#999' : '#ffc300'" 
         round 
         @click="changeFollow(item)"
-        :disabled="false"
+        :disabled="item.user.id === store.state.data.user.id"
         :style="{color: item.hasFollowed ? 'var(--main-text)' : '', fontWeight: 'bold'}"
         >{{ item.hasFollowed ? '已关注' : '关注'}}
       </el-button>
