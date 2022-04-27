@@ -201,7 +201,7 @@ function saveInfo(){
 }
 
 .avatar-uploader .el-upload:hover {
-  border-color: var(--el-color-primary);
+  border-color: var(--secondary-bg);
 }
 
 .el-icon.avatar-uploader-icon {
@@ -220,10 +220,17 @@ function saveInfo(){
 
 .bg-uploader{
   height: 200px;
+  width: 200px !important;
+  background: var(--secondary-bg);
   img{
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
+    width: 200px;
+    // height: 200px;
+    // object-fit: cover;
   }
+
+  .el-upload-dragger{
+        background-color: transparent !important;
+  }
+
 }
 </style>

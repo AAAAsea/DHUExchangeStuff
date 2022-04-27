@@ -67,6 +67,7 @@ import { useStore } from 'vuex'
 
 const type = ref('login');
 const store = useStore()
+const canSubmit = ref(true)
 
 // 登录
 const ruleFormRef = ref('')
@@ -212,6 +213,8 @@ function handleRes(res, successCallback=()=>{}, errorCallback=()=>{}){
 }
 // 提交
 function submit(formEl){
+  if(!canSubmit.value) return;  // 禁止连续注册
+  canSubmit.value = false;
   if (!formEl) return
   formEl.validate((valid) => {
     if (valid) {
@@ -220,21 +223,29 @@ function submit(formEl){
       {
         regist(registRuleForm)
         .then(res=>{
+          canSubmit.value = true;
           handleRes(res, ()=>{
             type.value = 'login'
           })
+        })
+        .catch(()=>{
+          canSubmit.value = true; 
         })
       }
       // 提交登录
       else{
         login(ruleForm.account, ruleForm.password)
         .then(res=>{
+          canSubmit.value = true; 
           handleRes(res,()=>{
             // console.log(res)
             store.state.data.isLoggedIn = true;
             store.dispatch('fetchMyProfile').then(()=>{store.state.model.loginModelFlag = false;})
             store.dispatch('fetchNewPostList')
           })
+        })
+        .catch(()=>{
+          canSubmit.value = true; 
         })
       }
     }
