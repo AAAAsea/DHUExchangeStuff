@@ -17,6 +17,7 @@
         </div>
       </div>
       <el-button 
+        v-if="item.user.id !== store.state.data.user.id"
         class="follow-btn"
         :color="item.hasFollowed ? '#999' : '#ffc300'" 
         round 

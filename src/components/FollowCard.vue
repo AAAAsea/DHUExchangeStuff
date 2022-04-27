@@ -59,10 +59,11 @@ action(route.params.id)
     display: flex;
     justify-content: space-between;
     padding: 0 10px;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
     a span{
       font-size: 20px;
+      color: var(--exreme);
     }
   }
 }
