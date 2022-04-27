@@ -3,12 +3,13 @@ import request from '../utils/request'
 /**
  * 获取邮箱验证码
  */
-export function getMailCode(username) {
+export function getMailCode(username, nickName) {
   return request({
     url: '/users/code',
     method: 'get',
     params: {
-      username
+      username,
+      nickName
     },
   });
 }
@@ -39,6 +40,19 @@ export function login(username, password) {
     params: {
       username,
       password,
+    },
+  });
+}
+
+
+/**
+ * 登录
+ */
+export function logout() {
+  return request({
+    url: '/logout',
+    method: 'get',
+    params: {
     },
   });
 }

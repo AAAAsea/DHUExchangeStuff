@@ -26,21 +26,30 @@ import LeftSideBar from '../LeftSideBar.vue'
 import { isAccountLoggedIn } from '@/utils/auth'
 import avatarDefaultImg from '@/assets/img/unlogin.png'
 import { computed } from '@vue/runtime-core'
+import { logout } from '@/api/auth'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const  store = useStore()
 const userInfo = computed(()=>store.state.data.user)
+
 function logIn(){
   store.state.model.loginModelFlag = true;
 }
 function logOut(){
-  console.log("hh")
-  store.state.data.isLoggedIn = false;
-  store.state.data.user = null;
-  store.commit('showToast',{
-    type: "info",
-    title: "已登出账号"
+  store.commit('resetUserInfo')
+  logout()
+  .then((res)=>{
+    if(res.code === 20000)
+    {
+      store.commit('showToast',{
+        type: "info",
+        title: "已登出账号"
+      })
+      router.push({path: '/'})
+    }
   })
-}
+  }
 </script>
 <style lang="scss" scoped>
 :deep() .drawer{

@@ -63,6 +63,7 @@ import {  reactive, ref, computed } from 'vue'
 import { Search,Expand } from '@element-plus/icons-vue'
 import avatarDefaultImg from '@/assets/img/unlogin.png' 
 import { isAccountLoggedIn } from '@/utils/auth'
+import { logout } from '@/api/auth'
 export default {
   name: "NavBar",
   components: {
@@ -92,10 +93,16 @@ export default {
     }
     function logOut(){
       store.commit('resetUserInfo')
-      store.dispatch('fetchNewPostList')
-      store.commit('showToast',{
-        type: "info",
-        title: "已登出账号"
+      logout()
+      .then((res)=>{
+        if(res.code === 20000)
+        {
+          store.commit('showToast',{
+            type: "info",
+            title: "已登出账号"
+          })
+          router.push({path: '/'})
+        }
       })
     }
     return{

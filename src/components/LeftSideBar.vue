@@ -1,13 +1,13 @@
 <template>
   <div class="home-left">
     <ul>
-      <router-link to="/home" :class="{'router-link-active': route.path.startsWith('/home') || route.path !== '/user/' + user.id}">
+      <router-link to="/home" :class="{'router-link-active': route.name === '详情'}">
         <li>
           <span class="emoji">🎈</span>
           <span class="title" >DHU广场</span>
         </li>
       </router-link>
-      <router-link :to='"/user/"+user.id' v-if="isAccountLoggedIn()">
+      <router-link :to='"/user/"+store.state.data.user.id' v-if="isAccountLoggedIn()">
         <li>
           <span class="emoji">📑</span>
           <span class="title">我的主页</span>
@@ -29,7 +29,7 @@ import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 const route = useRoute()
 const store = useStore()
-const user = store.state.data.user
+
 </script>
 
 <style lang="scss" scoped>

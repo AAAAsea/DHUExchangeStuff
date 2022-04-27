@@ -67,12 +67,12 @@ const isEdit = ref(false)
 
 const handleAvatarSuccess = (response,uploadFile) => {
   form.headerUrl = URL.createObjectURL(uploadFile.raw)
-  store.dispatch('fetchUserProfile')
+  store.dispatch('fetchMyProfile')
 }
 
 const handleBgSuccess = (response,uploadFile) => {
   form.backgroundUrl = URL.createObjectURL(uploadFile.raw)
-  store.dispatch('fetchUserProfile')
+  store.dispatch('fetchMyProfile')
 }
 
 const beforeAvatarUpload= (rawFile) => {

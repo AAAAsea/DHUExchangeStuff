@@ -32,7 +32,7 @@
       <el-form-item :label="$t('login.account')" label-width="auto" prop="username" >
         <el-input v-model="registRuleForm.username" autocomplete="off"  :placeholder="$t('login.accountPlace')"/>
       </el-form-item>
-      <el-form-item :label="$t('login.nickName')" label-width="auto" prop="username" >
+      <el-form-item :label="$t('login.nickName')" label-width="auto" prop="nickName" >
         <el-input v-model="registRuleForm.nickName" autocomplete="off"  :placeholder="$t('login.nickNamePlace')"/>
       </el-form-item>
       <el-form-item :label="$t('login.code')" label-width="auto" prop="code"  >
@@ -138,7 +138,7 @@ const registRules = reactive({
     { max: 15,  message: '最多15个字符', trigger: 'blur' },
   ],
   nickName: [
-    { required: true, message: '密码不可为空', trigger: 'blur' },
+    { required: true, message: '昵称不能为空', trigger: 'blur' },
     { min: 2,  message: '最少2个字符', trigger: 'blur' },
     { max: 10,  message: '最多10个字符', trigger: 'blur' },
   ],
@@ -153,6 +153,23 @@ const registRules = reactive({
 import { getMailCode, regist, login } from '@/api/auth'
 // 处理验证码
 function handleCodeClick(){
+  const reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+  if(!reg.test(registRuleForm.username))
+  {
+    store.commit('showToast',{
+      type: 'warning',
+      message: '邮箱格式不正确'
+    })
+    return;
+  }
+  if(registRuleForm.nickName === '')
+  {
+    store.commit('showToast',{
+      type: 'warning',
+      message: '昵称不可为空'
+    })
+    return;
+  }
   sendCodeButtonFlag.value = true;
   codeWaitTime.value = 60;
   const codeWaitTimeInterval  = setInterval(() => {
@@ -162,7 +179,7 @@ function handleCodeClick(){
     sendCodeButtonFlag.value = false;
     clearInterval(codeWaitTimeInterval)
   }, 60000)
-  getMailCode(registRuleForm.username)
+  getMailCode(registRuleForm.username, registRuleForm.nickName)
   .then((res)=>{
     handleRes(res,()=>{},()=>{
       sendCodeButtonFlag.value = false;
@@ -213,7 +230,7 @@ function submit(formEl){
         login(ruleForm.account, ruleForm.password)
         .then(res=>{
           handleRes(res,()=>{
-            console.log(res)
+            // console.log(res)
             store.state.data.isLoggedIn = true;
             store.dispatch('fetchMyProfile').then(()=>{store.state.model.loginModelFlag = false;})
             store.dispatch('fetchNewPostList')

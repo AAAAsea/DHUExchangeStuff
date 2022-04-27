@@ -52,7 +52,7 @@
       <div class="toolbar">
         <span 
           class="iconfont icon-like" 
-          :style="{color: likeStatus || post.likeStatus ? 'var(--primary-color)' : ''}" 
+          :style="{color: (likeStatus || post.likeStatus) && store.state.data.isLoggedIn ? 'var(--primary-color)' : ''}" 
           @click="handleLike"
         >
           <span>{{post.likeCount}}</span>
@@ -273,7 +273,7 @@ export default {
     }
     function shareCopy(id){
       const { toClipboard } = useClipboard()
-      toClipboard(window.location.href + '/' + id)
+      toClipboard(window.location.origin + '#/home/' + id)
       .then(()=>{
         store.commit('showToast',{
           type: "success",
@@ -298,7 +298,8 @@ export default {
       handleLike,
       route,
       isDetail,
-      shareCopy
+      shareCopy,
+      store
     }
   }
 }
