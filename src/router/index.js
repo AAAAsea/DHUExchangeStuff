@@ -53,7 +53,17 @@ const	routes=[
 						title:'🔐 账号设置',
 						requireAccountLogin: true
 					},
-				}
+				},
+				{
+					path:'/user/follow/:id',	
+					name: '关注',
+					component: ()=>import("@/components/FollowCard"),
+					props: true,
+					meta: {
+						title:'🔐 关注',
+						requireAccountLogin: true
+					},
+				},
 			]
 		},
 

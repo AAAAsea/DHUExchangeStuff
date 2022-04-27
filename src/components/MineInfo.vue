@@ -42,7 +42,7 @@
           name="file"
         >
           <img  :src="form.backgroundUrl" class="bg" />
-          <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+          <el-icon v-if="isEdit" class="el-icon--upload"><upload-filled /></el-icon>
         </el-upload>
       </li>
     </ul>
@@ -76,8 +76,9 @@ const handleBgSuccess = (response,uploadFile) => {
 }
 
 const beforeAvatarUpload= (rawFile) => {
-  if (rawFile.type !== 'image/jpeg') {
-    alert('必须JPG格式')
+  const types = ['image/png', 'image/jpg', 'image/gif', 'image/jpeg']
+  if (!types.includes(rawFile.type)) {
+    alert('必须JP(e)G/PNG/GIF格式')
     return false
   } else if (rawFile.size / 1024 / 1024 > 2) {
     alert('图片大小不能大于2MB!')
@@ -94,8 +95,7 @@ function saveInfo(){
     if(form.description !== user.description) reuqests.push(changeDescription(form.description))
     Promise.all(reuqests)
     .then( results => {
-    console.log(results)
-
+      console.log(results)
       let success = true;
       results.forEach(res=>{
         if(res.code !== 20000)
@@ -113,7 +113,7 @@ function saveInfo(){
           type: 'success',
           message: '修改成功~'
         })
-        store.dispatch('fetchUserProfile')
+        store.dispatch('fetchMyProfile')
         isEdit.value = false;
       }      
     })
@@ -140,22 +140,20 @@ function saveInfo(){
   }
   li{
     display: flex;
-    align-items: center;
+    flex-direction: column;
     margin-bottom: 40px;
     .label{
       line-height: 30px;
       height: 30px;
       opacity: 0.8;
       width: 100px;
-      text-align: right;
-      padding-right: 20px;
       box-sizing: border-box;
       letter-spacing: 1px;
     }
     .el-input__count{
       background: transparent;
     }
-    .el-input_inner {
+    :deep() .el-input_inner {
       box-shadow: none;
       background-color: var(--secondary-bg) !important;
       color: var(--main-text);
@@ -165,10 +163,10 @@ function saveInfo(){
     }
 
     .el-input {
-      width: 200px;
+      width: 100%;
     }
     .el-textarea{
-      width: 70%;
+      width: 100%;
     }
   }
 }
@@ -219,18 +217,28 @@ function saveInfo(){
 }
 
 .bg-uploader{
-  height: 200px;
-  width: 200px !important;
-  background: var(--secondary-bg);
-  img{
-    width: 200px;
-    // height: 200px;
-    // object-fit: cover;
+  width: 300px;
+  height: 180px;
+  :deep() .el-upload-dragger{
+    position: relative;
+    background: transparent;
+    border: 1px solid transparent;
+    width: 300px;
+    height: 180px;
+    img{
+      width: 300px;
+      height: 180px;
+      object-fit: cover;
+    }
+    .el-icon--upload{
+      width: 300px;
+      height: 180px;
+      position: absolute;
+      transform: translateX(-50%);
+      margin: 0;
+      top: 0;
+      background: rgba($color: #000000, $alpha: 0.5);
+    }
   }
-
-  .el-upload-dragger{
-        background-color: transparent !important;
-  }
-
 }
 </style>

@@ -11,15 +11,28 @@
           <div class="title">{{user.nickName}}</div>
           <div class="follow">
             <div class="followee">
-              <span class="label">粉丝</span>
-              <span>{{user.followeeCount}}</span>
+              <router-link :to="'/user/follow/' + user.id + '?relate=fans'">
+                <span class="label">粉丝</span>
+                <span>{{user.followerCount}}</span>
+              </router-link>
             </div>
             <div class="follower">
-              <span class="label">关注</span>
-              <span>{{user.followerCount}}</span>
+              <router-link :to="'/user/follow/' + user.id">
+                <span class="label">关注</span>
+                <span>{{user.followeeCount}}</span>
+              </router-link>
             </div>
           </div>
         </div>
+        <el-button 
+        :color="user.hasFollowed ? '#999' : '#ffc300'" 
+        round 
+        v-if="user.id !== store.state.data.user.id"
+        @click="changeFollow"
+        :disabled="!canChangeFollow"
+        :style="{color: user.hasFollowed ? 'var(--main-text)' : '', fontWeight: 'bold'}"
+        >{{ user.hasFollowed ? '已关注' : '关注'}}
+        </el-button>
       </div>
       <div class="user-description">
         📑 {{user.description || '这个人没有留下任何介绍...'}}
@@ -32,7 +45,8 @@
 
 import avatarDefaultImg from '@/assets/img/unlogin.png' 
 import bgDefaultImg from '@/assets/img/bg.jpg'
-import { getUserInfo } from '@/api/user'
+import { getUserInfo, follow, unfollow } from '@/api/user'
+import { isAccountLoggedIn } from '@/utils/auth'
 import { reactive, ref } from '@vue/reactivity';
 import { onBeforeRouteUpdate, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
@@ -56,6 +70,7 @@ const user = reactive ({
   backgroundUrl: ''
 })
 const show = ref(false)
+const canChangeFollow = ref(true)
 async function initUserInfo(id = route.params.id){
   try{
     let res = await getUserInfo(id)
@@ -65,9 +80,11 @@ async function initUserInfo(id = route.params.id){
     user.followerCount = res.data.followerCount
     user.description = res.data.user.description
     user.backgroundUrl = res.data.user.backgroundUrl
+    user.hasFollowed = res.data.hasFollowed;
+    user.id = res.data.user.id
     show.value = true;
     emit('on-update', user.nickName)
-    document.title = '🎮' + user.nickName + "的个人主页"
+    document.title = '🎮 ' + user.nickName + "的个人主页"
   }catch(err){
     console.log(err)
     store.commit('showToast',{
@@ -79,6 +96,40 @@ async function initUserInfo(id = route.params.id){
 }
 initUserInfo()
 
+function changeFollow(){
+  if(!isAccountLoggedIn()){
+    store.state.model.loginModelFlag = true;
+    return;
+  }
+  canChangeFollow.value = false;
+  let action = user.hasFollowed ? unfollow : follow;
+  action(user.id)
+  .then(res=>{
+    if(res.code === 20000)
+    {
+      store.commit('showToast',{
+        type: "success",
+        message: user.hasFollowed ? "已取关" : "已关注"
+      })
+      initUserInfo()
+    }else{
+      store.commit('showToast',{
+        type: 'error',
+        message: res.message
+      })
+    }
+  })
+  .catch((err)=>{
+    console.log(err)
+    store.commit('showToast',{
+      type: 'error',
+      message: '加载异常'
+    })
+  })
+  .finally(()=>{
+    canChangeFollow.value = true;
+  })
+}
 // 监听路由变化
 onBeforeRouteUpdate( (to, from) => {
   show.value = false;

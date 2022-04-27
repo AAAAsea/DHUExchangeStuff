@@ -38,7 +38,7 @@ export function changeNickName(nickName){
   })
 }
 /**
- * 修改用户昵称
+ * 修改用户介绍
  */
 export function changeDescription(description){
   return request({
@@ -58,6 +58,59 @@ export function changeAvatar(headerImage){
     method: 'post',
     params: {
       headerImage
+    },
+  })
+}
+/**
+ * 修改用户昵头像
+ */
+export function follow(entityId){
+  return request({
+    url: '/follow',
+    method: 'post',
+    params: {
+      entityType: 3,
+      entityId
+    },
+  })
+}
+/**
+ * 修改用户昵头像
+ */
+export function unfollow(entityId){
+  return request({
+    url: '/unfollow',
+    method: 'post',
+    params: {
+      entityType: 3,
+      entityId
+    },
+  })
+}
+/**
+ * 获取关注列表
+ */
+export function getFollowees(id, offset = 0, limit = 10){
+  return request({
+    url: '/followees/' + id,
+    method: 'get',
+    params: {
+      offset,
+      limit
+    },
+  })
+}
+
+/**
+ * 获取粉丝
+ */
+export function getFollowers(id, offset = 0, limit = 10){
+  return request({
+    url: '/followers/' + id,
+    method: 'get',
+    params: {
+      offset,
+      limit
     },
   })
 }
