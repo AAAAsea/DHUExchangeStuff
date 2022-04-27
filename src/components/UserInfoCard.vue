@@ -2,7 +2,7 @@
   <div class="user-index" v-show="show">
     <div class="user-banner">
       <div class="mask"/>
-      <img :src="user.backgroundUrl || 'http://ww2.sinaimg.cn/mw2000/68f96449jw1ergqx79rw4j20hs0hswh0.jpg'" alt="">
+      <img :src="user.backgroundUrl || bgDefaultImg">
     </div>
     <div class="user-info">
       <div class="user-head">
@@ -31,6 +31,7 @@
 <script setup>
 
 import avatarDefaultImg from '@/assets/img/unlogin.png' 
+import bgDefaultImg from '@/assets/img/bg.jpg'
 import { getUserInfo } from '@/api/user'
 import { reactive, ref } from '@vue/reactivity';
 import { onBeforeRouteUpdate, useRoute } from 'vue-router';

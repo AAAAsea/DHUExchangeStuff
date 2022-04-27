@@ -42,8 +42,14 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="store.state.model.postModelFlag = false">取消</el-button>
-        <el-button type="primary" @click="publish(ruleFormRef)"  style="backgroundColor:var(--primary-color); color: var(--main-bg); border: none;"
-          >发布 Ctrl ↵</el-button
+        <el-button 
+        type="primary" 
+        @click="publish(ruleFormRef)"  
+        style="backgroundColor:var(--primary-color); color: var(--main-bg); border: none;"
+        :disabled="!canPublish"
+        >
+          发布 Ctrl ↵
+        </el-button
         >
       </span>
     </template>
@@ -57,6 +63,7 @@ import { useStore } from 'vuex'
 import { addPost } from '../../api/post'
 const store = useStore()
 const route = useRoute()
+const canPublish = ref(true)
 const form = reactive({
   title: '',
   content: ''
@@ -83,9 +90,11 @@ function validateEmpty(rule, value, callback){
 function publish(formEl){
   formEl.validate((valid) => {
     if (valid) {
+      canPublish.value = false; // 防止多次发布
       addPost(form.title, form.content, dynamicTags.value)
       .then(res=>{
         store.state.model.postModelFlag = false
+        canPublish.value = true;
         if(res.code === 20000)
         {
           store.commit('showToast',{
@@ -102,19 +111,18 @@ function publish(formEl){
           {
             store.commit('resetUserInfo')
           }
-          console.log(res.message)
-            store.commit('showToast',{
-              type: 'info',
+          store.commit('showToast',{
+              type: 'error',
               message: res.message
             })
-          }
+        }
       })
       .catch((res)=>{
         console.log(res)
         // store.commit('resetUserInfo')
         store.commit('showToast',{
             type: 'error',
-            message: '发生错误'
+            message: '服务器异常'
           })
       })
     }

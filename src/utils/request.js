@@ -1,7 +1,11 @@
 import axios from 'axios';
 
 let baseURL = '/api';
-
+if (process.env.NODE_ENV === "'dev'"){
+  baseURL = '/api'
+} else {
+  baseURL = '/api'
+}
 const service = axios.create({
   baseURL,
   withCredentials: true,
