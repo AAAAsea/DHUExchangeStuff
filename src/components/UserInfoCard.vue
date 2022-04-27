@@ -94,13 +94,11 @@ onBeforeRouteUpdate( (to, from) => {
     margin-bottom: 8px;
     .user-banner{
       position: relative;
+      height: 280px;
       width: 100%;
       .mask{
         width: 100%;
         height: 280px;
-        @media screen and(max-width: 768px) {
-          height: 200px;
-        }
         opacity: 0.3;
         background-image: repeating-linear-gradient(rgb(72, 72, 72) , rgb(202, 202, 202)  20%, rgb(216, 216, 216) 80%, rgb(92, 92, 92) );
         background-size:cover;
@@ -113,9 +111,6 @@ onBeforeRouteUpdate( (to, from) => {
         width: 100%;
         height: 280px;
         object-fit: cover;
-      }
-      @media screen and(max-width: 768px) {
-        height: 200px;
       }
     }
     .user-info{
@@ -157,5 +152,17 @@ onBeforeRouteUpdate( (to, from) => {
         color: var(--secondary-text);
       }
     }
+    @media screen and(max-width: 768px) {
+      .user-banner{
+        height: 200px;
+        .mask{
+          height: 200px;
+        }
+        img{
+          height: 200px;
+        }
+      }
+    }
+
   }
 </style>
