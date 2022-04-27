@@ -141,8 +141,8 @@
         </span>
         <span class="iconfont icon-cc-right"></span>
       </div>
-      <span v-else style="color: var(--secondary-bg)">
-        {{post.commentCount === comments.length ? '——到底了——' : '···'}}
+      <span v-else style="color: var(--secondary-bg)" @click="loadMoreComment">
+        {{post.commentCount === comments.length ? '——到底了——' : '点击加载更多'}}
       </span>
     </div>
     <!-- 评论回复弹窗 -->
@@ -293,6 +293,7 @@ export default{
     // 详情页监听滚动
     if(isDetail.value){
       window.onscroll = loadMoreComment
+      loadMoreComment() // 防止刚开始三条评论无法触发滚动
     }
     // 离开页面时取消监听
     onUnmounted(()=>{window.onscroll = null})

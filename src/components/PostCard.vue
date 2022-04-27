@@ -52,7 +52,7 @@
       <div class="toolbar">
         <span 
           class="iconfont icon-like" 
-          :style="{color: post.likeStatus ? 'var(--primary-color)' : ''}" 
+          :style="{color: likeStatus || post.likeStatus ? 'var(--primary-color)' : ''}" 
           @click="handleLike"
         >
           <span>{{post.likeCount}}</span>
@@ -60,7 +60,7 @@
         <span class="iconfont icon-comment_light" @click="changeFold">
           <span>{{post.commentCount}}</span>
         </span>
-        <span class="iconfont icon-forward"></span>
+        <span class="iconfont icon-forward" @click="shareCopy(post.id)"></span>
       </div>
       <div v-if="isComment || isDetail">
         <div class="comment" >
@@ -114,6 +114,7 @@ import { getPostDetail, addComment, changeLikeStatus } from '@/api/post'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import { computed } from '@vue/runtime-core'
+import useClipboard from 'vue-clipboard3'
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Post",
@@ -167,7 +168,7 @@ export default {
       isRipplesFlag = false;
     }
     function initComment(offset = 0, limit = 3, type = 'init'){
-      console.log(offset, limit)
+      // console.log(offset, limit)
       getPostDetail({id:props.post.id, offset, limit})
       .then(res=>{
         if(res.code === 20000)
@@ -251,7 +252,7 @@ export default {
           .then(res=>{
             if(res.code === 20000)
             {
-              console.log("改变点赞成功")
+              // console.log("改变点赞成功")
             }else if(res){
               store.commit('showToast',{
                 type: "error",
@@ -270,6 +271,16 @@ export default {
         }, 1000);
       }
     }
+    function shareCopy(id){
+      const { toClipboard } = useClipboard()
+      toClipboard(window.location.href + '/' + id)
+      .then(()=>{
+        store.commit('showToast',{
+          type: "success",
+          message: "链接已复制，快去分享吧~"
+        })
+      })
+    }
     return{
       isFold,
       // ...toRefs(props.user),
@@ -286,7 +297,8 @@ export default {
       initComment,
       handleLike,
       route,
-      isDetail
+      isDetail,
+      shareCopy
     }
   }
 }
@@ -387,7 +399,7 @@ export default {
         font-size: 16px;
         color: var(--toolbar-text);
         transition: .1s;
-        &:hover{
+        & + span:hover{
           text-shadow: 1px 1px 2px 4px var(--primary-color);
           color: var(--primary-color) !important ;
         }

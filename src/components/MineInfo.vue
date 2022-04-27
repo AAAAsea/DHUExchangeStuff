@@ -3,12 +3,12 @@
     <div id="avatar">
       <el-upload
         class="avatar-uploader"
-        action="/api/users/upload"
+        action="/api/users/header"
         :show-file-list="false"
         :on-success="handleAvatarSuccess"
         :before-upload="beforeAvatarUpload"
         :disabled="!isEdit"
-        name="headerImage"
+        name="file"
       >
         <img  :src="form.headerUrl" class="avatar" />
         <el-icon v-if="isEdit" class="avatar-uploader-icon"><Plus /></el-icon>
@@ -21,13 +21,29 @@
       </li>
       <li>
         <div class="label" > 昵称:</div>
-        <div v-if="!isEdit">{{form.nickName ?? '未设置'}}</div>
+        <div v-if="!isEdit">{{form.nickName || '未设置'}}</div>
         <el-input v-else v-model="form.nickName" :readonly="!isEdit" class="input" autosize></el-input>
       </li>
       <li>
         <div class="label"> 介绍:</div>
-        <div v-if="!isEdit">{{form.description ?? '这个人很懒，什么也没写...'}}</div>
+        <div v-if="!isEdit">{{form.description || '这个人很懒，什么也没写...'}}</div>
         <el-input v-else v-model="form.description" :readonly="!isEdit" type="textarea" show-word-limit :maxlength="300" :autosize="{ minRows: 3, maxRows: 8 }" placeholder="在这里写下你的介绍"></el-input>
+      </li>
+      <li>
+        <div class="label"> 背景:</div>
+        <el-upload
+          class="bg-uploader"
+          drag
+          action="/api/users/background"
+          :show-file-list="false"
+          :on-success="handleBgSuccess"
+          :before-upload="beforeAvatarUpload"
+          :disabled="!isEdit"
+          name="file"
+        >
+          <img  :src="form.backgroundUrl" class="bg" />
+          <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+        </el-upload>
       </li>
     </ul>
     <el-button class="savebtn" @click="saveInfo">{{isEdit ? '保存' : '编辑'}}</el-button>
@@ -37,46 +53,61 @@
 <script setup>
 import { reactive, ref } from "vue";
 import { useStore } from "vuex";
-import { Plus } from '@element-plus/icons-vue'
+import {  Plus, UploadFilled  } from '@element-plus/icons-vue'
 import { changeNickName, changeDescription } from '@/api/user'
 const store = useStore()
 const user = store.state.data.user
 const form = reactive({
   nickName: user.nickName,
   description: user.description,
-  headerUrl: user.headerUrl
+  headerUrl: user.headerUrl,
+  backgroundUrl: user.backgroundUrl
 })
 const isEdit = ref(false)
 
-const handleAvatarSuccess = (
-  response,
-  uploadFile
-) => {
-  console.log(response, uploadFile)
+const handleAvatarSuccess = (response,uploadFile) => {
   form.headerUrl = URL.createObjectURL(uploadFile.raw)
-  console.log(form.headerUrl)
   store.dispatch('fetchUserProfile')
+}
 
+const handleBgSuccess = (response,uploadFile) => {
+  form.backgroundUrl = URL.createObjectURL(uploadFile.raw)
+  store.dispatch('fetchUserProfile')
 }
 
 const beforeAvatarUpload= (rawFile) => {
   if (rawFile.type !== 'image/jpeg') {
-    alert('Avatar picture must be JPG format!')
+    alert('必须JPG格式')
     return false
   } else if (rawFile.size / 1024 / 1024 > 2) {
-    alert('Avatar picture size can not exceed 2MB!')
+    alert('图片大小不能大于2MB!')
     return false
   }
   return true
 }
+
 function saveInfo(){
   if(isEdit.value)
   {
-    Promise.all([changeNickName(form.nickName), changeDescription(form.description) ])
-    .then( res => {
-      let status = 1;
-      res.map((x)=>{status & x === 20000})
-      if(status)
+    let reuqests = []
+    if(form.nickName !== user.nickName) reuqests.push(changeNickName(form.nickName))
+    if(form.description !== user.description) reuqests.push(changeDescription(form.description))
+    Promise.all(reuqests)
+    .then( results => {
+    console.log(results)
+
+      let success = true;
+      results.forEach(res=>{
+        if(res.code !== 20000)
+        {
+          success = false;
+          store.commit('showToast',{
+            type: 'warning',
+            message: res.message
+          })
+        }
+      })
+      if(success)
       {
         store.commit('showToast',{
           type: 'success',
@@ -84,14 +115,15 @@ function saveInfo(){
         })
         store.dispatch('fetchUserProfile')
         isEdit.value = false;
-      }else{
-        store.commit('showToast',{
+      }      
+    })
+    .catch(err=>{
+      console.log(err)
+      store.commit('showToast',{
           type: 'error',
-          message: '修改失败'
+          message: '修改失败~'
         })
-      }
-      
-    });
+    })
   }else{
     isEdit.value = true
   }
@@ -186,4 +218,12 @@ function saveInfo(){
   text-align: center;
 }
 
+.bg-uploader{
+  height: 200px;
+  img{
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+}
 </style>

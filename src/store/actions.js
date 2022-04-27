@@ -1,6 +1,6 @@
 import { getPostList } from '@/api/post'
-import { getUserInfo } from '@/api/user'
-
+import { getUserInfo, getMyInfo } from '@/api/user'
+// import { isAccountLoggedIn } from '@/utils/auth';
 export default {
   // 获取postList
   fetchPostList: ({ commit, state }, userId = 0 ) => {
@@ -45,6 +45,14 @@ export default {
     console.log("profile")
     return getUserInfo(state.data.user.id).then(result => {
     console.log(result)
+    if (result.code === 20000) {
+      commit('updateData', { key: 'user', value: result.data.user });
+    }
+    });
+  },
+  // 获取本人信息
+  fetchMyProfile: ({ commit }) => {
+    return getMyInfo().then(result => {
     if (result.code === 20000) {
       commit('updateData', { key: 'user', value: result.data.user });
     }

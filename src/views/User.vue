@@ -30,10 +30,10 @@
 // import PostList from '../components/PostList.vue'
 import LeftSideBar from '@/components/LeftSideBar.vue'
 import RightSideBar from '@/components/RightSideBar.vue'
-import { reactive, toRefs } from '@vue/reactivity'
 import { Edit } from '@element-plus/icons-vue'
 import { useStore } from 'vuex'
 import { isAccountLoggedIn } from '../utils/auth'
+
 
 
 export default {
@@ -46,19 +46,6 @@ export default {
   },
   setup(){
     const store = useStore()
-    const data = reactive({
-      postList: [],
-      isLoading: true
-    })
-    store.state.data.postList.splice()
-    store.dispatch('fetchPostList')
-    .then(()=>{
-      data.isLoading = false
-    })
-    .catch(err=>{
-      console.log(err)
-    })
-
     function showPostModel(){
       if(!isAccountLoggedIn()){
         store.commit('showToast',{
@@ -71,7 +58,6 @@ export default {
       }
     }
     return{
-      ...toRefs(data),
       Edit,
       store,
       showPostModel

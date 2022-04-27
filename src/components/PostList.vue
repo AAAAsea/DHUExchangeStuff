@@ -4,7 +4,7 @@
   @touchstart="handleTouchStart" @touchend="handleTouchEnd" @touchmove ="handleTouchMove"
   >
     <el-icon :style="refreshStyle" color="var(--primary-color)"><refresh-right/></el-icon>
-    <el-empty v-if="store.state.data.postList.length === 0"></el-empty>
+    <el-empty v-if="postList?.length === 0"></el-empty>
     <div 
       v-for="item in postList"
       :key="item.post.id"

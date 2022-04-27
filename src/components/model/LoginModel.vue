@@ -213,8 +213,9 @@ function submit(formEl){
         login(ruleForm.account, ruleForm.password)
         .then(res=>{
           handleRes(res,()=>{
+            console.log(res)
             store.state.data.isLoggedIn = true;
-            store.dispatch('fetchUserProfile').then(()=>{store.state.model.loginModelFlag = false;})
+            store.dispatch('fetchMyProfile').then(()=>{store.state.model.loginModelFlag = false;})
             store.dispatch('fetchNewPostList')
           })
         })

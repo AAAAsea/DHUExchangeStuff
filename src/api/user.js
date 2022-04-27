@@ -1,5 +1,18 @@
 import request from '../utils/request'
 
+
+/**
+ * 获取本人信息
+ */
+export function getMyInfo(){
+  return request({
+    url: '/users/info',
+    method: 'get',
+    params: {
+      timestamp: new Date().getTime(),
+    },
+  })
+} 
 /**
  * 获取用户信息
  */

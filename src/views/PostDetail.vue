@@ -8,9 +8,10 @@
       <!-- 主体 -->
       <el-col  :xs="24" :sm="16" :md="16" :lg="16" :xl="15">      
       <div class="detail-nav">
-        <router-link to="/">
+        <a @click="router.back(-1)"> 
           <span class="iconfont icon-back">返回</span>
-        </router-link>
+        </a>
+        
         <span class="nav-title">{{postDetail?.user?.nickName}}</span>
       </div>
       <PostCard
@@ -41,14 +42,14 @@ import PostCard from '../components/PostCard.vue'
 import LeftSideBar from '@/components/LeftSideBar.vue'
 import RightSideBar from '@/components/RightSideBar.vue'
 import { useStore } from 'vuex'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { getPostDetail } from '@/api/post'
 import { ref } from '@vue/reactivity'
 
 const store = useStore()
 const route = useRoute()
 const postDetail = ref('')
-
+const router = useRouter()
 function initPostDetail(){
   getPostDetail({id:route.params.id, offset: 0, limit: 5})
   .then(res=>{

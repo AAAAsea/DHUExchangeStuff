@@ -1,12 +1,12 @@
 <template>
-  <div class="user-index">
+  <div class="user-index" v-show="show">
     <div class="user-banner">
       <div class="mask"/>
-      <img src="http://ww2.sinaimg.cn/mw2000/68f96449jw1ergqx79rw4j20hs0hswh0.jpg" alt="">
+      <img :src="user.backgroundUrl || 'http://ww2.sinaimg.cn/mw2000/68f96449jw1ergqx79rw4j20hs0hswh0.jpg'" alt="">
     </div>
     <div class="user-info">
       <div class="user-head">
-        <img :src="user.headerUrl" alt="">
+        <img :src="user.headerUrl || avatarDefaultImg" alt="">
         <div class="info">
           <div class="title">{{user.nickName}}</div>
           <div class="follow">
@@ -22,7 +22,7 @@
         </div>
       </div>
       <div class="user-description">
-        📑 {{user.description}}
+        📑 {{user.description || '这个人没有留下任何介绍...'}}
       </div>
     </div>
   </div>
@@ -30,16 +30,20 @@
 
 <script setup>
 
-// import { computed, ref } from 'vue';
+import avatarDefaultImg from '@/assets/img/unlogin.png' 
 import { getUserInfo } from '@/api/user'
-import { reactive } from '@vue/reactivity';
-import { useRoute } from 'vue-router';
+import { reactive, ref } from '@vue/reactivity';
+import { onBeforeRouteUpdate, useRoute } from 'vue-router';
+import { useStore } from 'vuex';
+import { defineEmits } from 'vue';
 
+const emit = defineEmits(['on-update'])
 const route = useRoute()
+const store = useStore()
 const user = reactive ({
   ZcreateTime: '"2022-04-23T11:25:45.000+0000"',
   description: '',
-  headerUrl: '""',
+  headerUrl: '',
   id: '',
   nickName: '',
   status: 0,
@@ -47,19 +51,39 @@ const user = reactive ({
   username: '',
   followeeCount: 0,
   followerCount: 0,
-  hasFollowed: false
+  hasFollowed: false,
+  backgroundUrl: ''
 })
-console.log( route.params.id)
-getUserInfo(route.params.id)
-.then(res=>{
-  console.log(res)
-  user.headerUrl = res.data.user.headerUrl
-  user.nickName = res.data.user.nickName
-  user.followeeCount = res.data.followeeCounr
-  user.followerCount = res.data.followerCount
-  user.description = res.data.user.description
-})
+const show = ref(false)
+async function initUserInfo(id = route.params.id){
+  try{
+    let res = await getUserInfo(id)
+    user.headerUrl = res.data.user.headerUrl
+    user.nickName = res.data.user.nickName
+    user.followeeCount = res.data.followeeCounr
+    user.followerCount = res.data.followerCount
+    user.description = res.data.user.description
+    user.backgroundUrl = res.data.user.backgroundUrl
+    show.value = true;
+    emit('on-update', user.nickName)
+    document.title = '🎮' + user.nickName + "的个人主页"
+  }catch(err){
+    console.log(err)
+    store.commit('showToast',{
+      type: "error",
+      message: "加载失败"
+    })  
+  }
 
+}
+initUserInfo()
+
+// 监听路由变化
+onBeforeRouteUpdate( (to, from) => {
+  show.value = false;
+  if(to.params.id !== from.params.id)
+  initUserInfo(to.params.id)
+});
 </script>
 
 <style lang="scss" scoped>
