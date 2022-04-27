@@ -1,7 +1,7 @@
 <template>
   <div class="home-left">
     <ul>
-      <router-link to="/home" :class="{'router-link-active': route.path.startsWith('/home')}">
+      <router-link to="/home" :class="{'router-link-active': route.path.startsWith('/home') || route.path !== '/user/' + user.id}">
         <li>
           <span class="emoji">🎈</span>
           <span class="title" >DHU广场</span>

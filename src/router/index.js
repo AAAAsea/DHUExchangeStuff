@@ -50,7 +50,8 @@ const	routes=[
 					component: ()=>import("@/components/MineInfo"),
 					props: true,
 					meta: {
-						title:'🔐 账号设置'
+						title:'🔐 账号设置',
+						requireAccountLogin: true
 					},
 				}
 			]
