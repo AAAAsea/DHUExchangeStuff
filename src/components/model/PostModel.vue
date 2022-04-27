@@ -95,7 +95,7 @@ function publish(formEl){
           form.title = '';
           form.content = '';
           dynamicTags.value.splice(0);
-          store.dispatch('fetchNewPostList', route.path.startsWith('/mine') ? store.state.data.user.id : 0)
+          store.dispatch('fetchNewPostList', route.path === "/user/"+store.state.data.user.id ? store.state.data.user.id : 0)
         }
         else{
           if(res.code === 52008 || res.code === 52007)
