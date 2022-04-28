@@ -23,7 +23,6 @@ export default {
   resetUserInfo(state){
     state.data.userPostList.splice(0);
     state.data.isLoggedIn = false;
-    state.data.user = null;
     document.cookie = "ticket=;path=/";
   }
 }

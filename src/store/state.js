@@ -1,10 +1,16 @@
 export default {
   data:{
     isLoggedIn: false,
-    user: null,
+    user: {
+      id: '',
+      nickName: '',
+      username: '',
+      headerUrl: '',
+      bakgroundUrl: ''
+    },
     postCount: 99,
     userPostCount: 99,
-    ...JSON.parse(localStorage.getItem('data')),
+    // ...JSON.parse(localStorage.getItem('data')),
     postList: [],
     userPostList: []
   },

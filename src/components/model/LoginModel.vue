@@ -204,6 +204,7 @@ function handleRes(res, successCallback=()=>{}, errorCallback=()=>{}){
     })
     successCallback()
   }else{
+    console.log(res)
     store.commit('showToast',{
       type: 'error',
       title: res?.message ?? '发生错误'

@@ -3,6 +3,9 @@ import store from '@/store'
 import {createRouter,  createWebHashHistory} from 'vue-router'
 // 引入工具
 import { isAccountLoggedIn } from '../utils/auth'
+// 进度条动画
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 //创建routes
 const	routes=[
 		{
@@ -85,6 +88,7 @@ router.beforeEach((to, from, next) => {
 			store.state.model.loginModelFlag = true;
 		}
 	}else{
+		NProgress.start()
 		next();
 	}
 	
@@ -94,5 +98,6 @@ router.afterEach(to => {
 	// 设置title
 	document.title = to.meta.title;
 	store.state.model.leftDrawerModelFlag = false
+	NProgress.done()
 })
 export default router;

@@ -1,5 +1,5 @@
 <template>
-  <div class="user-index" v-show="show">
+  <div class="user-index" v-if="show" >
     <div class="user-banner">
       <div class="mask"/>
       <img :src="user.backgroundUrl || bgDefaultImg">
@@ -27,7 +27,7 @@
         <el-button 
         :color="user.hasFollowed ? '#999' : '#ffc300'" 
         round 
-        v-if="user.id !== store.state.data.user.id"
+        v-if="user.id !== store.state.data.user?.id"
         @click="changeFollow"
         :disabled="!canChangeFollow"
         :style="{color: user.hasFollowed ? 'var(--main-text)' : '', fontWeight: 'bold'}"
@@ -43,8 +43,8 @@
 
 <script setup>
 
-import avatarDefaultImg from '@/assets/img/unlogin.png' 
-import bgDefaultImg from '@/assets/img/bg.jpg'
+// import avatarDefaultImg from '@/assets/img/unlogin.png' 
+// import bgDefaultImg from '@/assets/img/bg.jpg'
 import { getUserInfo, follow, unfollow } from '@/api/user'
 import { isAccountLoggedIn } from '@/utils/auth'
 import { reactive, ref } from '@vue/reactivity';
@@ -56,7 +56,7 @@ const emit = defineEmits(['on-update'])
 const route = useRoute()
 const store = useStore()
 const user = reactive ({
-  ZcreateTime: '"2022-04-23T11:25:45.000+0000"',
+  createTime: '"2022-04-23T11:25:45.000+0000"',
   description: '',
   headerUrl: '',
   id: '',
@@ -71,9 +71,9 @@ const user = reactive ({
 })
 const show = ref(false)
 const canChangeFollow = ref(true)
-async function initUserInfo(id = route.params.id){
-  try{
-    let res = await getUserInfo(id)
+function initUserInfo(id = route.params.id){
+  getUserInfo(id)
+  .then(res=>{  
     user.headerUrl = res.data.user.headerUrl
     user.nickName = res.data.user.nickName
     user.followeeCount = res.data.followeeCount
@@ -85,14 +85,14 @@ async function initUserInfo(id = route.params.id){
     show.value = true;
     emit('on-update', user.nickName)
     document.title = '🎮 ' + user.nickName + "的个人主页"
-  }catch(err){
+  })
+  .catch((err)=>{
     console.log(err)
     store.commit('showToast',{
       type: "error",
       message: "加载失败"
     })  
-  }
-
+  })
 }
 initUserInfo()
 

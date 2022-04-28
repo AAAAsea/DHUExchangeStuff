@@ -3,8 +3,7 @@
     <div 
       class="detail-nav" 
       :style="{
-        background: onTop ? 'transparent' : 'var(--post-card-bg)',
-        borderRadius: onTop ? '5px' : '0'
+        background: 'var(--post-card-bg)',
       }">
       <a>
         <span class="iconfont icon-back" @click="router.back(-1)">返回</span>
