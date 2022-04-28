@@ -17,12 +17,14 @@ import nprogress from 'nprogress'
 //简单的配置，一般情况speed配置为500
 nprogress.inc(0.2)
 nprogress.configure({ easing: 'ease', speed: 500, showSpinner: false })
+console.log(process.env.NODE_ENV)
 
-createApp(App)
-  .use(router)
+
+const app = createApp(App)
+app.config.devtools = (process.env.NODE_ENV !== 'production') // 上线后关闭开发者工具
+app.use(router)
   .use(ElementPlus)
   .use(store)
   .use(i18n)
   .mount('#app')
-  .config.devtools = (process.env.NODE_ENV !== 'production') // 上线后关闭开发者工具
-
+  
