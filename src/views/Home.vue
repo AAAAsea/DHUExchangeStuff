@@ -8,10 +8,11 @@
       <!-- 主体 -->
       <el-col  :xs="24" :sm="15" :md="15" :lg="15" :xl="15">        
         <PostList
+          @on-update="reBindOnscroll"
           :postList="store.state.data.postList"
           class="postlist"
         />
-        <div class="no-more-post" v-if="!haveMorePost" style="color: var(--secondary-bg)">——到底了——</div>
+        <div class="no-more-post" style="color: var(--secondary-bg)">{{haveMorePost ? 'Loading' : '——到底了——'}}</div>
       </el-col>
       <!-- 右侧 -->
       <el-col  :xs="0" :sm="5" :md="5" :lg="5" :xl="5">
@@ -92,7 +93,7 @@ export default {
     function loadMorePost(){
       // 加载完毕关闭监听
       if(!haveMorePost.value) window.onscroll = null;
-      if(canLoadMorePost && isOnBottom(1000))
+      if(canLoadMorePost && isOnBottom(1500))
       {
         console.log("loadMorePost")
         canLoadMorePost = false;
@@ -102,11 +103,17 @@ export default {
         }, 1000);
       }
     }
+    // 监听如果子组件下滑刷新，重新绑定事件
+    function reBindOnscroll(){
+      window.onscroll = loadMorePost
+    }
     return{
       Edit,
       store,
       showPostModel,
-      haveMorePost
+      haveMorePost,
+      loadMorePost,
+      reBindOnscroll
     }
   }
 }

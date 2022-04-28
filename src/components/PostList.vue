@@ -38,7 +38,7 @@ export default {
     PostCard,
     RefreshRight
   },
-  setup(){
+  setup(props,context){
     const store = useStore()
     const refreshStyle = reactive({
       position: 'absolute',
@@ -67,7 +67,7 @@ export default {
       refreshStyle.transition = '0.15s ease-out'
       if(e.changedTouches[0].clientY-startY>100 && scrollTop===0 )
       {
-        store.dispatch('fetchNewPostList')
+        store.dispatch('fetchNewPostList', route.params.id)
         .then(res=>{
           if(res === 'all')
           {
@@ -81,7 +81,8 @@ export default {
       if(e.changedTouches[0].clientY-startY > 200) 
       {
         refreshStyle.top = '20px';
-        store.dispatch('fetchNewPostList', route.path.startsWith('/mine') ? store.state.data.user.id : 0 )
+        context.emit('on-update')
+        store.dispatch('fetchNewPostList', route.params.id)
         .then(()=>{
         })
         .catch(()=>{

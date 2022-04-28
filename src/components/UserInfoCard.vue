@@ -142,6 +142,7 @@ onBeforeRouteUpdate( (to, from) => {
     background: var(--post-card-bg);
     border-radius: 5px;
     margin-bottom: 8px;
+    width: 100%;
     .user-banner{
       position: relative;
       height: 280px;

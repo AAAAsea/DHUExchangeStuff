@@ -13,11 +13,13 @@
     </div>
     <UserInfoCard @on-update="name=>{userNickName = name}"/>
     <PostList
+      @on-update="reBindOnscroll"
       v-if="data.userPostList?.length > 0"
       :postList="data.userPostList"
       :isLoading="false"
     />
-    <div class="no-more-post" v-if="!haveMorePost" style="color: var(--secondary-bg)">——到底了——</div>
+    <div class="no-more-post" style="color: var(--secondary-bg)">{{haveMorePost ? 'Loading' : '——到底了——'}}</div>
+
   </div>
 </template>
 
@@ -58,6 +60,8 @@ initUserPostList()
 // 监听路由变化
 onBeforeRouteUpdate( (to, from) => {
   if(to.params.id !== from.params.id)
+  onTop.value = true; // 防止切换user不透明
+  store.state.data.userPostList.splice(0)
   initUserPostList(to.params.id)
 });
 
@@ -103,7 +107,10 @@ function loadMorePost(){
     }, 1000);
   }
 }
-
+// 监听如果子组件下滑刷新，重新绑定事件
+function reBindOnscroll(){
+  window.onscroll = loadMorePost
+}
 </script>
 
 <style lang='scss' scoped>
