@@ -4,12 +4,12 @@ module.exports = defineConfig({
     devServer: {
         proxy: {
             '/api': {
-                target: 'http://127.0.0.1:8081',  // 后台接口地址
+                target: 'http://124.222.191.66',  // 后台接口地址
                 ws: false,        //如果要代理 websockets，配置这个参数
                 secure: false,  // 如果是https接口，需要配置这个参数
                 changeOrigin: true,  //是否跨域
                 pathRewrite:{	// 重写路径
-                    '^/api':''
+                    // '^/api':''
                 }
             }
         }

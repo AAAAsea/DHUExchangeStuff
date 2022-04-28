@@ -42,9 +42,8 @@
 </template>
 
 <script setup>
-
-// import avatarDefaultImg from '@/assets/img/unlogin.png' 
-// import bgDefaultImg from '@/assets/img/bg.jpg'
+import avatarDefaultImg from '@/assets/img/unlogin.png' 
+import bgDefaultImg from '@/assets/img/bg.jpg'
 import { getUserInfo, follow, unfollow } from '@/api/user'
 import { isAccountLoggedIn } from '@/utils/auth'
 import { reactive, ref } from '@vue/reactivity';

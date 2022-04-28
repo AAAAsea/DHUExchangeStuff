@@ -20,7 +20,7 @@
         <!-- 用户昵称 -->
         <div class="user">
           <router-link :to="/user/+item.user.id">
-            {{item.user.nickName ?? item.user.username}}
+            {{item.user.nickName || item.user.username}}
           </router-link>
         </div>
         <!-- 主评论内容 -->
