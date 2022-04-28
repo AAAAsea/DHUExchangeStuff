@@ -55,7 +55,7 @@ export default {
     const data = store.state.data
     const haveMorePost = computed(()=>data.postCount > data.postList.length) 
     data.postList.splice()
-    function initPostList(){
+    async function initPostList(){
       store.dispatch('fetchPostList')
       .then(()=>{
         if(data.postCount === data.postList.length){
@@ -71,6 +71,10 @@ export default {
       })
     }
     initPostList()
+    .finally(()=>{
+      // 第一次请求后监听滚动
+      window.onscroll = loadMorePost
+    })
     function showPostModel(){
       if(!isAccountLoggedIn()){
         store.commit('showToast',{
@@ -82,8 +86,7 @@ export default {
         store.state.model.postModelFlag = true
       }
     }
-    // 监听滚动
-    window.onscroll = loadMorePost
+
     // 默认可以加载
     let canLoadMorePost = true;
     // 离开页面时取消监听

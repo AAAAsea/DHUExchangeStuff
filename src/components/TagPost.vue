@@ -6,8 +6,9 @@
       :postList="data.hotPostList"
       :isLoading="false"
     />
-    <div class="no-more-post" style="color: var(--secondary-bg)">{{haveMorePost ? 'Loading' : '——到底了——'}}</div>
-
+    <div class="no-more-post" style="color: var(--secondary-bg)">
+      {{haveMorePost ? 'Loading' : '——到底了——'}}
+    </div>
   </div>
 </template>
 
@@ -40,7 +41,12 @@ async function initHotPostList({offset = 0, limit = 10, id = route.params.id}){
       })    
   }
 }
-initHotPostList({}) // 形参结构所以要传空对象
+// 结束之后在开启监听，防止初次多次加载
+initHotPostList({})
+.finally(()=>{
+  window.addEventListener('scroll',loadMorePost)
+})
+
 // 监听路由变化
 onBeforeRouteUpdate( (to, from) => {
   if(to.params.id !== from.params.id)
@@ -51,8 +57,7 @@ onBeforeRouteUpdate( (to, from) => {
 
 
 
-// 监听滚动
-window.addEventListener('scroll',loadMorePost)
+
 
 // 默认可以加载
 let canLoadMorePost = true;
@@ -76,7 +81,7 @@ function loadMorePost(){
   }
   if(canLoadMorePost && isOnBottom(1000))
   {
-    console.log("loadMoreUserPost")
+    // console.log("loadMoreTagPost")
     canLoadMorePost = false;
     initHotPostList(data.hotPostList.length, 10) 
     setTimeout(() => {

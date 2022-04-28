@@ -8,7 +8,8 @@
       right: '10px', 
       color:'#eee', 
       transform: 'rotate('+ (isFold ? 0 : 180) +'deg)', 
-      transition: '0.3s'
+      transition: '0.3s',
+      cursor: 'pointer'
     }" 
     @click.stop="isFold = !isFold" >
       <arrow-down-bold />
@@ -84,7 +85,7 @@ function loadMoreTags(){
         box-sizing: border-box;
         line-height: 1.5em;
         width: 100%;
-        background: var(--main-bg);
+        background: var(--post-card-bg);
         font-size: 1em;
         font-weight: bold;
         display: flex;
@@ -105,10 +106,11 @@ function loadMoreTags(){
       display: none
     }
     .load-more{
-      height: 30px;
+      height: 35px;
       font-size: 16px;
-      line-height: 30px;
+      line-height: 35px;
       text-align: center;
+      cursor: pointer;
     }
   }
 </style>

@@ -56,7 +56,12 @@ async function initUserPostList(id = route.params.id){
       })    
   }
 }
+
+// 结束之后在开启监听，防止初次多次加载
 initUserPostList()
+.finally(()=>{
+  window.addEventListener('scroll',loadMorePost)
+})
 // 监听路由变化
 onBeforeRouteUpdate( (to, from) => {
   if(to.params.id !== from.params.id)
@@ -72,7 +77,7 @@ function onScroll(){
 }
 
 // 监听滚动
-window.addEventListener('scroll',loadMorePost)
+
 // console.log(window.onscroll)
 
 // 默认可以加载
