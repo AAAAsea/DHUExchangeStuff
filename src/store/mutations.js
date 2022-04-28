@@ -20,9 +20,14 @@ export default {
   resetPostList(state){
     state.data.postList.splice(0);
   },
+  resetHotTags(state){
+    state.data.tags.splice(0);
+  },
   resetUserInfo(state){
     state.data.userPostList.splice(0);
     state.data.isLoggedIn = false;
-    document.cookie = "ticket=;path=/";
+    Object.keys(state.data.user).forEach(key=>{
+      state.data.user[key] = ''
+    })
   }
 }

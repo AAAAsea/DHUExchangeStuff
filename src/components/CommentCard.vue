@@ -200,7 +200,7 @@ export default{
     const route = useRoute()
     let canLoadComment = true;
     const isDetail = computed(()=>route.name === '详情') // 判断是否是详情页
-    // let likeTimeOut; // 点赞定时器(优化为item。likeTimeOut)
+    // let likeTimeOut; // 点赞定时器(优化为item.likeTimeOut)
     // let isLikeChange = false; // 是否在发送请求之前改变了点赞，发送之后置为false（同上）
     const comment = reactive({
       id: props.post.id, 
@@ -290,28 +290,32 @@ export default{
         path: '/home/'+props.post.id
       })
     }
+
     // 详情页监听滚动
     if(isDetail.value){
-      window.onscroll = loadMoreComment
+      window.addEventListener('scroll', loadMoreComment)
       loadMoreComment() // 防止刚开始三条评论无法触发滚动
     }
     // 离开页面时取消监听
-    onUnmounted(()=>{window.onscroll = null})
+    onUnmounted(()=>{
+      window.removeEventListener('scroll', loadMoreComment);
+    })
     // 滚动时判断是否到底部，并且500ms之内未触发更新，且还有数据
     function loadMoreComment(){
       // 加载完毕关闭监听
       if(props.post.commentCount <= props.comments.length)
       {
-        window.onscroll = null;
+        window.removeEventListener('scroll', loadMoreComment)
+        return;
       }
       if(isDetail.value && canLoadComment && isOnBottom())
       {
-        // console.log("loadMoreComment")
+        console.log("loadMoreComment")
         context.emit('on-bottom')
         canLoadComment = false;
         setTimeout(() => {
           canLoadComment = true; // 防止过快加载
-          loadMoreComment() // 防止一秒内到底后不动导致不加载，所以自动多判断一次
+          if(isOnBottom()) loadMoreComment() // 防止一秒内到底后不动导致不加载，所以自动多判断一次
         }, 1000);
       }
     }

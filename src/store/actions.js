@@ -1,5 +1,7 @@
 import { getPostList } from '@/api/post'
 import {  getMyInfo, getUserInfo } from '@/api/user'
+import {  getHotTags, getPostListByTagId } from '@/api/tags'
+
 // import { isAccountLoggedIn } from '@/utils/auth';
 export default {
   // 获取postList
@@ -42,20 +44,47 @@ export default {
   // 获取用户信息
   fetchUserProfile: ({ commit, state }) => {
     // if (!isAccountLoggedIn()) return;
-    console.log("profile")
+    // console.log("profile")
     return getUserInfo(state.data.user.id).then(result => {
-    console.log(result)
+    // console.log(result)
     if (result.code === 20000) {
       commit('updateData', { key: 'user', value: result.data.user });
     }
     });
   },
-  // 获取本人信息
+  // 获取本人信息（登录后调用）
   fetchMyProfile: ({ commit }) => {
     return getMyInfo().then(result => {
     if (result.code === 20000) {
       commit('updateData', { key: 'user', value: result.data.user });
     }
+    });
+  },
+  // 获取热门标签
+  fetchHotTags: ({ commit },{ offset = 0, limit = 10}) => {
+    // console.log(offset,limit)
+    return getHotTags(offset, limit).then(result => {
+      // console.log(result)
+    if (result.code === 20000) {
+      commit('addData', { key: 'tags', value: result.data });
+    }
+    });
+  },
+  // 获取postList
+  fetchHotPostList: ({ commit, state }, {offset = 0, limit = 10, id}) => {
+    // if (!isAccountLoggedIn()) return;
+    if(offset === 0)
+    {
+      state.data.hotPostList.splice(0)
+    }
+    return getPostListByTagId(
+      offset,
+      limit,
+      id
+    ).then(result => {
+      if (result.code === 20000) {
+        commit('addData', { key: 'hotPostList', value: result.data.postList });
+      }
     });
   },
 }

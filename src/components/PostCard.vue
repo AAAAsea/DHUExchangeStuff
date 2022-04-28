@@ -35,20 +35,24 @@
       <p :class="{fold: isFold}">{{post.content}}</p>
     </div>
     <div class="footer">
-      <el-tag
+      <router-link 
         v-for="tag in post.tags"
-        :key="tag"
-        :style="{margin: '0  10px 10px 0'}"
-        :disable-transitions="false"
-        type="info"
-        color="transparent"
-        size="small"
-        effect="plain"
-        class="tag"
-        round
+        :key="tag.tagId"
+        :to="'/tag/' + tag.tagId" 
       >
-        #{{ tag }}
-      </el-tag>
+        <el-tag
+          :style="{margin: '0  10px 10px 0'}"
+          :disable-transitions="false"
+          type="info"
+          color="transparent"
+          size="small"
+          effect="plain"
+          class="tag"
+          round
+        >
+          #{{ tag.tagName}}
+        </el-tag>
+      </router-link>
       <div class="toolbar">
         <span 
           class="iconfont icon-like" 
@@ -377,9 +381,13 @@ export default {
   .footer{
     padding-bottom: 2px;
     font-size: var(--post-card-footer-font-size);
+    a.router-link-active span, a.router-link-active .tag{
+      color: var(--primary-color);
+      border-color: var(--primary-color) !important;
+    }
     .tag{
       transition: .2s;
-      border-color:  var(--secondary-border) !important;
+      border-color:  var(--secondary-border);
       color: var(--secondary-text) !important;
       &:hover{
       border-color: var(--primary-color) !important ;

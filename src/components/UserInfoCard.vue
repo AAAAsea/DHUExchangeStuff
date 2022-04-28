@@ -177,6 +177,7 @@ onBeforeRouteUpdate( (to, from) => {
           height: 100px;
           border-radius: 50%;
           border: 5px solid var(--main-bg);
+          box-shadow: 0 0 0 3px var(--main-bg) inset; // 去除border和content中间的空隙
         }
         .info{
           margin-left: 20px;

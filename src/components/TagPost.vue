@@ -1,21 +1,9 @@
 <template>
   <div class="mine-post" @scroll="onScroll">
-    <div 
-      class="detail-nav" 
-      :style="{
-        background: onTop ? 'transparent' : 'var(--post-card-bg)',
-        borderRadius: onTop ? '5px' : '0'
-      }">
-      <a>
-        <span class="iconfont icon-back" @click="router.back(-1)">返回</span>
-      </a>
-      <span class="nav-title">{{userNickName}}</span>
-    </div>
-    <UserInfoCard @on-update="name=>{userNickName = name}"/>
     <PostList
       @on-update="reBindOnscroll"
-      v-if="data.userPostList?.length > 0"
-      :postList="data.userPostList"
+      v-if="data.hotPostList?.length > 0"
+      :postList="data.hotPostList"
       :isLoading="false"
     />
     <div class="no-more-post" style="color: var(--secondary-bg)">{{haveMorePost ? 'Loading' : '——到底了——'}}</div>
@@ -28,24 +16,20 @@ import { useStore } from 'vuex'
 import PostList from '@/components/PostList.vue'
 import { onDeactivated, onUnmounted, ref } from '@vue/runtime-core'
 import { isOnBottom } from '@/utils/tools'
-import UserInfoCard from '@/components/UserInfoCard.vue'
-import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router'
+import { onBeforeRouteUpdate, useRoute } from 'vue-router'
 
 const route = useRoute()
-const router = useRouter()
 const store = useStore()
 const data = store.state.data
-const userNickName =  ref('')
 const haveMorePost = ref(true)
 const onTop = ref(true)
 
-store.state.data.userPostList.splice(0)
-async function initUserPostList(id = route.params.id){
+async function initHotPostList({offset = 0, limit = 10, id = route.params.id}){
   try{
-    await store.dispatch('fetchPostList', id) // 等待数据加载
-    if(data.userPostCount === data.userPostList.length){
+    let _length = data.hotPostList.length
+    await store.dispatch('fetchHotPostList', {offset, limit, id}) // 等待数据加载
+    if(data.hotPostList.length - _length < limit){
       window.removeEventListener('scroll',loadMorePost) // 没有更多数据了关闭监听
-      window.onscroll = onScroll  // 只监听导航栏
       haveMorePost.value = false; // 没有更多数据了
     }
   }catch(err){
@@ -56,24 +40,19 @@ async function initUserPostList(id = route.params.id){
       })    
   }
 }
-initUserPostList()
+initHotPostList({}) // 形参结构所以要传空对象
 // 监听路由变化
 onBeforeRouteUpdate( (to, from) => {
   if(to.params.id !== from.params.id)
   onTop.value = true; // 防止切换user不透明
-  store.state.data.userPostList.splice(0)
-  initUserPostList(to.params.id)
+  store.state.data.hotPostList.splice(0)
+  initHotPostList({id: to.params.id}) // 否则会加载之前的id
 });
 
-// 动态修改导航栏背景色
-function onScroll(){
-  let scrollTop = document.documentElement.scrollTop||document.body.scrollTop;
-  onTop.value = scrollTop < 200
-}
+
 
 // 监听滚动
 window.addEventListener('scroll',loadMorePost)
-// console.log(window.onscroll)
 
 // 默认可以加载
 let canLoadMorePost = true;
@@ -90,20 +69,19 @@ onDeactivated (()=>{
 // 滚动时判断是否到底部，并且500ms之内未触发更新，且还有数据
 
 function loadMorePost(){
-  onScroll() 
   // 加载完毕只监听导航栏
   if(!(haveMorePost.value)){
     window.removeEventListener('scroll',loadMorePost)
-    window.onscroll = onScroll // 没有更多数据了关闭监听
     return;
   }
   if(canLoadMorePost && isOnBottom(1000))
   {
     console.log("loadMoreUserPost")
     canLoadMorePost = false;
+    initHotPostList(data.hotPostList.length, 10) 
     setTimeout(() => {
       canLoadMorePost = true; // 防止过快加载
-      initUserPostList() // 防止一秒内到底后不动导致不加载，所以自动多判断一次
+      initHotPostList(data.hotPostList.length, 10) // 防止一秒内到底后不动导致不加载，所以自动多判断一次
     }, 1000);
   }
 }
@@ -132,7 +110,6 @@ a{
     font-size: 20px;
   }
   transition: 0.3s;
-  margin-bottom: -50px;
   position: sticky;
   top: 60px;
   z-index: 999;

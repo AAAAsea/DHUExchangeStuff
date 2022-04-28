@@ -14,17 +14,22 @@ import 'element-plus/dist/index.css'
 import 'nprogress/nprogress.css'
 import nprogress from 'nprogress'
 
-//简单的配置，一般情况speed配置为500
+//noprogress
 nprogress.inc(0.2)
 nprogress.configure({ easing: 'ease', speed: 500, showSpinner: false })
-console.log(process.env.NODE_ENV)
+
+// const isDebug_mode =  process.env.NODE_ENV !== 'development';
 
 
 const app = createApp(App)
-app.config.devtools = (process.env.NODE_ENV !== 'production') // 上线后关闭开发者工具
+// app.config.debug = isDebug_mode;
+// app.config.devtools = false;
+// app.config.productionTip = isDebug_mode;
+
+
 app.use(router)
   .use(ElementPlus)
   .use(store)
   .use(i18n)
   .mount('#app')
-  
+

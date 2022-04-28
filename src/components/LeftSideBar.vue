@@ -1,12 +1,18 @@
 <template>
   <div class="home-left">
     <ul>
-      <router-link to="/home" :class="{'router-link-active': route.name === '详情'}">
+      <router-link to="/" :class="{'router-link-active': route.name === '详情'}">
         <li>
           <span class="emoji">🎈</span>
           <span class="title" >DHU广场</span>
         </li>
       </router-link>
+      <!-- <router-link to="/tag" :class="{'router-link-active': route.name === '详情'}">
+        <li>
+          <span class="emoji">🔥</span>
+          <span class="title" >热门话题</span>
+        </li>
+      </router-link> -->
       <router-link :to='"/user/"+store.state.data.user.id' v-if="isAccountLoggedIn()">
         <li>
           <span class="emoji">📑</span>

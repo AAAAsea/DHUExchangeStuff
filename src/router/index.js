@@ -9,11 +9,11 @@ import { isAccountLoggedIn } from '../utils/auth'
 //创建routes
 const	routes=[
 		{
-			path:'/',
-			redirect: '/home'
+			path:'/home',
+			redirect: '/'
 		},
 		{
-			path:'/home',
+			path:'/',
 			name: '🎈 DHU-广场',
 			component: ()=>import("@/views/Home"),
 			meta: {
@@ -28,6 +28,15 @@ const	routes=[
 			props: true,
 			meta: {
 				title:'详情'
+			},
+		},
+		{
+			path:'/tag/:id',	
+			name: '话题',
+			component: ()=>import("@/views/HotTag"),
+			props: true,
+			meta: {
+				title:'话题'
 			},
 		},
 		{

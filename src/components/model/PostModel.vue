@@ -91,7 +91,7 @@ function publish(formEl){
   formEl.validate((valid) => {
     if (valid) {
       canPublish.value = false; // 防止多次发布
-      addPost(form.title, form.content, dynamicTags.value)
+      addPost(form.title, form.content, [...dynamicTags.value])
       .then(res=>{
         store.state.model.postModelFlag = false
         canPublish.value = true;
@@ -103,7 +103,7 @@ function publish(formEl){
           })
           form.title = '';
           form.content = '';
-          dynamicTags.value.splice(0);
+          dynamicTags.value.clear();
           store.dispatch('fetchNewPostList', route.path === "/user/"+store.state.data.user.id ? store.state.data.user.id : 0)
         }
         else{
@@ -133,7 +133,7 @@ function publish(formEl){
 import { nextTick, ref } from 'vue'
 import { useRoute } from 'vue-router'
 const inputValue = ref('')
-const dynamicTags = ref([])
+const dynamicTags = ref(new Set())
 const inputVisible = ref(false)
 const InputRef = ref('')
 const handleClose = (tag) => {
@@ -154,7 +154,7 @@ const handleInputConfirm = () => {
         message:"最多添加五个标签"
       })
     }else{
-      dynamicTags.value.push(inputValue.value)
+      dynamicTags.value.add(inputValue.value)
     }
   }
   inputVisible.value = false

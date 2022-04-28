@@ -92,7 +92,10 @@ export default {
     // 滚动时判断是否到底部，并且500ms之内未触发更新，且还有数据
     function loadMorePost(){
       // 加载完毕关闭监听
-      if(!haveMorePost.value) window.onscroll = null;
+      if(!haveMorePost.value){
+        window.onscroll = null;
+        return;
+      }
       if(canLoadMorePost && isOnBottom(1500))
       {
         console.log("loadMorePost")
