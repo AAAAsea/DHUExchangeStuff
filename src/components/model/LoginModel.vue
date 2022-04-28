@@ -230,6 +230,10 @@ function submit(formEl){
           })
         })
         .catch(()=>{
+          store.commit('showToast',{
+            type: "error",
+            message: "系统异常"
+          })
           canSubmit.value = true; 
         })
       }
