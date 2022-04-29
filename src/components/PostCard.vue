@@ -21,7 +21,7 @@
     </el-icon>
     <div class="header">
       <router-link :to="/user/+user.id">
-        <img :src="user.headerUrl + '?width=100'" alt="">
+        <img :src="user.headerUrl.replace('/header','/image')  + '?width=100'" alt="">
       </router-link>
       <div class="title">
         <router-link :to="/user/+user.id">

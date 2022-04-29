@@ -7,7 +7,7 @@
     >
       <div class="user-cotainer">
         <router-link :to='"/user/"+item.user.id'>
-          <img :src="item.user.headerUrl + '?width=200'">
+          <img :src="item.user.headerUrl.replace('/header','/image')  + '?width=200'">
         </router-link>
         <div class="info">
           <router-link :to='"/user/"+item.user.id'>

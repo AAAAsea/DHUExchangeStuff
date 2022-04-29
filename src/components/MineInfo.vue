@@ -10,7 +10,7 @@
         :disabled="!isEdit"
         name="file"
       >
-        <img  :src="form.headerUrl + '?width=150'" class="avatar" />
+        <img  :src="form.headerUrl.replace('/header','/image')  + '?width=150'" class="avatar" />
         <el-icon v-if="isEdit" class="avatar-uploader-icon"><Plus /></el-icon>
       </el-upload>
     </div>
@@ -41,7 +41,7 @@
           :disabled="!isEdit"
           name="file"
         >
-          <img  :src="form.backgroundUrl  + '?width=500'" class="bg" />
+          <img  :src="form.backgroundUrl.replace('/header','/image')   + '?width=500'" class="bg" />
           <el-icon v-if="isEdit" class="el-icon--upload"><upload-filled /></el-icon>
         </el-upload>
       </li>

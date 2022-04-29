@@ -1,4 +1,5 @@
-import { ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus';
+import 'element-plus/theme-chalk/el-message.css'; // 需要单独引入
 
 export default {
   updateData(state, { key, value }) {
