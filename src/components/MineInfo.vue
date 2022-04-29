@@ -41,7 +41,7 @@
           :disabled="!isEdit"
           name="file"
         >
-          <img  :src="form.backgroundUrl.replace('/header','/image')   + '?width=500'" class="bg" />
+          <img v-if="form.backgroundUrl"  :src="form.backgroundUrl.replace('/header','/image')   + '?width=1500'" class="bg" />
           <el-icon v-if="isEdit" class="el-icon--upload"><upload-filled /></el-icon>
         </el-upload>
       </li>
@@ -133,7 +133,7 @@ function saveInfo(){
 <style lang="scss" scoped>
 .acount-info{
   background: var(--post-card-bg);
-  border-radius: 3px;
+  border-radius: 5px;
   padding: 60px 30px;
   ul{
     list-style: none;
@@ -219,6 +219,8 @@ function saveInfo(){
 .bg-uploader{
   width: 300px;
   height: 180px;
+  border: 1px solid var(--secondary-text);
+  border-radius: 5px;
   :deep() .el-upload-dragger{
     position: relative;
     background: transparent;
