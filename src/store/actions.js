@@ -55,9 +55,9 @@ export default {
   // 获取本人信息（登录后调用）
   fetchMyProfile: ({ commit }) => {
     return getMyInfo().then(result => {
-    if (result.code === 20000) {
-      commit('updateData', { key: 'user', value: result.data.user });
-    }
+      if (result.code === 20000) {
+        commit('updateData', { key: 'user', value: result.data.user });
+      }
     });
   },
   // 获取热门标签
@@ -84,6 +84,7 @@ export default {
     ).then(result => {
       if (result.code === 20000) {
         commit('addData', { key: 'hotPostList', value: result.data.postList });
+        commit('updateData', { key: 'currentHotTagName', value: result.data.tagName });
       }
     });
   },

@@ -2,11 +2,11 @@
   <div class="user-index" v-if="show" >
     <div class="user-banner">
       <div class="mask"/>
-      <img :src="user.backgroundUrl ? (user.backgroundUrl.replace('/header','/image')  + '?width=500') : bgDefaultImg">
+      <img :src="user.backgroundUrl ? (user.backgroundUrl.replace('/header','/image')  + '?width=800') : bgDefaultImg">
     </div>
     <div class="user-info">
       <div class="user-head">
-        <img :src="user?.headerUrl  ?  (user?.headerUrl.replace('/header','/image')  + '?width=300') : avatarDefaultImg" alt="">
+        <img :src="user?.headerUrl  ?  (user?.headerUrl.replace('/header','/image')  + '?width=200') : avatarDefaultImg" alt="">
         <div class="info">
           <div class="title">{{user.nickName}}</div>
           <div class="follow">
@@ -150,8 +150,8 @@ onBeforeRouteUpdate( (to, from) => {
       .mask{
         width: 100%;
         height: 280px;
-        opacity: 0.3;
-        background-image: repeating-linear-gradient(rgb(72, 72, 72) , rgb(202, 202, 202)  20%, rgb(216, 216, 216) 80%, rgb(92, 92, 92) );
+        opacity: 0.4;
+        background-image: repeating-linear-gradient(rgba(0, 0, 0, 0.8) , rgba(202, 202, 202, 0)  30%, rgba(253, 253, 253, 0) 70%, rgba(0, 0, 0, 0.8) );
         background-size:cover;
         position: absolute;
         top: 0;

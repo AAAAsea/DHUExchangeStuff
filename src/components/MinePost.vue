@@ -1,5 +1,5 @@
 <template>
-  <transition name="el-zoom-in-top">
+  <!-- <transition name="el-zoom-in-top"> -->
     <div class="mine-post" @scroll="onScroll">
       <transition name="el-zoom-in-top">
         <div 
@@ -25,7 +25,7 @@
       </transition>
       <div class="no-more-post" style="color: var(--secondary-text)">{{haveMorePost ? 'Loading' : '——到底了——'}}</div>
     </div>
-  </transition>
+  <!-- </transition> -->
   <edit-button v-if="route.params?.id == data?.user?.id"/> 
 </template>
 

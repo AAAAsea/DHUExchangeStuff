@@ -101,3 +101,8 @@ div, p, span{
 #nprogress .bar {
   background: var(--primary-color) !important; //自定义颜色
 }
+
+
+.fade-leave-active{
+  display: none !important;
+}

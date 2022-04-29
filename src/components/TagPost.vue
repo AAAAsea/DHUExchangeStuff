@@ -1,12 +1,13 @@
 <template>
   <div class="mine-post" @scroll="onScroll">
+    <div class="tag-nav"><h3># {{data.currentHotTagName}}</h3></div>
     <transition name="el-zoom-in-top">
-    <PostList
-      @on-update="reBindOnscroll"
-      v-if="data.hotPostList?.length > 0"
-      :postList="data.hotPostList"
-      :isLoading="false"
-    />
+      <PostList
+        @on-update="reBindOnscroll"
+        v-if="data.hotPostList?.length > 0"
+        :postList="data.hotPostList"
+        :isLoading="false"
+      />
     </transition>
     <div class="no-more-post" style="color: var(--secondary-text)">
       {{haveMorePost ? 'Loading' : '——到底了——'}}
@@ -105,17 +106,9 @@ a{
 .mine-post{
   position: relative;
 }
-.detail-nav{
-  span:first-child{
-    font-size: 20px;
-    font-weight: bold;
-    position: absolute;
-    left: 10px;
-    color: var(--extreme);
-  }
-  span:last-child{
-    font-size: 20px;
-  }
+.tag-nav{
+  border-bottom: 1px solid var(--secondary-bg);
+  background: var(--post-card-bg);
   transition: 0.3s;
   position: sticky;
   top: 60px;

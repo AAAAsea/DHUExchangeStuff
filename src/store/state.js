@@ -14,7 +14,8 @@ export default {
     postList: [],
     userPostList: [],
     tags: [],
-    hotPostList: []
+    hotPostList: [],
+    currentHotTagName: ''
   },
   model:{
     postModelFlag: false,

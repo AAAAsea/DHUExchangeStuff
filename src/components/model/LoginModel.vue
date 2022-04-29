@@ -182,6 +182,7 @@ function handleCodeClick(){
   }, 60000)
   getMailCode(registRuleForm.username, registRuleForm.nickName)
   .then((res)=>{
+    // console.log(res)
     handleRes(res,()=>{},()=>{
       sendCodeButtonFlag.value = false;
       clearInterval(codeWaitTimeInterval)

@@ -10,7 +10,7 @@
         :disabled="!isEdit"
         name="file"
       >
-        <img  :src="form.headerUrl.replace('/header','/image')  + '?width=150'" class="avatar" />
+        <img  :src="form.headerUrl.replace('/header','/image')" class="avatar" />
         <el-icon v-if="isEdit" class="avatar-uploader-icon"><Plus /></el-icon>
       </el-upload>
     </div>
@@ -41,7 +41,7 @@
           :disabled="!isEdit"
           name="file"
         >
-          <img v-if="form.backgroundUrl"  :src="form.backgroundUrl.replace('/header','/image')   + '?width=1500'" class="bg" />
+          <img :src="form.backgroundUrl ? (form.backgroundUrl.replace('/header','/image')) : bgDefaultImg">
           <el-icon v-if="isEdit" class="el-icon--upload"><upload-filled /></el-icon>
         </el-upload>
       </li>
@@ -51,6 +51,8 @@
 </template>
 
 <script setup>
+import bgDefaultImg from '@/assets/img/bg.jpg'
+
 import { reactive, ref } from "vue";
 import { useStore } from "vuex";
 import {  Plus, UploadFilled  } from '@element-plus/icons-vue'
@@ -60,19 +62,46 @@ const user = store.state.data.user
 const form = reactive({
   nickName: user.nickName,
   description: user.description,
-  headerUrl: user.headerUrl,
-  backgroundUrl: user.backgroundUrl
+  headerUrl: user.headerUrl + '?width=200',
+  backgroundUrl: user.backgroundUrl  + '?width=700'
 })
 const isEdit = ref(false)
 
+store.dispatch('fetchMyProfile')
+
 const handleAvatarSuccess = (response,uploadFile) => {
-  form.headerUrl = URL.createObjectURL(uploadFile.raw)
-  store.dispatch('fetchMyProfile')
+  if(response.code === 20000)
+  {
+    store.commit('showToast',{
+      type: 'success',
+      message: "上传成功"
+    })
+    form.headerUrl = URL.createObjectURL(uploadFile.raw)
+    store.dispatch('fetchMyProfile')
+  }else{
+    store.commit('showToast',{
+      type: 'error',
+      message: response.message ?? "上传失败"
+    })
+  }
+  
 }
 
 const handleBgSuccess = (response,uploadFile) => {
-  form.backgroundUrl = URL.createObjectURL(uploadFile.raw)
-  store.dispatch('fetchMyProfile')
+  if(response.code === 20000)
+  {
+    store.commit('showToast',{
+      type: 'success',
+      message: "上传成功"
+    })
+    form.backgroundUrl = URL.createObjectURL(uploadFile.raw)
+    store.dispatch('fetchMyProfile')
+  }else{
+    store.commit('showToast',{
+      type: 'error',
+      message: response.message ?? "上传失败"
+    })
+  }
 }
 
 const beforeAvatarUpload= (rawFile) => {
@@ -80,8 +109,8 @@ const beforeAvatarUpload= (rawFile) => {
   if (!types.includes(rawFile.type)) {
     alert('必须JP(e)G/PNG/GIF格式')
     return false
-  } else if (rawFile.size / 1024 / 1024 > 2) {
-    alert('图片大小不能大于2MB!')
+  } else if (rawFile.size / 1024 / 1024 > 3) {
+    alert('图片大小不能大于3MB!')
     return false
   }
   return true
