@@ -315,7 +315,7 @@ export default{
         canLoadComment = false;
         setTimeout(() => {
           canLoadComment = true; // 防止过快加载
-          if(isOnBottom()) loadMoreComment() // 防止一秒内到底后不动导致不加载，所以自动多判断一次
+          loadMoreComment() // 防止一秒内到底后不动导致不加载，所以自动多判断一次
         }, 1000);
       }
     }

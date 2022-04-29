@@ -29,6 +29,7 @@
     color="rgb(255,195,0)"
     size="large"
     :dark="true"
+    v-show="store.state.model.publishPostFlag"
   />
 </template>
 
@@ -40,7 +41,7 @@ import { isOnBottom } from '@/utils/tools'
 import { Edit } from '@element-plus/icons-vue'
 import { useStore } from 'vuex'
 import { isAccountLoggedIn } from '../utils/auth'
-import { computed, onDeactivated, onUnmounted } from '@vue/runtime-core'
+import { computed, onActivated, onDeactivated, onUnmounted } from '@vue/runtime-core'
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -53,6 +54,7 @@ export default {
   setup(){
     const store = useStore()
     const data = store.state.data
+    let firstIn = true;
     const haveMorePost = computed(()=>data.postCount > data.postList.length) 
     data.postList.splice()
     async function initPostList(){
@@ -73,7 +75,14 @@ export default {
     initPostList()
     .finally(()=>{
       // 第一次请求后监听滚动
+      console.log("hhh")
       window.onscroll = loadMorePost
+      firstIn = false; // 判断下一次进入
+    })
+    onActivated(()=>{
+      console.log("actived")
+      if(!firstIn)
+        window.onscroll = loadMorePost
     })
     function showPostModel(){
       if(!isAccountLoggedIn()){
@@ -99,13 +108,14 @@ export default {
         window.onscroll = null;
         return;
       }
-      if(canLoadMorePost && isOnBottom(1500))
+      if(canLoadMorePost && isOnBottom(1000))
       {
         console.log("loadMorePost")
         canLoadMorePost = false;
+        initPostList()
         setTimeout(() => {
           canLoadMorePost = true; // 防止过快加载
-          initPostList() // 防止一秒内到底后不动导致不加载，所以自动多判断一次
+          loadMorePost() // 防止一秒内到底后不动导致不加载，所以自动多判断一次
         }, 1000);
       }
     }

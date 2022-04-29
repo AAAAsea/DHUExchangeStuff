@@ -75,7 +75,9 @@
             :minlength="1" 
             :maxlength="140" 
             :autosize="{ minRows: 1, maxRows: 5 }" 
-            show-word-limit   
+            show-word-limit 
+            @focus="store.state.model.publishPostFlag = false"  
+            @blur="store.state.model.publishPostFlag = true"  
           />
           <el-button 
           style="float: right; margin: 10px 0" 

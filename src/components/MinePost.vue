@@ -106,9 +106,10 @@ function loadMorePost(){
   {
     console.log("loadMoreUserPost")
     canLoadMorePost = false;
+    initUserPostList()
     setTimeout(() => {
       canLoadMorePost = true; // 防止过快加载
-      initUserPostList() // 防止一秒内到底后不动导致不加载，所以自动多判断一次
+      loadMorePost() // 防止一秒内到底后不动导致不加载，所以自动多判断一次
     }, 1000);
   }
 }

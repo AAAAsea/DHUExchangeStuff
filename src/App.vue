@@ -14,7 +14,9 @@
   <!-- 侧边导航栏抽屉 -->
   <LeftDrawerModel/>
   <!-- 回到顶部 -->
-  <el-backtop :right="30" :bottom="100">
+  <el-backtop :right="30" :bottom="100" 
+    v-show="store.state.model.publishPostFlag"  
+  >
     <el-button 
     type="primary" 
     :icon="Pointer" 
