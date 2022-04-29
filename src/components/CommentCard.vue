@@ -13,7 +13,7 @@
         <!-- 头像 -->
         <div class="user-face">
           <router-link :to="/user/+item.user.id">
-            <img :src="item.user.headerUrl" alt="">
+            <img :src="item.user.headerUrl + '?width=100'" alt="">
           </router-link>
         </div>
         <!-- 评论区内容（包含子评论） -->
@@ -67,7 +67,7 @@
             >
               <!-- 头像 -->
               <router-link :to="/user/+subItem.user.id">
-                <img :src="subItem.user.headerUrl">
+                <img :src="subItem.user.headerUrl + '?width=100'">
               </router-link>
               <!-- 子评论区内容区 -->
               <div class="reply-con">

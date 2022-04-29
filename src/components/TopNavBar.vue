@@ -30,7 +30,7 @@
             <div class="avatar">
               <!-- <router-link to="/mine"> -->
                 <el-dropdown>
-                  <img :src="userInfo?.headerUrl || avatarDefaultImg">
+                  <img :src="userInfo?.headerUrl ?  (userInfo?.headerUrl + '?width=100') : avatarDefaultImg">
                   <template #dropdown>
                     <el-dropdown-menu>
                       <router-link :to="'/user/' + userInfo?.id">

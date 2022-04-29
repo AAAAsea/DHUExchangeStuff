@@ -2,11 +2,11 @@
   <div class="user-index" v-if="show" >
     <div class="user-banner">
       <div class="mask"/>
-      <img :src="user.backgroundUrl || bgDefaultImg">
+      <img :src="user.backgroundUrl ? (user.backgroundUrl + '?width=500') : bgDefaultImg">
     </div>
     <div class="user-info">
       <div class="user-head">
-        <img :src="user.headerUrl || avatarDefaultImg" alt="">
+        <img :src="user?.headerUrl ?  (user?.headerUrl + '?width=300') : avatarDefaultImg" alt="">
         <div class="info">
           <div class="title">{{user.nickName}}</div>
           <div class="follow">

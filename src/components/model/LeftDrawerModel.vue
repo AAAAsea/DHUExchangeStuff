@@ -7,7 +7,7 @@
       custom-class="drawer"
     >
       <div class="user">
-        <img :src="userInfo?.headerUrl || avatarDefaultImg">
+        <img :src="userInfo?.headerUrl ?  (userInfo?.headerUrl + '?width=100') : avatarDefaultImg">
         <div @click="logOut" v-if="isAccountLoggedIn()">
           退出登录
         </div>
