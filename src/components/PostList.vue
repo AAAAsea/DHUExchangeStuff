@@ -1,28 +1,31 @@
 <template>
-  <div 
-  class="post-list" 
-  @touchstart="handleTouchStart" @touchend="handleTouchEnd" @touchmove ="handleTouchMove"
-  >
-    <el-icon :style="refreshStyle" color="var(--primary-color)"><refresh-right/></el-icon>
-    <el-empty v-if="postList?.length === 0" description="没有更多数据"></el-empty>
+  <transition name="el-zoom-in-top">
     <div 
-      v-for="item in postList"
-      :key="item.post.id"
-      class="post-list-card"
+      v-show="postList.length > 0"
+      class="post-list" 
+      @touchstart="handleTouchStart" @touchend="handleTouchEnd" @touchmove ="handleTouchMove"
     >
-      <PostCard
-        :post="item.post"
-        :user="item.user"
-        :likeStatus="item.likeStatus" 
-        @on-changeLikeStatus="()=>{ 
-          item.post.likeStatus = !item.post.likeStatus; 
-          item.post.likeCount += item.post.likeStatus || -1
-        }"
-        @on-mainReply="item.post.commentCount++"
-        class="post"
-      />
+      <el-icon :style="refreshStyle" color="var(--primary-color)"><refresh-right/></el-icon>
+      <el-empty v-if="postList?.length === 0" description="没有更多数据"></el-empty>
+      <div 
+        v-for="item in postList"
+        :key="item.post.id"
+        class="post-list-card"
+      >
+        <PostCard
+          :post="item.post"
+          :user="item.user"
+          :likeStatus="item.likeStatus" 
+          @on-changeLikeStatus="()=>{ 
+            item.post.likeStatus = !item.post.likeStatus; 
+            item.post.likeCount += item.post.likeStatus || -1
+          }"
+          @on-mainReply="item.post.commentCount++"
+          class="post"
+        />
+      </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script>

@@ -7,12 +7,16 @@
       </el-col>
       <!-- 主体 -->
       <el-col  :xs="24" :sm="15" :md="15" :lg="15" :xl="15">        
+      
         <PostList
+          v-show="store.state.data.postList.length > 0"
           @on-update="reBindOnscroll"
           :postList="store.state.data.postList"
           class="postlist"
         />
-        <div class="no-more-post" style="color: var(--secondary-bg)">{{haveMorePost ? 'Loading' : '——到底了——'}}</div>
+      
+      <div class="no-more-post" style="color: var(--secondary-text)">{{haveMorePost ? 'Loading' : '——到底了——'}}</div>
+      
       </el-col>
       <!-- 右侧 -->
       <el-col  :xs="0" :sm="5" :md="5" :lg="5" :xl="5">
@@ -75,13 +79,13 @@ export default {
     initPostList()
     .finally(()=>{
       // 第一次请求后监听滚动
-      console.log("hhh")
+      // console.log("hhh")
       window.onscroll = loadMorePost
       firstIn = false; // 判断下一次进入
     })
     onActivated(()=>{
-      console.log("actived")
-      if(!firstIn)
+      // console.log("actived")
+      if(!firstIn && haveMorePost.value)
         window.onscroll = loadMorePost
     })
     function showPostModel(){
@@ -110,7 +114,7 @@ export default {
       }
       if(canLoadMorePost && isOnBottom(1000))
       {
-        console.log("loadMorePost")
+        // console.log("loadMorePost")
         canLoadMorePost = false;
         initPostList()
         setTimeout(() => {

@@ -7,7 +7,9 @@
       </el-col>
       <!-- 主体 -->
       <el-col  :xs="24" :sm="15" :md="15" :lg="15" :xl="15">      
-        <router-view></router-view>
+        <transition name="el-zoom-in-top">
+          <router-view></router-view>
+        </transition>
       </el-col>
       <!-- 右侧 -->
       <el-col  :xs="0" :sm="5" :md="5" :lg="5" :xl="5">

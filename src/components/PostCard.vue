@@ -66,53 +66,57 @@
         </span>
         <span class="iconfont icon-forward" @click="shareCopy(post.id)"></span>
       </div>
-      <div v-if="isComment || isDetail">
-        <div class="comment" >
-          <el-input 
-            v-model="comment" 
-            placeholder="发布你的评论" 
-            type="textarea"  
-            :minlength="1" 
-            :maxlength="140" 
-            :autosize="{ minRows: 1, maxRows: 5 }" 
-            show-word-limit 
-            @focus="store.state.model.publishPostFlag = false"  
-            @blur="store.state.model.publishPostFlag = true"  
-          />
-          <el-button 
-          style="float: right; margin: 10px 0" 
-          @click="replyToPost" 
-          :disabled="comment.trim() === ''">
-            评论
-          </el-button>
-        </div>
-        <CommentCard 
-          :comments="postDetail.comments" 
-          v-if="postDetail.comments && postDetail.comments.length > 0" 
-          :post="post"
-          :handleLike="handleLike"
-          @on-reply="initComment"
-          @on-bottom="initComment(postDetail.comments.length, 5, 'add')"
-        />
-        <!-- 加载动画 -->
-        <div 
-          class="loading-comment" 
-          v-if="post.commentCount > 0 && !postDetail.comments" 
-        >
-            <div 
-              v-loading="true"
-              element-loading-background="transparent" 
-              element-loading-text="正在获取" 
+      <el-collapse-transition>
+        <div v-if="isComment">
+          <div class="comment" >
+            <el-input 
+              v-model="comment" 
+              placeholder="发布你的评论" 
+              type="textarea"  
+              :minlength="1" 
+              :maxlength="140" 
+              :autosize="{ minRows: 1, maxRows: 5 }" 
+              show-word-limit 
+              @focus="store.state.model.publishPostFlag = false"  
+              @blur="store.state.model.publishPostFlag = true"  
             />
+            <el-button 
+            style="float: right; margin: 10px 0" 
+            @click="replyToPost" 
+            :disabled="comment.trim() === ''">
+              评论
+            </el-button>
+          </div>
+            <el-collapse-transition>
+              <CommentCard 
+                :comments="postDetail.comments" 
+                v-show="postDetail.comments && postDetail.comments?.length > 0" 
+                :post="post"
+                :handleLike="handleLike"
+                @on-reply="initComment"
+                @on-bottom="initComment(postDetail.comments?.length, 5, 'add')"
+              />
+            </el-collapse-transition>
+          <!-- 加载动画 -->
+          <div 
+            class="loading-comment" 
+            v-if="post.commentCount > 0 && !postDetail.comments" 
+          >
+              <div 
+                v-loading="true"
+                element-loading-background="transparent" 
+                element-loading-text="正在获取" 
+              />
+          </div>
         </div>
-      </div>
+      </el-collapse-transition>
     </div>
   </div>
 </template>
 
 <script>
 import { ArrowDownBold } from '@element-plus/icons-vue' 
-import { ref } from '@vue/reactivity'
+import { reactive, ref } from '@vue/reactivity'
 import { timeFormat } from '@/utils/tools'
 import { isAccountLoggedIn } from '@/utils/auth'
 import CommentCard from '@/components/CommentCard.vue'
@@ -133,7 +137,7 @@ export default {
     const postCardRef = ref('')
     const comment = ref('')
     const isFirstComment = ref(true)
-    const postDetail = ref([])
+    const postDetail = reactive({comments:[]})
     const store = useStore()
     const route = useRoute()
     const isDetail = computed(()=>route.name === '详情') // 判断是否是详情页
@@ -179,14 +183,16 @@ export default {
       .then(res=>{
         if(res.code === 20000)
         {
+          // console.log(res.data.comments)
           if(type === 'init')
           {
-            postDetail.value = res.data;
+            postDetail.comments.splice(0)
+            postDetail.comments.push(...res.data.comments);
           }else if(type === 'add'){
-            postDetail.value.comments.push(...res.data.comments);
+            postDetail.comments.push(...res.data.comments);
           }
         }else{
-          postDetail.value.comments = []
+          // postDetail.comments.splice(0)
           store.commit('showToast',{
             type: 'error',
             message: res.message ?? "加载失败"

@@ -1,26 +1,31 @@
 <template>
-  <div class="mine-post" @scroll="onScroll">
-    <div 
-      class="detail-nav" 
-      :style="{
-        background: onTop ? 'transparent' : 'var(--post-card-bg)',
-        borderRadius: onTop ? '5px' : '0'
-      }">
-      <a>
-        <span class="iconfont icon-back" @click="router.back(-1)">返回</span>
-      </a>
-      <span class="nav-title">{{userNickName}}</span>
+  <transition name="el-zoom-in-top">
+    <div class="mine-post" @scroll="onScroll">
+      <transition name="el-zoom-in-top">
+        <div 
+          class="detail-nav" 
+          :style="{
+            background: onTop ? 'transparent' : 'var(--post-card-bg)',
+            borderRadius: onTop ? '5px' : '0'
+          }">
+          <a>
+            <span class="iconfont icon-back" @click="router.back(-1)">返回</span>
+          </a>
+          <span class="nav-title">{{userNickName}}</span>
+        </div>
+      </transition>
+      <UserInfoCard @on-update="name=>{userNickName = name}"/>
+      <transition name="el-zoom-in-top">
+        <PostList
+          @on-update="reBindOnscroll"
+          v-if="data.userPostList?.length > 0"
+          :postList="data.userPostList"
+          :isLoading="false"
+        />
+      </transition>
+      <div class="no-more-post" style="color: var(--secondary-text)">{{haveMorePost ? 'Loading' : '——到底了——'}}</div>
     </div>
-    <UserInfoCard @on-update="name=>{userNickName = name}"/>
-    <PostList
-      @on-update="reBindOnscroll"
-      v-if="data.userPostList?.length > 0"
-      :postList="data.userPostList"
-      :isLoading="false"
-    />
-    <div class="no-more-post" style="color: var(--secondary-bg)">{{haveMorePost ? 'Loading' : '——到底了——'}}</div>
-
-  </div>
+  </transition>
 </template>
 
 <script setup>
@@ -104,7 +109,7 @@ function loadMorePost(){
   }
   if(canLoadMorePost && isOnBottom(1000))
   {
-    console.log("loadMoreUserPost")
+    // console.log("loadMoreUserPost")
     canLoadMorePost = false;
     initUserPostList()
     setTimeout(() => {

@@ -1,189 +1,191 @@
 <template>
-  <div 
-    class="comment-container" 
-    v-if="comments" 
-  >
-    <!-- 最外层评论区 -->
+  <el-collapse-transition>
     <div 
-      class="comment-box" 
-      v-for="item in comments" 
-      :key="item.comment.id" 
+      class="comment-container" 
+      v-if="comments" 
     >
-      <!-- 头像 -->
-      <div class="user-face">
-        <router-link :to="/user/+item.user.id">
-          <img :src="item.user.headerUrl" alt="">
-        </router-link>
-      </div>
-      <!-- 评论区内容（包含子评论） -->
-      <div class="con" >
-        <!-- 用户昵称 -->
-        <div class="user">
+      <!-- 最外层评论区 -->
+      <div 
+        class="comment-box" 
+        v-for="item in comments" 
+        :key="item.comment.id" 
+      >
+        <!-- 头像 -->
+        <div class="user-face">
           <router-link :to="/user/+item.user.id">
-            {{item.user.nickName || item.user.username}}
+            <img :src="item.user.headerUrl" alt="">
           </router-link>
         </div>
-        <!-- 主评论内容 -->
-        <p>{{item.comment.content}}</p>
-        <!-- 时间、点赞等 -->
-        <div class="info">
-          <!-- 时间 -->
-          <span class="time">
-            {{timeFormat(new Date(item.comment.createTime).getTime())}}
-          </span>
-          <!-- 点赞 -->
-          <span 
-          class="iconfont icon-like" 
-          :style="{color: item.likeStatus ? 'var(--primary-color)' : ''}" 
-          @click="handleLike(2, item.comment.id, item.user.id, item)"
-          >
-            <span class="like">{{item.likeCount}}</span>
-          </span>
-          <!-- 评论数-->
-          <span class="iconfont icon-comment_light">
-            <span class="reply">
-              {{item.replyCount}}
-            </span>
-          </span>
-          <!-- 回复按钮 -->
-          <span 
-            class="btn" 
-            @click="showCommentInput('回复'+item.user.nickName ?? item.user.username,2, item.comment.id)"
-          >
-            回复
-          </span>
-        </div>
-        <!-- 子评论最外层 -->
-        <div 
-          class="reply-box" 
-          v-if="item.replys.length > 0"
-        >
-          <!-- 每个子评论 -->
-          <div 
-            class="reply-item" 
-            v-for="subItem in item.replys" 
-            :key="subItem.reply.id"
-          >
-            <!-- 头像 -->
-            <router-link :to="/user/+subItem.user.id">
-              <img :src="subItem.user.headerUrl">
+        <!-- 评论区内容（包含子评论） -->
+        <div class="con" >
+          <!-- 用户昵称 -->
+          <div class="user">
+            <router-link :to="/user/+item.user.id">
+              {{item.user.nickName || item.user.username}}
             </router-link>
-            <!-- 子评论区内容区 -->
-            <div class="reply-con">
-              <!--  子评论内容点击回复-->
-              <span 
-                class="reply-user" 
-                @click="showCommentInput( '@'+subItem.user.nickName ?? item.user.username,2, item.comment.id, subItem.user.id)"
-              >
-                <!-- 子评论用户昵称 -->
-                <span @click.stop="">
-                  <router-link :to="/user/+subItem.user.id">
-                    {{subItem.user.nickName ?? subItem.user.username}}:
-                  </router-link>
-                </span> 
-                <!-- @用户 -->
-                <span 
-                  v-if="subItem.target"
-                >
-                  <router-link :to="/user/+subItem.target.id">
-                    @{{subItem.target.nickName ?? subItem.target.username}}
-                  </router-link>
-                </span>
-                <!-- 子评论内容 -->
-                {{subItem.reply.content}}
+          </div>
+          <!-- 主评论内容 -->
+          <p>{{item.comment.content}}</p>
+          <!-- 时间、点赞等 -->
+          <div class="info">
+            <!-- 时间 -->
+            <span class="time">
+              {{timeFormat(new Date(item.comment.createTime).getTime())}}
+            </span>
+            <!-- 点赞 -->
+            <span 
+            class="iconfont icon-like" 
+            :style="{color: item.likeStatus ? 'var(--primary-color)' : ''}" 
+            @click="handleLike(2, item.comment.id, item.user.id, item)"
+            >
+              <span class="like">{{item.likeCount}}</span>
+            </span>
+            <!-- 评论数-->
+            <span class="iconfont icon-comment_light">
+              <span class="reply">
+                {{item.replyCount}}
               </span>
-              <!-- 子评论时间点赞回复等 -->
-              <div class="info">
-                <!-- 子评论时间 -->
-                <span class="time">
-                  {{timeFormat(new Date(subItem.reply.createTime).getTime())}}
-                </span>
-                <!-- 点赞 -->
+            </span>
+            <!-- 回复按钮 -->
+            <span 
+              class="btn" 
+              @click="showCommentInput('回复'+item.user.nickName ?? item.user.username,2, item.comment.id)"
+            >
+              回复
+            </span>
+          </div>
+          <!-- 子评论最外层 -->
+          <div 
+            class="reply-box" 
+            v-if="item.replys?.length > 0"
+          >
+            <!-- 每个子评论 -->
+            <div 
+              class="reply-item" 
+              v-for="subItem in item.replys" 
+              :key="subItem.reply.id"
+            >
+              <!-- 头像 -->
+              <router-link :to="/user/+subItem.user.id">
+                <img :src="subItem.user.headerUrl">
+              </router-link>
+              <!-- 子评论区内容区 -->
+              <div class="reply-con">
+                <!--  子评论内容点击回复-->
                 <span 
-                class="iconfont icon-like" 
-                :style="{color: subItem.likeStatus ? 'var(--primary-color)' : ''}" 
-                @click="handleLike(2, subItem.reply.id, subItem.user.id, subItem)"
+                  class="reply-user" 
+                  @click="showCommentInput( '@'+subItem.user.nickName ?? item.user.username,2, item.comment.id, subItem.user.id)"
                 >
-                  <span class="like">
-                    {{subItem.likeCount}}
+                  <!-- 子评论用户昵称 -->
+                  <span @click.stop="">
+                    <router-link :to="/user/+subItem.user.id">
+                      {{subItem.user.nickName ?? subItem.user.username}}:
+                    </router-link>
+                  </span> 
+                  <!-- @用户 -->
+                  <span 
+                    v-if="subItem.target"
+                  >
+                    <router-link :to="/user/+subItem.target.id">
+                      @{{subItem.target.nickName ?? subItem.target.username}}
+                    </router-link>
                   </span>
+                  <!-- 子评论内容 -->
+                  {{subItem.reply.content}}
                 </span>
-                <!-- 回复 -->
-                <span 
-                class="btn" 
-                @click="showCommentInput( '@'+subItem.user.nickName ?? item.user.username,2, item.comment.id, subItem.user.id)"
-                >
-                  回复
-                </span>
+                <!-- 子评论时间点赞回复等 -->
+                <div class="info">
+                  <!-- 子评论时间 -->
+                  <span class="time">
+                    {{timeFormat(new Date(subItem.reply.createTime).getTime())}}
+                  </span>
+                  <!-- 点赞 -->
+                  <span 
+                  class="iconfont icon-like" 
+                  :style="{color: subItem.likeStatus ? 'var(--primary-color)' : ''}" 
+                  @click="handleLike(2, subItem.reply.id, subItem.user.id, subItem)"
+                  >
+                    <span class="like">
+                      {{subItem.likeCount}}
+                    </span>
+                  </span>
+                  <!-- 回复 -->
+                  <span 
+                  class="btn" 
+                  @click="showCommentInput( '@'+subItem.user.nickName ?? item.user.username,2, item.comment.id, subItem.user.id)"
+                  >
+                    回复
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-          <!-- 子评论区最后提示语 -->
-          <div 
-          class="reply-total" 
-          v-if="item.replyCount > 3"
-          @click="toDetail"
-          >
-            共{{item.replyCount}}条回复
+            <!-- 子评论区最后提示语 -->
+            <div 
+            class="reply-total" 
+            v-if="item.replyCount > 3"
+            @click="toDetail"
+            >
+              共{{item.replyCount}}条回复
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <!-- 主评论区最后提示语 -->
-    <div 
-    class="comment-footer" 
-    v-if="post.commentCount > 3"
-    @click="toDetail"
-    >
-      <div v-if="!isDetail">
-        <span >
-          查看全部{{post.commentCount}}条回复
-        </span>
-        <span class="iconfont icon-cc-right"></span>
-      </div>
-      <span v-else style="color: var(--secondary-bg)" @click="loadMoreComment">
-        {{post.commentCount === comments.length ? '——到底了——' : '点击加载更多'}}
-      </span>
-    </div>
-    <!-- 评论回复弹窗 -->
-    <teleport to='body' >
-      <el-dialog 
-        v-model="dialogVisible"
-        title="评论"
-        :width="store.state.model.modelWidth"
+      <!-- 主评论区最后提示语 -->
+      <div 
+      class="comment-footer" 
+      v-if="post.commentCount > 3"
+      @click="toDetail"
       >
-        <div class="comment" >
-          <el-input 
-          v-model="comment.content" 
-          :placeholder="replyInputPlaceHolder" 
-          type="textarea"  
-          :minlength="1" 
-          :maxlength="140" 
-          :autosize="{ minRows: 1, maxRows: 5 }" 
-          show-word-limit>
-        </el-input>
-        </div>
-        <template #footer>
-          <span class="dialog-footer">
-            <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button 
-            type="primary" 
-            @click="replyToComment" 
-            :disabled="comment.content.trim() === ''"
-            >
-              确定
-            </el-button
-            >
+        <div v-if="!isDetail">
+          <span >
+            查看全部{{post.commentCount}}条回复
           </span>
-        </template>
-      </el-dialog>
-    </teleport>
-  </div> 
+          <span class="iconfont icon-cc-right"></span>
+        </div>
+        <span v-else style="color: var(--secondary-text)" @click="loadMoreComment">
+          {{post?.commentCount === comments?.length ? '——到底了——' : '点击加载更多'}}
+        </span>
+      </div>
+      <!-- 评论回复弹窗 -->
+      <teleport to='body' >
+        <el-dialog 
+          v-model="dialogVisible"
+          title="评论"
+          :width="store.state.model.modelWidth"
+        >
+          <div class="comment" >
+            <el-input 
+            v-model="comment.content" 
+            :placeholder="replyInputPlaceHolder" 
+            type="textarea"  
+            :minlength="1" 
+            :maxlength="140" 
+            :autosize="{ minRows: 1, maxRows: 5 }" 
+            show-word-limit>
+          </el-input>
+          </div>
+          <template #footer>
+            <span class="dialog-footer">
+              <el-button @click="dialogVisible = false">取消</el-button>
+              <el-button 
+              type="primary" 
+              @click="replyToComment" 
+              :disabled="comment.content.trim() === ''"
+              >
+                确定
+              </el-button
+              >
+            </span>
+          </template>
+        </el-dialog>
+      </teleport>
+    </div> 
+  </el-collapse-transition>
 </template>
 
 <script>
-import { computed, onUnmounted, reactive, ref } from 'vue'
-import { timeFormat, isOnBottom } from '@/utils/tools'
+import { computed, reactive, ref } from 'vue'
+import { timeFormat } from '@/utils/tools'
 import { isAccountLoggedIn } from '@/utils/auth'
 import { addComment, changeLikeStatus  } from '@/api/post'
 import { useStore } from 'vuex'
@@ -198,7 +200,7 @@ export default{
     const router = useRouter()
     const replyInputPlaceHolder = ref('')
     const route = useRoute()
-    let canLoadComment = true;
+    // let canLoadComment = true;
     const isDetail = computed(()=>route.name === '详情') // 判断是否是详情页
     // let likeTimeOut; // 点赞定时器(优化为item.likeTimeOut)
     // let isLikeChange = false; // 是否在发送请求之前改变了点赞，发送之后置为false（同上）
@@ -290,35 +292,37 @@ export default{
         path: '/home/'+props.post.id
       })
     }
-
-    // 详情页监听滚动
-    if(isDetail.value){
-      window.addEventListener('scroll', loadMoreComment)
-      loadMoreComment() // 防止刚开始三条评论无法触发滚动
-    }
-    // 离开页面时取消监听
-    onUnmounted(()=>{
-      window.removeEventListener('scroll', loadMoreComment);
-    })
-    // 滚动时判断是否到底部，并且500ms之内未触发更新，且还有数据
     function loadMoreComment(){
-      // 加载完毕关闭监听
-      if(props.post.commentCount <= props.comments.length)
-      {
-        window.removeEventListener('scroll', loadMoreComment)
-        return;
-      }
-      if(isDetail.value && canLoadComment && isOnBottom())
-      {
-        console.log("loadMoreComment")
-        context.emit('on-bottom')
-        canLoadComment = false;
-        setTimeout(() => {
-          canLoadComment = true; // 防止过快加载
-          loadMoreComment() // 防止一秒内到底后不动导致不加载，所以自动多判断一次
-        }, 1000);
-      }
+      context.emit('on-bottom')
     }
+    // // 详情页监听滚动
+    // if(isDetail.value){
+    //   window.addEventListener('scroll', loadMoreComment)
+    //   loadMoreComment() // 防止刚开始三条评论无法触发滚动
+    // }
+    // // 离开页面时取消监听
+    // onUnmounted(()=>{
+    //   window.removeEventListener('scroll', loadMoreComment);
+    // })
+    // // 滚动时判断是否到底部，并且500ms之内未触发更新，且还有数据
+    // function loadMoreComment(){
+    //   // 加载完毕关闭监听
+    //   if(props.post?.commentCount <= props?.comments?.length)
+    //   {
+    //     window.removeEventListener('scroll', loadMoreComment)
+    //     return;
+    //   }
+    //   if(isDetail.value && canLoadComment && isOnBottom())
+    //   {
+    //     // console.log("loadMoreComment")
+        
+    //     canLoadComment = false;
+    //     setTimeout(() => {
+    //       canLoadComment = true; // 防止过快加载
+    //       loadMoreComment() // 防止一秒内到底后不动导致不加载，所以自动多判断一次
+    //     }, 1000);
+    //   }
+    // }
     return {
       store,
       timeFormat,

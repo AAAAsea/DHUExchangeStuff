@@ -14,12 +14,9 @@
     @click.stop="isFold = !isFold" >
       <arrow-down-bold />
     </el-icon>
-    <ul :style="{
-      height: isFold ? 0 : ulHeight + 'px', 
-      maxHeight: '80vh', overflow: 'auto'
-      }"
-      >
-      <div class="li-container"  ref='ulRef'>
+    <el-collapse-transition>
+    <ul v-show="!isFold">
+      <div class="li-container">
         <router-link :to="'/tag/' + tag.tagId" v-for="tag in tags" :key="tag.tagId">
           <li>
               # {{tag.tagName}}
@@ -27,6 +24,7 @@
         </router-link>
       </div>
     </ul>
+    </el-collapse-transition>
     <div class="load-more" @click="loadMoreTags">
       {{isFold ? '点击箭头展开' : (haveMoreTags ? '加载更多' : '已加载全部') }}
     </div>
@@ -40,15 +38,12 @@ import { computed } from '@vue/runtime-core'
 import { useStore } from 'vuex'
 
 const isFold = ref(false)
-const ulRef = ref('')
-const ulHeight = ref(ulRef.value.offsetHeight)
 const store = useStore()
 const tags = computed(()=>store.state.data.tags)
 const haveMoreTags = ref(true)
 
 store.dispatch('fetchHotTags', {offset: tags.value.length, limit: 10})
 .then(()=>{
-  ulHeight.value = ulRef.value.offsetHeight
 })
 
 function loadMoreTags(){
@@ -61,7 +56,6 @@ function loadMoreTags(){
     {
       haveMoreTags.value = false; // 标记没有tags了
     }
-    ulHeight.value = ulRef.value.offsetHeight
   })
 }
 </script>
@@ -79,6 +73,9 @@ function loadMoreTags(){
     ul{
       transition: .3s ease;
       overflow: hidden;
+      .li-container{
+        transition: .3s ease;
+      }
       li{
         transition: 0.2s ease;
         padding: 10px;
@@ -95,7 +92,6 @@ function loadMoreTags(){
         }
       }
       .router-link-active{
-
         li{
           color: var(--main-bg);
           background: var(--primary-color) !important;

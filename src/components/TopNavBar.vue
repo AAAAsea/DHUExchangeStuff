@@ -36,6 +36,9 @@
                       <router-link :to="'/user/' + userInfo?.id">
                         <el-dropdown-item v-if="isAccountLoggedIn()">个人主页</el-dropdown-item>
                       </router-link>
+                      <router-link :to="'/user/set'">
+                        <el-dropdown-item v-if="isAccountLoggedIn()">账户设置</el-dropdown-item>
+                      </router-link>
                       <el-dropdown-item @click="logOut" v-if="isAccountLoggedIn()">
                         退出登录
                       </el-dropdown-item>

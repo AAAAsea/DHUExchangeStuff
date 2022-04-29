@@ -1,12 +1,14 @@
 <template>
   <div class="mine-post" @scroll="onScroll">
+    <transition name="el-zoom-in-top">
     <PostList
       @on-update="reBindOnscroll"
       v-if="data.hotPostList?.length > 0"
       :postList="data.hotPostList"
       :isLoading="false"
     />
-    <div class="no-more-post" style="color: var(--secondary-bg)">
+    </transition>
+    <div class="no-more-post" style="color: var(--secondary-text)">
       {{haveMorePost ? 'Loading' : '——到底了——'}}
     </div>
   </div>

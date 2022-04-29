@@ -11,7 +11,6 @@
         <a @click="router.back(-1)"> 
           <span class="iconfont icon-back">返回</span>
         </a>
-        
         <span class="nav-title">{{postDetail?.user?.nickName}}</span>
       </div>
       <PostCard
