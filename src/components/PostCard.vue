@@ -103,7 +103,7 @@
             v-if="post.commentCount > 0 && !postDetail.comments" 
           >
               <div 
-                v-loading="true"
+                
                 element-loading-background="transparent" 
                 element-loading-text="正在获取" 
               />

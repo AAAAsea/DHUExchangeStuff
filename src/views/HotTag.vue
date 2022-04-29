@@ -15,7 +15,7 @@
       </el-col>
     </el-row>
   </div>
-  <el-button 
+  <!-- <el-button 
     @click="showPostModel" 
     type="primary" 
     :icon="Edit" 
@@ -23,7 +23,7 @@
     class="edit" 
     color="rgb(255,195,0)" 
     size="large"
-  />
+  /> -->
 </template>
 
 <script>
@@ -31,7 +31,7 @@
 import LeftSideBar from '@/components/LeftSideBar.vue'
 import RightSideBar from '@/components/RightSideBar.vue'
 import TagPost from '@/components/TagPost.vue'
-import { Edit } from '@element-plus/icons-vue'
+// import { Edit } from '@element-plus/icons-vue'
 import { useStore } from 'vuex'
 import { isAccountLoggedIn } from '../utils/auth'
 import { useRoute } from 'vue-router'
@@ -62,7 +62,7 @@ export default {
       }
     }
     return{
-      Edit,
+      // Edit,
       store,
       showPostModel,
       route

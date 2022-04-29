@@ -17,22 +17,15 @@
       </el-col>
     </el-row>
   </div>
-  <el-button 
-    @click="showPostModel" 
-    type="primary" 
-    :icon="Edit" 
-    circle 
-    class="edit" 
-    color="rgb(255,195,0)" 
-    size="large"
-  />
+  <!-- <EditButton/> -->
 </template>
 
 <script>
 // import PostList from '../components/PostList.vue'
 import LeftSideBar from '@/components/LeftSideBar.vue'
 import RightSideBar from '@/components/RightSideBar.vue'
-import { Edit } from '@element-plus/icons-vue'
+// import EditButton from '@/components/EditButton.vue'
+// import { Edit } from '@element-plus/icons-vue'
 import { useStore } from 'vuex'
 import { isAccountLoggedIn } from '../utils/auth'
 
@@ -42,7 +35,7 @@ export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "User",
   components: {
-    // PostList,
+    // EditButton,
     LeftSideBar,
     RightSideBar
   },
@@ -60,7 +53,7 @@ export default {
       }
     }
     return{
-      Edit,
+      // Edit,
       store,
       showPostModel
     }

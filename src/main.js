@@ -8,8 +8,8 @@ import store from './store'
 // i18n
 import i18n from './local';
 // 引入ElementPlus
-import ElementPlus from 'element-plus'
-import 'element-plus/dist/index.css'
+// import ElementPlus from 'element-plus'
+// import 'element-plus/dist/index.css'
 // 进度条动画
 import 'nprogress/nprogress.css'
 import nprogress from 'nprogress'
@@ -28,7 +28,7 @@ const app = createApp(App)
 
 
 app.use(router)
-  .use(ElementPlus)
+  // .use(ElementPlus)
   .use(store)
   .use(i18n)
   .mount('#app')

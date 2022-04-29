@@ -120,7 +120,7 @@ export default {
       store,
       isAccountLoggedIn,
       isMobile,
-      Expand
+      // Expand
     }
   }
 }

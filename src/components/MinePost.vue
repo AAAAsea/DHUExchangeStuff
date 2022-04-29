@@ -26,9 +26,11 @@
       <div class="no-more-post" style="color: var(--secondary-text)">{{haveMorePost ? 'Loading' : '——到底了——'}}</div>
     </div>
   </transition>
+  <edit-button v-if="route.params?.id == data?.user?.id"/> 
 </template>
 
 <script setup>
+import EditButton from '@/components/EditButton.vue'
 import { useStore } from 'vuex'
 import PostList from '@/components/PostList.vue'
 import { onDeactivated, onUnmounted, ref } from '@vue/runtime-core'

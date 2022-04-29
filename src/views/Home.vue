@@ -24,27 +24,19 @@
       </el-col>
     </el-row>
   </div>
-  <el-button 
-    @click="showPostModel" 
-    type="primary" 
-    :icon="Edit" 
-    circle 
-    class="edit" 
-    color="rgb(255,195,0)"
-    size="large"
-    :dark="true"
-    v-show="store.state.model.publishPostFlag"
-  />
+  <edit-button/>
 </template>
 
 <script>
 import PostList from '../components/PostList.vue'
 import LeftSideBar from '@/components/LeftSideBar.vue'
 import RightSideBar from '@/components/RightSideBar.vue'
+import EditButton from '@/components/EditButton.vue'
+
 import { isOnBottom } from '@/utils/tools'
-import { Edit } from '@element-plus/icons-vue'
+// import { Edit } from '@element-plus/icons-vue'
 import { useStore } from 'vuex'
-import { isAccountLoggedIn } from '../utils/auth'
+// import { isAccountLoggedIn } from '../utils/auth'
 import { computed, onActivated, onDeactivated, onUnmounted } from '@vue/runtime-core'
 
 export default {
@@ -53,7 +45,8 @@ export default {
   components: {
     PostList,
     LeftSideBar,
-    RightSideBar
+    RightSideBar,
+    EditButton
   },
   setup(){
     const store = useStore()
@@ -88,17 +81,17 @@ export default {
       if(!firstIn && haveMorePost.value)
         window.onscroll = loadMorePost
     })
-    function showPostModel(){
-      if(!isAccountLoggedIn()){
-        store.commit('showToast',{
-        title: 'Error',
-        message: '点击头像登录',
-        type: 'warning',
-      })
-      }else{
-        store.state.model.postModelFlag = true
-      }
-    }
+    // function showPostModel(){
+    //   if(!isAccountLoggedIn()){
+    //     store.commit('showToast',{
+    //     title: 'Error',
+    //     message: '点击头像登录',
+    //     type: 'warning',
+    //   })
+    //   }else{
+    //     store.state.model.postModelFlag = true
+    //   }
+    // }
 
     // 默认可以加载
     let canLoadMorePost = true;
@@ -128,9 +121,9 @@ export default {
       window.onscroll = loadMorePost
     }
     return{
-      Edit,
+      // Edit,
       store,
-      showPostModel,
+      // showPostModel,
       haveMorePost,
       loadMorePost,
       reBindOnscroll
