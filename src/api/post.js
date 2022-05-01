@@ -34,15 +34,12 @@ export function getPostDetail({id, offset = 0, limit = 10}) {
 /**
  * 发布新的post
  */
-export function addPost(title, content, tags) {
+export function addPost(formData) {
+  // console.log(formData)
   return request({
     url: '/post/add',
     method: 'post',
-    data: {
-      title,
-      content,
-      tags,
-    },
+    data: formData,
   });
 }
 
@@ -78,4 +75,13 @@ export function changeLikeStatus({entityType, entityId, entityUserId}) {
   });
 }
 
-
+// /**
+//  * 多图上传
+//  */
+// export function uploadPics(formData) {
+//   return request({
+//     url: '/li',
+//     method: 'post',
+//     data: formData,
+//   })
+// }

@@ -6,7 +6,7 @@
   >
     <!-- 折叠展开 -->
     <el-icon
-    v-if="!isDetail"
+    v-if="!isDetail && false"
     :style="{
       position: 'absolute', 
       top: '15px', 
@@ -15,7 +15,7 @@
       transform: 'rotate('+ (isFold ? 0 : 180) +'deg)',
       transition: '0.3s'
       }" 
-    @click.stop="isFold = !isFold" 
+    
     >
       <arrow-down-bold />
     </el-icon>
@@ -32,7 +32,45 @@
     </div>
     <div class="sub">
       <h3>{{post.title}}</h3>
-      <p :class="{fold: isFold}">{{post.content}}</p>
+      <p :class="{fold: false}">
+        {{post.content.substr(0, isFold ? 140 : undefined )}}
+        <span v-if="isFold && post.content.length > 140">...</span>
+        <span 
+          @click.stop="isFold = !isFold" 
+          v-if="post.content.length > 140" 
+          style="color: var(--primary-color); cursor: pointer;"
+        >
+          {{isFold ? "展开（约" + post.content.length + "字）"  : "收起"}}
+        </span>
+      </p>
+      
+      <div class="pics">
+        <div class="section1" v-if="post?.pictureUrls?.length === 1">
+          <el-image 
+          v-for="pic in post.pictureUrls"
+          :src="pic + '?width=300'"
+          :key="pic" 
+          :preview-src-list="post.pictureUrls"
+          style="maxWidth: 40%; maxHeight: 300px;borderRadius: 3px"
+          fit="cover" />
+        </div>
+        <div class="section2" ref="imgSection2Ref" v-if="post.pictureUrls?.length > 1">
+          <el-image 
+          v-for="(pic, index) in post.pictureUrls"
+          :key="pic" 
+          :src="pic + '?width=300'"
+          :preview-src-list="post.pictureUrls"
+          :initial-index="index"
+          :style="{
+              borderRadius: '3px',
+              padding: '2px',
+              boxSizing: 'border-box',
+              width: imgSize(),
+              height: imgSize()
+            }" 
+          fit="cover" />
+        </div>
+      </div>
     </div>
     <div class="footer">
       <router-link 
@@ -50,7 +88,7 @@
           class="tag"
           round
         >
-          #{{ tag.tagName}}
+          #{{tag.tagName || tag}}
         </el-tag>
       </router-link>
       <div class="toolbar">
@@ -143,6 +181,18 @@ export default {
     const isDetail = computed(()=>route.name === '详情') // 判断是否是详情页
     const isComment = ref(isDetail.value)
     const isFold = ref(!isDetail.value) // 详情页默认展开且不允许折叠
+    const imgSection2Ref = ref('')
+    const imgSize = ()=>{
+      if(props.post.pictureUrls.length < 3)
+      {
+        return imgSection2Ref.value.offsetWidth / props.post.pictureUrls.length - 2 + 'px';
+      }else if(props.post.pictureUrls.length === 4)
+      {
+        return imgSection2Ref.value.offsetWidth / 2 - 2  + 'px';
+      }else{
+        return imgSection2Ref.value.offsetWidth / 3 - 2  + 'px';
+      }
+    }
     if(isDetail.value){  // 详情页默认加载评论
       initComment()
     } 
@@ -311,7 +361,9 @@ export default {
       route,
       isDetail,
       shareCopy,
-      store
+      store,
+      imgSection2Ref,
+      imgSize
     }
   }
 }
@@ -350,6 +402,7 @@ export default {
     img{
       width: 45px;
       height: 45px;
+      object-fit: cover;
       border-radius: 50%;
       margin-right: 2%;
       &:hover{
@@ -377,6 +430,26 @@ export default {
       word-wrap:break-word;
       line-height: 1.5em;
       transition: 0.3s;
+    }
+    .pics{
+      .section2{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        width: 100%;
+        .el-image-viewer__btn{
+          background: rgba(0,0,0,.1);
+        }
+        .el-image-viewer__next{
+          right: 10px;
+
+        }
+        .el-image-viewer__prev{
+          left: 10px;
+        }
+        // el-image-viewer__next
+      }
+      margin-bottom: 10px;
     }
     .fold{
         // 限制三行字数

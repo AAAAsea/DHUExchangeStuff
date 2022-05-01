@@ -236,6 +236,7 @@ h1{
     img{
       width: 35px;
       height: 35px;
+      object-fit: cover;
       border-radius: 50%;
       overflow: hidden;
     }

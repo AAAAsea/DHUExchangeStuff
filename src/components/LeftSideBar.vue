@@ -25,6 +25,12 @@
           <span class="title">账户设置</span>
         </li>
       </router-link>
+      <router-link to="/constructing">
+        <li>
+          <span class="emoji">📢</span>
+          <span class="title">项目进度</span>
+        </li>
+      </router-link>
     </ul>
   </div>
 </template>

@@ -76,7 +76,26 @@ const	routes=[
 						requireAccountLogin: true
 					},
 				},
+				{
+					path:'/user/follow/:id',	
+					name: '关注',
+					component: ()=>import("@/components/FollowCard"),
+					props: true,
+					meta: {
+						title:'🔐 关注',
+						requireAccountLogin: true
+					},
+				},
 			]
+		},
+		{
+			path:'/constructing',	
+			name: '项目进度',
+			component: ()=>import("@/views/Constructing"),
+			props: true,
+			meta: {
+				title:'🔐 constructing',
+			},
 		},
 
 ]

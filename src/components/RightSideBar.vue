@@ -71,8 +71,9 @@ function loadMoreTags(){
       padding: 10px;
     }
     ul{
+      max-height: 70vh;
+      overflow: scroll;
       transition: .3s ease;
-      overflow: hidden;
       .li-container{
         transition: .3s ease;
       }

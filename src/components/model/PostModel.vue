@@ -1,19 +1,13 @@
 <template>
 
   <!-- Form -->
-  <el-dialog v-model="store.state.model.postModelFlag" title="发贴" custom-class="dialog" :width="store.state.model.modelWidth">
+  <el-dialog v-model="store.state.model.postModelFlag" title="发贴" custom-class="dialog" :width="store.state.model.modelWidth" :fullscreen="store.state.model.modelWidth === '95vw'">
     <el-form :model="form" :rules="rules" ref="ruleFormRef" @keydown.ctrl.enter="publish(ruleFormRef)">
-      <el-form-item label="标题" :label-width="auto" prop="title">
+      <el-form-item label="标题" label-width="auto" prop="title">
         <el-input v-model="form.title" maxlength="10" show-word-limit autocomplete="off"  placeholder="输入你的标题"/>
       </el-form-item>
-      <!-- <el-form-item label="楼号" :label-width="formLabelWidth">
-        <el-select v-model="form.region" placeholder="选择你的楼号">
-          <el-option label="1" value="shanghai" />
-          <el-option label="2" value="beijing" />
-        </el-select>
-      </el-form-item> -->
       <el-form-item label="内容" prop="content"  >
-        <el-input v-model="form.content"  maxlength="520" show-word-limit autocomplete="off" type="textarea" :autosize="{ minRows: 2, maxRows: 50 }" placeholder="写点什么呢..."/>
+        <el-input v-model="form.content"  maxlength="5200" show-word-limit autocomplete="off" type="textarea" :autosize="{ minRows: 2, maxRows: 20 }" placeholder="写点什么呢..."/>
       </el-form-item>
     </el-form>
     <el-tag
@@ -39,6 +33,25 @@
     <el-button v-else :style="{width: '80px',margin: '0  10px 0 0'}" size="small" @click="showInput">
       +增加标签
     </el-button>
+    <div class="upload-pic">
+      <el-upload
+        class="uploader"
+        accept="image/*"
+        list-type="picture-card"
+        :on-preview="handlePictureCardPreview"
+        :on-remove="handleRemove"
+        :file-list="fileList"
+        :auto-upload="false"
+        :on-exceed="exceedTips"
+        :limit="9"
+        multiple
+      >
+        <el-icon><Plus /></el-icon>
+      </el-upload>
+      <el-dialog v-model="dialogVisible" :width="store.state.model.modelWidth">
+        <img :src="dialogImageUrl" alt="Preview Image"  />
+      </el-dialog>
+    </div>
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="store.state.model.postModelFlag = false">取消</el-button>
@@ -48,7 +61,7 @@
         style="backgroundColor:var(--primary-color); color: var(--main-bg); border: none;"
         :disabled="!canPublish"
         >
-          发布 Ctrl ↵
+          发布
         </el-button
         >
       </span>
@@ -61,6 +74,7 @@
 import { reactive } from 'vue'
 import { useStore } from 'vuex'
 import { addPost } from '../../api/post'
+import { Plus } from '@element-plus/icons-vue'
 const store = useStore()
 const route = useRoute()
 const canPublish = ref(true)
@@ -91,7 +105,18 @@ function publish(formEl){
   formEl.validate((valid) => {
     if (valid) {
       canPublish.value = false; // 防止多次发布
-      addPost(form.title, form.content, [...dynamicTags.value])
+      // 图片
+      let formData = new FormData()
+      fileList.value.forEach( e => {
+        formData.append('mfs', e.raw)
+        // console.log(mfs)
+      })
+      formData.append('title', form.title)
+      formData.append('content', form.content)
+      formData.append('tags', [...dynamicTags.value] )
+      
+
+      addPost(formData)
       .then(res=>{
         store.state.model.postModelFlag = false
         canPublish.value = true;
@@ -104,6 +129,7 @@ function publish(formEl){
           form.title = '';
           form.content = '';
           dynamicTags.value.clear();
+          fileList.value.splice(0);
           store.dispatch('fetchNewPostList', route.path === "/user/"+store.state.data.user.id ? store.state.data.user.id : 0)
         }
         else{
@@ -161,6 +187,26 @@ const handleInputConfirm = () => {
   inputValue.value = ''
 }
 
+// upload
+const fileList = ref([])
+const dialogImageUrl = ref('')
+const dialogVisible = ref(false)
+const handleRemove = (uploadFile, uploadFiles) => {
+  console.log(uploadFile, uploadFiles)
+}
+
+const handlePictureCardPreview = (uploadFile) => {
+  dialogImageUrl.value = uploadFile.url
+  dialogVisible.value = true
+}
+
+const exceedTips= () => {
+    store.commit('showToast',{
+      type: "warning",
+      message: "最多只能上传9张图片"
+    })
+}
+
 </script>
 
 <style lang="scss" scoped>
@@ -175,5 +221,24 @@ const handleInputConfirm = () => {
 }
 .dialog-footer button:first-child {
   margin-right: 10px;
+}
+.upload-pic{
+  margin: 10px 0;
+  display: flex;
+  :deep().uploader{
+    margin: 0 auto;
+    text-align: center;
+  }
+  :deep().el-upload-list__item{
+    width: 100px;
+    height: 100px;
+  }
+  :deep().el-upload--picture-card{
+    width: 100px;
+    height: 100px;
+  }
+  :deep()img.el-upload-list__item-thumbnail{
+    object-fit: cover !important;
+  }
 }
 </style>
