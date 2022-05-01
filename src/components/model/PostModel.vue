@@ -163,7 +163,7 @@ const dynamicTags = ref(new Set())
 const inputVisible = ref(false)
 const InputRef = ref('')
 const handleClose = (tag) => {
-  dynamicTags.value.splice(dynamicTags.value.indexOf(tag), 1)
+  dynamicTags.value.delete(tag)
 }
 const showInput = () => {
   inputVisible.value = true
