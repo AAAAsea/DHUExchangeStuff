@@ -175,6 +175,7 @@ onBeforeRouteUpdate( (to, from) => {
         img{
           width: 100px;
           height: 100px;
+          object-fit: cover;
           border-radius: 50%;
           border: 5px solid var(--main-bg);
           box-shadow: 0 0 0 3px var(--main-bg) inset; // 去除border和content中间的空隙

@@ -12,7 +12,9 @@
   <!-- 登录模块 -->
   <LoginModel/>
   <!-- 侧边导航栏抽屉 -->
-  <LeftDrawerModel/>
+  <LeftDrawerModel/>  
+  <!-- 侧边tag栏抽屉 -->
+  <RightDrawerModel/>
   <!-- 回到顶部 -->
   <el-backtop :right="30" :bottom="100" 
     v-show="store.state.model.publishPostFlag"  
@@ -34,6 +36,7 @@ import TopNavBar from './components/TopNavBar'
 import PostModel from './components/model/PostModel.vue'
 import LoginModel from './components/model/LoginModel.vue'
 import LeftDrawerModel from './components/model/LeftDrawerModel.vue'
+import RightDrawerModel from './components/model/RightDrawerModel.vue'
 import { useStore } from 'vuex'
 import { Pointer } from '@element-plus/icons-vue'
 
@@ -52,12 +55,19 @@ function handleTouchStart(e){
   startX = e.changedTouches[0].clientX
 }
 function handleTouchEnd(e){
+  const model = store.state.model
   // 右滑呼出导航栏
-  if(e.changedTouches[0].clientX - startX > 80)
-    store.state.model.leftDrawerModelFlag = true;
+  if(e.changedTouches[0].clientX - startX > 80 && !model.rightDrawerModelFlag)
+    model.leftDrawerModelFlag = true;
+  else if(e.changedTouches[0].clientX - startX > 80 && model.rightDrawerModelFlag)
+    model.rightDrawerModelFlag = false;
+
   // 左滑关闭导航栏
-  else if(e.changedTouches[0].clientX - startX < -80)
-    store.state.model.leftDrawerModelFlag = false;
+  if(e.changedTouches[0].clientX - startX < -80 && !model.leftDrawerModelFlag)
+    model.rightDrawerModelFlag = true;
+  else if(e.changedTouches[0].clientX - startX < -80 && model.leftDrawerModelFlag)
+    model.leftDrawerModelFlag = false;
+
 }
 </script>
 

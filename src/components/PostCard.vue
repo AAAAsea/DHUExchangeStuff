@@ -3,22 +3,51 @@
     @touchstart="handleTouchStart"  
     @touchmove="handleTouchMove" 
     ref='postCardRef'
+    v-if="!post?.deleteStatus"
   >
     <!-- 折叠展开 -->
-    <el-icon
-    v-if="!isDetail && false"
+    
+    <el-dropdown
+    trigger="click"
     :style="{
       position: 'absolute', 
       top: '15px', 
       right: '10px', 
-      color:'#eee', 
-      transform: 'rotate('+ (isFold ? 0 : 180) +'deg)',
-      transition: '0.3s'
-      }" 
-    
+    }"
     >
-      <arrow-down-bold />
-    </el-icon>
+      <el-icon
+      :style="{
+        cursor: 'pointer',
+        color:'#eee', 
+        transition: '0.3s'
+        }" 
+      >
+        <arrow-down-bold />
+      </el-icon>
+        <el-dialog
+          v-model="dialogVisible"
+          title="删除"
+          :width="store.state.model.modelWidth"
+        >
+          <span>删除后不可恢复，确定删除？</span>
+          <template #footer>
+            <span class="dialog-footer">
+              <el-button @click="dialogVisible = false">取消</el-button>
+              <el-button type="primary" @click="handleDeletePost(post)"
+                >确定</el-button
+              >
+            </span>
+          </template>
+        </el-dialog>
+      <template #dropdown>
+        <el-dropdown-menu>
+          <el-dropdown-item @click="handleLike">{{(likeStatus || post.likeStatus) ? '取消点赞' : '点赞'}}</el-dropdown-item>
+          <el-dropdown-item @click="dialogVisible = true" v-if="user.id === store.state.data.user.id">删除</el-dropdown-item>
+          <!-- <el-dropdown-item>Action 2</el-dropdown-item>
+          <el-dropdown-item>Action 3</el-dropdown-item> -->
+        </el-dropdown-menu>
+      </template>
+    </el-dropdown>
     <div class="header">
       <router-link :to="/user/+user.id">
         <img :src="user.headerUrl.replace('/header','/image')  + '?width=100'" alt="">
@@ -158,7 +187,7 @@ import { reactive, ref } from '@vue/reactivity'
 import { timeFormat } from '@/utils/tools'
 import { isAccountLoggedIn } from '@/utils/auth'
 import CommentCard from '@/components/CommentCard.vue'
-import { getPostDetail, addComment, changeLikeStatus } from '@/api/post'
+import { getPostDetail, addComment, changeLikeStatus, deletePost } from '@/api/post'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import { computed } from '@vue/runtime-core'
@@ -182,6 +211,7 @@ export default {
     const isComment = ref(isDetail.value)
     const isFold = ref(!isDetail.value) // 详情页默认展开且不允许折叠
     const imgSection2Ref = ref('')
+    const dialogVisible = ref(false)
     const imgSize = ()=>{
       if(props.post.pictureUrls.length < 3)
       {
@@ -343,6 +373,32 @@ export default {
         })
       })
     }
+
+    function handleDeletePost(post){
+      dialogVisible.value = false;
+      deletePost(post.id)
+      .then(res=>{
+        if(res.code === 20000)
+        {
+          post.deleteStatus = true; // 本地添加删除状态
+          store.commit('showToast',{
+            type: "success",
+            message: "已删除"
+          })
+        }else{
+          store.commit('showToast',{
+            type: "error",
+            message: res.message
+          })
+        }
+      })
+      .catch(()=>{
+        store.commit('showToast',{
+            type: "error",
+            message: "系统异常"
+          })
+      })
+    }
     return{
       isFold,
       // ...toRefs(props.user),
@@ -363,7 +419,9 @@ export default {
       shareCopy,
       store,
       imgSection2Ref,
-      imgSize
+      imgSize,
+      handleDeletePost,
+      dialogVisible
     }
   }
 }

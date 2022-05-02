@@ -75,13 +75,15 @@ export function changeLikeStatus({entityType, entityId, entityUserId}) {
   });
 }
 
-// /**
-//  * 多图上传
-//  */
-// export function uploadPics(formData) {
-//   return request({
-//     url: '/li',
-//     method: 'post',
-//     data: formData,
-//   })
-// }
+/**
+ * 删除
+ */
+export function deletePost(id) {
+  return request({
+    url: '/users/delete/' + id,
+    method: 'post',
+    data: {
+      
+    },
+  })
+}

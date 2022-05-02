@@ -52,8 +52,12 @@
                 </el-dropdown>
               <!-- </router-link> -->
             </div>
+            <span v-if="store.state.model.modelWidth === '95vw'" class="hot-tag-drawer" @click="store.state.model.rightDrawerModelFlag = !store.state.model.rightDrawerModelFlag">
+            🔥
+          </span>
             <!-- <el-button type="text" @click="logOut" v-show="store?.state?.data?.isLoggedIn"></el-button> -->
           </div>
+          
         </el-col>
       </el-row>
   </div>
@@ -241,7 +245,9 @@ h1{
       overflow: hidden;
     }
   }
-
+  .hot-tag-drawer{
+    margin-left: 10px;
+  }
 }
 
 </style>

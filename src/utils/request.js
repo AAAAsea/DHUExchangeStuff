@@ -13,7 +13,7 @@ if (process.env.NODE_ENV === "'dev'"){
 const service = axios.create({
   baseURL,
   withCredentials: true,
-  timeout: 10000,
+  timeout: 60000,
 });
 
 // 请求拦截器

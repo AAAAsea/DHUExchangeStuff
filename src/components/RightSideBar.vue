@@ -17,8 +17,8 @@
     <el-collapse-transition>
     <ul v-show="!isFold">
       <div class="li-container">
-        <router-link :to="'/tag/' + tag.tagId" v-for="tag in tags" :key="tag.tagId">
-          <li>
+        <router-link :to="'/tag/' + tag.tagId" v-for="tag in tags" :key="tag.tagId"  >
+          <li @click="store.state.model.rightDrawerModelFlag =false">
               # {{tag.tagName}}
           </li>
         </router-link>
@@ -41,7 +41,7 @@ const isFold = ref(false)
 const store = useStore()
 const tags = computed(()=>store.state.data.tags)
 const haveMoreTags = ref(true)
-
+// console.log(tags.value.length)
 store.dispatch('fetchHotTags', {offset: tags.value.length, limit: 10})
 .then(()=>{
 })

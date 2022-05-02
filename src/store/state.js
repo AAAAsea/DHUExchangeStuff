@@ -21,6 +21,7 @@ export default {
     postModelFlag: false,
     loginModelFlag: false,
     leftDrawerModelFlag: false,
+    rightDrawerModelFlag: false,
     modelWidth: '500px',
     publishPostFlag: true
   },

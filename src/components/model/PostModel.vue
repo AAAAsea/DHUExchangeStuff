@@ -36,20 +36,20 @@
     <div class="upload-pic">
       <el-upload
         class="uploader"
-        accept="image/*"
         list-type="picture-card"
         :on-preview="handlePictureCardPreview"
         :on-remove="handleRemove"
         :file-list="fileList"
         :auto-upload="false"
         :on-exceed="exceedTips"
+        :on-change="handleChange"
         :limit="9"
         multiple
       >
         <el-icon><Plus /></el-icon>
       </el-upload>
       <el-dialog v-model="dialogVisible" :width="store.state.model.modelWidth">
-        <img :src="dialogImageUrl" alt="Preview Image"  />
+        <img :src="dialogImageUrl" style="width: 100%" alt="Preview Image"  />
       </el-dialog>
     </div>
     <template #footer>
@@ -75,6 +75,9 @@ import { reactive } from 'vue'
 import { useStore } from 'vuex'
 import { addPost } from '../../api/post'
 import { Plus } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus';
+import 'element-plus/theme-chalk/el-message.css'; // 需要单独引入
+
 const store = useStore()
 const route = useRoute()
 const canPublish = ref(true)
@@ -114,11 +117,17 @@ function publish(formEl){
       formData.append('title', form.title)
       formData.append('content', form.content)
       formData.append('tags', [...dynamicTags.value] )
-      
+      const message = ElMessage({
+        'show-close': false,
+        offset: 40,
+        type: 'info',
+        message: '后台上传中...',
+        duration: 0
+      })
+      store.state.model.postModelFlag = false
 
       addPost(formData)
       .then(res=>{
-        store.state.model.postModelFlag = false
         canPublish.value = true;
         if(res.code === 20000)
         {
@@ -144,12 +153,15 @@ function publish(formEl){
         }
       })
       .catch((res)=>{
+        console.log(res)  
         console.log(res)
-        // store.commit('resetUserInfo')
         store.commit('showToast',{
             type: 'error',
-            message: '服务器异常'
+            message: '上传超时'
           })
+      })
+      .finally(()=>{
+          message.close()
       })
     }
   })
@@ -200,6 +212,25 @@ const handlePictureCardPreview = (uploadFile) => {
   dialogVisible.value = true
 }
 
+const handleChange = (file, fileList)=>{
+  const types = ['image/png', 'image/jpg', 'image/gif', 'image/jpeg']
+  if (!types.includes(file.raw.type)) {
+    store.commit('showToast',{
+      type: 'warning',
+      message: '必须JP(E)G/PNG/GIF格式'
+    })
+    fileList.splice(fileList.length-1)
+    return false
+  }
+  if (file.size / 1024 / 1024 > 3) {
+    store.commit('showToast',{
+      type: 'warning',
+      message: '图片大小不能大于3MB!'
+    })
+    fileList.splice(fileList.length-1)
+    return false
+  }
+}
 const exceedTips= () => {
     store.commit('showToast',{
       type: "warning",
@@ -226,7 +257,7 @@ const exceedTips= () => {
   margin: 10px 0;
   display: flex;
   :deep().uploader{
-    margin: 0 auto;
+    // margin: 0 auto;
     text-align: center;
   }
   :deep().el-upload-list__item{
