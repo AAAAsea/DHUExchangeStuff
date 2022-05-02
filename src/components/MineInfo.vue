@@ -105,12 +105,18 @@ const handleBgSuccess = (response,uploadFile) => {
 }
 
 const beforeAvatarUpload= (rawFile) => {
-  const types = ['image/png', 'image/jpg', 'image/gif', 'image/jpeg']
-  if (!types.includes(rawFile.type)) {
-    alert('必须JP(e)G/PNG/GIF格式')
-    return false
+    const types = ['image/png', 'image/jpg', 'image/gif', 'image/jpeg']
+    if (!types.includes(rawFile.type)) {
+      store.commit('showToast',{
+        type: 'warning',
+        message: '必须JP(E)G/PNG/GIF格式'
+      })
+      return false
   } else if (rawFile.size / 1024 / 1024 > 3) {
-    alert('图片大小不能大于3MB!')
+    store.commit('showToast',{
+      type: 'warning',
+      message: '图片大小不能大于3MB!'
+    })
     return false
   }
   return true
