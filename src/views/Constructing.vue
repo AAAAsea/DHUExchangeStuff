@@ -90,6 +90,9 @@ myAppend(
 )(
   "2022-05-02",
   "移动端增加热门tag栏"
+)(
+  "2022-05-03",
+  "新增发帖进度条"
 )
 list.reverse()
 
@@ -97,6 +100,7 @@ list.reverse()
 
 <style lang="scss" scoped>
 .construct{
+  
   width: 1200px;
   margin: 0 auto;
   .construct-mid{

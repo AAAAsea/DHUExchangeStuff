@@ -34,12 +34,13 @@ export function getPostDetail({id, offset = 0, limit = 10}) {
 /**
  * 发布新的post
  */
-export function addPost(formData) {
+export function addPost(formData, progressCallBack) {
   // console.log(formData)
   return request({
     url: '/post/add',
     method: 'post',
     data: formData,
+    onUploadProgress: progressCallBack
   });
 }
 

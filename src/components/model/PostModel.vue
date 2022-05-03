@@ -75,8 +75,8 @@ import { reactive } from 'vue'
 import { useStore } from 'vuex'
 import { addPost } from '../../api/post'
 import { Plus } from '@element-plus/icons-vue'
-import { ElMessage } from 'element-plus';
-import 'element-plus/theme-chalk/el-message.css'; // 需要单独引入
+// import { ElMessage } from 'element-plus';
+// import 'element-plus/theme-chalk/el-message.css'; // 需要单独引入
 
 const store = useStore()
 const route = useRoute()
@@ -117,16 +117,16 @@ function publish(formEl){
       formData.append('title', form.title)
       formData.append('content', form.content)
       formData.append('tags', [...dynamicTags.value] )
-      const message = ElMessage({
-        'show-close': false,
-        offset: 40,
-        type: 'info',
-        message: '后台上传中...',
-        duration: 0
-      })
+      // const message = ElMessage({
+      //   'show-close': false,
+      //   offset: 40,
+      //   type: 'info',
+      //   message: '后台上传中... ',
+      //   duration: 0
+      // })
       store.state.model.postModelFlag = false
-
-      addPost(formData)
+      store.state.model.progressModelFlag = true
+      addPost(formData, progressCallBack)
       .then(res=>{
         canPublish.value = true;
         if(res.code === 20000)
@@ -161,12 +161,17 @@ function publish(formEl){
           })
       })
       .finally(()=>{
-          message.close()
+          // message.close();
+          store.state.model.progressModelFlag = false;
+          store.state.model.progressPercentage = 0;
       })
     }
   })
 }
-
+// 上传时的回调
+function progressCallBack(e){
+  store.state.model.progressPercentage = ~~(e.loaded / e.total * 100);
+}
 // tag
 import { nextTick, ref } from 'vue'
 import { useRoute } from 'vue-router'

@@ -23,7 +23,9 @@ export default {
     leftDrawerModelFlag: false,
     rightDrawerModelFlag: false,
     modelWidth: '500px',
-    publishPostFlag: true
+    publishPostFlag: true,
+    progressModelFlag: false,
+    progressPercentage: 0
   },
   user:{
     isLogin: true

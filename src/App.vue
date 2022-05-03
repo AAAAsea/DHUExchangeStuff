@@ -11,6 +11,8 @@
   <PostModel/>
   <!-- 登录模块 -->
   <LoginModel/>
+  <!-- 进度条 -->
+  <ProgressModel/>
   <!-- 侧边导航栏抽屉 -->
   <LeftDrawerModel/>  
   <!-- 侧边tag栏抽屉 -->
@@ -37,6 +39,7 @@ import PostModel from './components/model/PostModel.vue'
 import LoginModel from './components/model/LoginModel.vue'
 import LeftDrawerModel from './components/model/LeftDrawerModel.vue'
 import RightDrawerModel from './components/model/RightDrawerModel.vue'
+import ProgressModel from './components/model/ProgressModel.vue'
 import { useStore } from 'vuex'
 import { Pointer } from '@element-plus/icons-vue'
 
@@ -67,7 +70,6 @@ function handleTouchEnd(e){
     model.rightDrawerModelFlag = true;
   else if(e.changedTouches[0].clientX - startX < -80 && model.leftDrawerModelFlag)
     model.leftDrawerModelFlag = false;
-
 }
 </script>
 
