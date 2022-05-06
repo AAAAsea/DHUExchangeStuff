@@ -6,6 +6,7 @@
         action="/api/users/header"
         :show-file-list="false"
         :on-success="handleAvatarSuccess"
+        :on-progress="handleProgress"
         :before-upload="beforeAvatarUpload"
         :disabled="!isEdit"
         name="file"
@@ -37,6 +38,7 @@
           action="/api/users/background"
           :show-file-list="false"
           :on-success="handleBgSuccess"
+          :on-progress="handleProgress"
           :before-upload="beforeAvatarUpload"
           :disabled="!isEdit"
           name="file"
@@ -70,6 +72,8 @@ const isEdit = ref(false)
 store.dispatch('fetchMyProfile')
 
 const handleAvatarSuccess = (response,uploadFile) => {
+  store.state.model.progressPercentage = 0;
+  store.state.model.progressModelFlag = false;
   if(response.code === 20000)
   {
     store.commit('showToast',{
@@ -88,6 +92,8 @@ const handleAvatarSuccess = (response,uploadFile) => {
 }
 
 const handleBgSuccess = (response,uploadFile) => {
+  store.state.model.progressPercentage = 0;
+  store.state.model.progressModelFlag = false;
   if(response.code === 20000)
   {
     store.commit('showToast',{
@@ -104,14 +110,18 @@ const handleBgSuccess = (response,uploadFile) => {
   }
 }
 
+const handleProgress = (e) => {
+  store.state.model.progressPercentage = ~~(e.percent);
+}
+
 const beforeAvatarUpload= (rawFile) => {
-    const types = ['image/png', 'image/jpg', 'image/gif', 'image/jpeg']
-    if (!types.includes(rawFile.type)) {
-      store.commit('showToast',{
-        type: 'warning',
-        message: '必须JP(E)G/PNG/GIF格式'
-      })
-      return false
+  const types = ['image/png', 'image/jpg', 'image/gif', 'image/jpeg']
+  if (!types.includes(rawFile.type)) {
+    store.commit('showToast',{
+      type: 'warning',
+      message: '必须JP(E)G/PNG/GIF格式'
+    })
+    return false
   } else if (rawFile.size / 1024 / 1024 > 3) {
     store.commit('showToast',{
       type: 'warning',
@@ -119,6 +129,7 @@ const beforeAvatarUpload= (rawFile) => {
     })
     return false
   }
+  store.state.model.progressModelFlag = true;
   return true
 }
 

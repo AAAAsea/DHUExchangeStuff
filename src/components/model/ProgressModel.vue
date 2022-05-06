@@ -1,6 +1,6 @@
 <template>
   <div class="progress"  v-show="store.state.model.progressModelFlag">
-    <span>发布中...</span>
+    <span>上传中...</span>
     <el-progress 
     :percentage="store.state.model.progressPercentage" 
     :format="format"
