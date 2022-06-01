@@ -227,10 +227,10 @@ const handleChange = (file, fileList)=>{
     fileList.splice(fileList.length-1)
     return false
   }
-  if (file.size / 1024 / 1024 > 3) {
+  if (file.size / 1024 / 1024 > 6) {
     store.commit('showToast',{
       type: 'warning',
-      message: '图片大小不能大于3MB!'
+      message: '图片大小不能大于6MB!'
     })
     fileList.splice(fileList.length-1)
     return false
