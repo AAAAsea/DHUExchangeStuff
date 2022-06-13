@@ -60,9 +60,9 @@
       </div>
     </div>
     <div class="sub">
-      <h3>{{post.title}}</h3>
+      <h3 v-html="post.title"></h3>
       <p :class="{fold: false}">
-        {{post.content.substr(0, isFold ? 140 : undefined )}}
+        <span v-html="post.content.substr(0, isFold ? 140 : undefined )"/>
         <span v-if="isFold && post.content.length > 140">...</span>
         <span 
           @click.stop="isFold = !isFold" 
@@ -562,32 +562,36 @@ export default {
       margin: 20px 0;
     }
   }
-.comment{
-  overflow: hidden;
-  width: 100%;
-  padding-top: 10px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top: 1px solid var(--secondary-bg);
-  border-bottom: 1px solid var(--secondary-bg);
-  .el-input__count{
-      background: transparent;
+  .comment{
+    overflow: hidden;
+    width: 100%;
+    padding-top: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-top: 1px solid var(--secondary-bg);
+    border-bottom: 1px solid var(--secondary-bg);
+    .el-input__count{
+        background: transparent;
+      }
+    .el-textarea__inner {
+      box-shadow: none;
+      background-color: var(--secondary-bg);
+      color: var(--main-text);
+      
+      &:focus{
+        box-shadow: 0 0 0 1px var(--primary-color);
+      }
     }
-  .el-textarea__inner {
-    box-shadow: none;
-    background-color: var(--secondary-bg);
-    color: var(--main-text);
-    
-    &:focus{
-      box-shadow: 0 0 0 1px var(--primary-color);
+    .el-button{
+      background: var(--primary-color);
+      color: var(--main-bg);
+      border: none;
     }
   }
-  .el-button{
-    background: var(--primary-color);
-    color: var(--main-bg);
-    border: none;
+  em{
+    font-style:normal;
+    color: var(--primary-color);
   }
-}
 
 }
 </style>

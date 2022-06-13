@@ -62,7 +62,7 @@
             <!-- 每个子评论 -->
             <div 
               class="reply-item" 
-              v-for="subItem in item.replys" 
+              v-for="subItem in item.replys.slice(0,subItemNums)" 
               :key="subItem.reply.id"
             >
               <!-- 头像 -->
@@ -122,10 +122,10 @@
             <!-- 子评论区最后提示语 -->
             <div 
             class="reply-total" 
-            v-if="item.replyCount > 3"
-            @click="toDetail"
+            v-if="item.replyCount > 3 && item.replyCount > subItemNums"
+            @click="subItemNums += 10"
             >
-              共{{item.replyCount}}条回复
+              共{{item.replyCount}}条回复，点击展开更多
             </div>
           </div>
         </div>
@@ -200,6 +200,7 @@ export default{
     const router = useRouter()
     const replyInputPlaceHolder = ref('')
     const route = useRoute()
+    const subItemNums = ref(3) // 默认子评论展示3个
     // let canLoadComment = true;
     const isDetail = computed(()=>route.name === '详情') // 判断是否是详情页
     // let likeTimeOut; // 点赞定时器(优化为item.likeTimeOut)
@@ -334,7 +335,8 @@ export default{
       handleLike,
       toDetail,
       isDetail,
-      loadMoreComment
+      loadMoreComment,
+      subItemNums
     }
   }
 }

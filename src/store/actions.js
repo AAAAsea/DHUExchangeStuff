@@ -1,4 +1,4 @@
-import { getPostList } from '@/api/post'
+import { getPostList, getPostListBySearch } from '@/api/post'
 import {  getMyInfo, getUserInfo } from '@/api/user'
 import {  getHotTags, getPostListByTagId } from '@/api/tags'
 
@@ -70,7 +70,7 @@ export default {
     }
     });
   },
-  // 获取postList
+  // 获取热门postList
   fetchHotPostList: ({ commit, state }, {offset = 0, limit = 10, id}) => {
     // if (!isAccountLoggedIn()) return;
     if(offset === 0)
@@ -85,6 +85,25 @@ export default {
       if (result.code === 20000) {
         commit('addData', { key: 'hotPostList', value: result.data.postList });
         commit('updateData', { key: 'currentHotTagName', value: result.data.tagName });
+      }
+    });
+  },
+  // 获取搜索postList
+  fetchSearchPostList: ({ commit, state }, {offset = 0, limit = 10, keyword}) => {
+    if(offset === 0)
+    {
+      state.data.searchPostList.splice(0)
+    }
+    return getPostListBySearch(
+      {
+        offset,
+        limit,
+        keyword
+      }
+    ).then(result => {
+      if (result.code === 20000) {
+        commit('addData', { key: 'searchPostList', value: result.data.postList });
+        commit('updateData', { key: 'currentSearchTagName', value: result.data.tagName });
       }
     });
   },

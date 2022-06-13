@@ -25,7 +25,7 @@
           <div class="user-info" >
             <div class="search-box" tabindex="111" v-if="!isMobile">
               <el-icon class="search-icon"><search /></el-icon>
-              <input type="text" :placeholder="$t('nav.search') " />
+              <input type="text" :placeholder="$t('nav.search') " maxlength="10" v-model="keyword" @keypress.enter="search"/>
             </div>
             <div class="avatar">
               <!-- <router-link to="/mine"> -->
@@ -81,7 +81,8 @@ export default {
   setup(){
     const store = useStore()
     const route = useRoute()
-    const router = useRouter();
+    const router = useRouter()
+    const keyword = ref('');
     const userInfo = computed(()=>store.state.data.user)
     const titles = ref(null)  // 绑定DOM
     const isMobile = ref(document.documentElement.clientWidth < 768)
@@ -112,6 +113,10 @@ export default {
         }
       })
     }
+    function search(){
+      if(keyword.value.trim() === '') return;
+      router.push({ path: '/search/' + keyword.value})
+    }
     return{
       go,
       userInfo,
@@ -124,6 +129,8 @@ export default {
       store,
       isAccountLoggedIn,
       isMobile,
+      keyword,
+      search
       // Expand
     }
   }

@@ -40,6 +40,42 @@ const	routes=[
 			},
 		},
 		{
+			path:'/search/:keyword',	
+			name: '搜索',
+			component: ()=>import("@/views/Search"),
+			props: true,
+			meta: {
+				title:'搜索'
+			},
+		},
+		{
+			path:'/message',	
+			name: '消息',
+			component: ()=>import("@/views/Message"),
+			redirect: "/message/notice",
+			meta: {
+				title:'消息'
+			},
+			children:[
+				{
+					path:'/message/notice',	
+					name: '通知',
+					component: ()=>import("@/components/NoticeMessage"),
+					meta: {
+						title:'消息通知'
+					},
+				},
+				{
+					path:'/message/letter',	
+					name: '私信',
+					component: ()=>import("@/components/LetterMessage"),
+					meta: {
+						title:'私信通知'
+					},
+				}
+			]
+		},
+		{
 			path:'/user',
 			name: '🐖 DHU-你',
 			component: ()=>import("@/views/User"),
@@ -63,16 +99,6 @@ const	routes=[
 					props: true,
 					meta: {
 						title:'🔐 账号设置',
-						requireAccountLogin: true
-					},
-				},
-				{
-					path:'/user/follow/:id',	
-					name: '关注',
-					component: ()=>import("@/components/FollowCard"),
-					props: true,
-					meta: {
-						title:'🔐 关注',
 						requireAccountLogin: true
 					},
 				},

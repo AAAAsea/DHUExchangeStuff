@@ -114,3 +114,15 @@ export function getFollowers(id, offset = 0, limit = 10){
     },
   })
 }
+
+/**
+ * 获取粉丝
+ */
+export function getNotice(){
+  return request({
+    url: '/notice/list',
+    method: 'get',
+    params: {
+    },
+  })
+}

@@ -15,6 +15,7 @@ export default {
     userPostList: [],
     tags: [],
     hotPostList: [],
+    searchPostList: [],
     currentHotTagName: ''
   },
   model:{

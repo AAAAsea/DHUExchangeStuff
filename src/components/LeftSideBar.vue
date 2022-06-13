@@ -19,6 +19,12 @@
           <span class="title">我的主页</span>
         </li>
       </router-link>
+      <router-link :to='"/message"' v-if="isAccountLoggedIn()">
+        <li>
+          <span class="emoji">📧</span>
+          <span class="title">我的消息</span>
+        </li>
+      </router-link>
       <router-link to="/user/set" v-if="isAccountLoggedIn()">
         <li>
           <span class="emoji">🔐</span>

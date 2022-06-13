@@ -88,3 +88,18 @@ export function deletePost(id) {
     },
   })
 }
+
+/**
+ * 搜索post
+ */
+export function getPostListBySearch({offset = 0, limit = 10, keyword}) {
+  return request({
+    url: '/search',
+    method: 'get',
+    params: {
+      keyword,
+      offset,
+      limit
+    },
+  });
+}

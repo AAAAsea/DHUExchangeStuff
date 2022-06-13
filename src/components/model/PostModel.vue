@@ -88,8 +88,8 @@ const form = reactive({
 const ruleFormRef = ref('')
 const rules = reactive({
   title: [
-    { required: true, message: '不能为空', trigger: 'blur' },
-    { validator: validateEmpty, trigger: 'blur'}
+    // { required: true, message: '不能为空', trigger: 'blur' },
+    // { validator: validateEmpty, trigger: 'blur'}
   ],
   content: [
     { required: true, message: '不能为空', trigger: 'blur' },
