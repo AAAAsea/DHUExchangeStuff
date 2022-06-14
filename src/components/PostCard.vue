@@ -339,7 +339,8 @@ export default {
           changeLikeStatus({
             entityType: 1,
             entityId: props.post.id,
-            entityUserId: props.user.id
+            entityUserId: props.user.id,
+            postId: props.post.id
           })
           .then(res=>{
             if(res.code === 20000)

@@ -8,10 +8,17 @@
       <!-- 主体 -->
       <el-col  :xs="24" :sm="15" :md="15" :lg="15" :xl="15">   
         <div class="message-bar">
-          <router-link to="/message/letter"><span>私信</span></router-link>
-          <router-link to="/message/notice"><span>通知</span></router-link>
-        </div>   
-        <router-view/>
+          <router-link replace to="/message/like"><span>点赞</span><span class="bubble" :style="
+          {display:!unreadNotice.like? 'none' : 'block'}">{{unreadNotice.like}}</span></router-link>
+          <router-link replace to="/message/comment"><span>评论</span><span class="bubble" :style="{display:!unreadNotice.comment ? 'none' : 'block'}">{{unreadNotice.comment}}</span></router-link>
+          <router-link replace to="/message/follow"><span>关注</span><span class="bubble" :style="{display:!unreadNotice.follow ? 'none' : 'block'}">{{unreadNotice.follow}}</span></router-link>
+          <router-link replace to="/message/letter"><span>私信</span><span class="bubble" :style="{display:!unreadNotice.letter ? 'none' : 'block'}">{{unreadNotice.letter}}</span></router-link> 
+        </div>  
+        <router-view v-slot="{ Component }">
+          <keep-alive>
+            <component :is="Component"></component>
+          </keep-alive>
+        </router-view>
       </el-col>
       <!-- 右侧 -->
       <el-col  :xs="0" :sm="5" :md="5" :lg="5" :xl="5">
@@ -25,8 +32,9 @@
 import LeftSideBar from '@/components/LeftSideBar.vue'
 import RightSideBar from '@/components/RightSideBar.vue'
 import { useStore } from 'vuex'
-import { isAccountLoggedIn } from '../utils/auth'
+import { getNotice } from '@/api/user'
 import { useRoute } from 'vue-router'
+import { reactive } from '@vue/reactivity'
 
 
 
@@ -40,22 +48,26 @@ export default {
   setup(){
     const store = useStore()
     const route = useRoute()
-    function showPostModel(){
-      if(!isAccountLoggedIn()){
-        store.commit('showToast',{
-        title: 'Error',
-        message: '点击头像登录',
-        type: 'error'
-      })
-      }else{
-        store.state.model.postModelFlag = true
-      }
-    }
+    const unreadNotice = reactive({
+      comment: 0,
+      follow: 0,
+      like: 0,
+      letter: 0
+    })
+    getNotice()
+    .then(res=>{
+      res = res.data;
+      unreadNotice.comment = res.commentNotice?.unread;
+      unreadNotice.follow = res.followNotice?.unread;
+      unreadNotice.like = res.likeNotice?.unread;
+      unreadNotice.letter = res?.letterUnreadNotice;  
+      console.log(unreadNotice)
+    })
+    
     return{
-      // Edit,
       store,
-      showPostModel,
-      route
+      route,
+      unreadNotice
     }
   }
 }
@@ -64,14 +76,8 @@ export default {
 <style lang="scss" scoped>
 .home{
   width: 1200px;
+  height: 100%;
   margin: 0 auto;
-}
-
-@media screen and (max-width: 1200px) {
-  .home{
-    width: 100%;
-    margin: 0 auto;
-  }
 }
 
 .edit{
@@ -85,7 +91,7 @@ export default {
 .message-bar{
   display: flex;
   background: var(--secondary-bg);
-  height: 30px;
+  height: 40px;
   padding-left: 10px;
   border-radius: 5px;
   align-items: center;
@@ -96,8 +102,30 @@ export default {
     padding:0 10px;
   }
   .router-link-exact-active{
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--primary-color);
+  }
+  .bubble{
+    width: 15px;
+    height: 15px;
     background: var(--primary-color);
-    color: var(--main-bg)
+    color: var(--main-bg);
+    text-align: center;
+    line-height: 15px;
+    border-radius: 50%;
+    font-size: 13px;
+    margin-left: 3px;
+  }
+}
+@media screen and (max-width: 1200px) {
+  .home{
+    width: 100%;
+    margin: 0 auto;
+  }
+}
+@media screen and (max-width: 768px) {
+  .message-bar{
+    border-radius: 0;
   }
 }
 </style>

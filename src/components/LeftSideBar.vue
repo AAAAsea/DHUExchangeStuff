@@ -22,7 +22,7 @@
       <router-link :to='"/message"' v-if="isAccountLoggedIn()">
         <li>
           <span class="emoji">📧</span>
-          <span class="title">我的消息</span>
+          <span class="title">消息通知</span>
         </li>
       </router-link>
       <router-link to="/user/set" v-if="isAccountLoggedIn()">

@@ -52,17 +52,33 @@ const	routes=[
 			path:'/message',	
 			name: '消息',
 			component: ()=>import("@/views/Message"),
-			redirect: "/message/notice",
+			redirect: "/message/like",
 			meta: {
 				title:'消息'
 			},
 			children:[
 				{
-					path:'/message/notice',	
-					name: '通知',
-					component: ()=>import("@/components/NoticeMessage"),
+					path:'/message/like',	
+					name: '点赞',
+					component: ()=>import("@/components/LikeMessage"),
 					meta: {
-						title:'消息通知'
+						title:'点赞'
+					},
+				},
+				{
+					path:'/message/comment',	
+					name: '评论',
+					component: ()=>import("@/components/CommentMessage"),
+					meta: {
+						title:'评论'
+					},
+				},
+				{
+					path:'/message/follow',	
+					name: '关注',
+					component: ()=>import("@/components/FollowMessage"),
+					meta: {
+						title:'关注'
 					},
 				},
 				{
@@ -70,7 +86,7 @@ const	routes=[
 					name: '私信',
 					component: ()=>import("@/components/LetterMessage"),
 					meta: {
-						title:'私信通知'
+						title:'私信'
 					},
 				}
 			]
@@ -104,11 +120,21 @@ const	routes=[
 				},
 				{
 					path:'/user/follow/:id',	
-					name: '关注',
+					name: '关注用户',
 					component: ()=>import("@/components/FollowCard"),
 					props: true,
 					meta: {
-						title:'🔐 关注',
+						title:'🔐 关注用户',
+						requireAccountLogin: true
+					},
+				},
+				{
+					path:'/user/chat/:id',	
+					name: '聊天',
+					component: ()=>import("@/components/ChatRoom"),
+					props: true,
+					meta: {
+						title:'🔐 聊天',
 						requireAccountLogin: true
 					},
 				},

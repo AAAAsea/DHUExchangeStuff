@@ -3,54 +3,59 @@
   <div class="container" v-show="notice.length > 0">
     <div class="like-container"
     v-for="item in notice"
-    :key="item.conversation.id"
-    @click="toChat(item.target.id)"
+    :key="item.notice.id"
+    @click="toPost(item.postId)"
     >
-      <img :src="item.target.headerUrl" @click.stop="toUser(item.target.id)" alt="">
+      <img :src="item.user.headerUrl" @click.stop="toUser(item.user.id)" alt="">
       <div class="content">
         <div class="top">
-          <span class="from" @click.stop="toUser(item.target.id)">{{item.target.nickName ?? item.target.username}}</span>
+          <span class="from" @click.stop="toUser(item.user.id)">{{item.user.nickName ?? item.user.username}}</span>
           <div class="time">
-            {{timeFormat(new Date(item.conversation.createTime))}}
+            {{timeFormat(new Date(item.notice.createTime))}}
           </div>
         </div>
-        <span>{{item?.conversation?.content}}</span>
+        <span>
+          <span 
+          @click.stop="router.push({path: '/user/' + item.comment.targetId})"
+          style="color: var(--primary-color); cursor: pointer" v-if="item.entityType === 2">@{{store.state.data.user.nickName}}</span>
+          {{item.comment?.content}}
+        </span>
       </div>
     </div>
   </div>
   </transition>
-  <div class="footer" @click="initLetterNotice" v-if="haveMore">加载更多</div>
+  <div class="footer" @click="initCommentNotice" v-if="haveMore">加载更多</div>
 </template>
 
 <script setup>
-import { getLetterNotice } from '@/api/user'
+import { getCommentNotice } from '@/api/user'
 const { reactive, ref }=require("@vue/reactivity")
 const notice = reactive([]);
 import { timeFormat } from '@/utils/tools'
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
-const router = useRouter();
 const store = useStore()
-const toChat = id=>{
-  router.push('/user/chat/' + store.state.data.user.id + '_' + id)
+const router = useRouter();
+const toPost = postId=>{
+  router.push('/home/' + postId)
 }
 const toUser = userId=>{
   router.push('/user/' + userId)
 }
 
 const haveMore = ref(true);
-const initLetterNotice = ()=>{
-  getLetterNotice(notice.length)
+const initCommentNotice = ()=>{
+  getCommentNotice(notice.length)
   .then(res=>{
     console.log(res.data)
-    if(!res.data.conversations.length)
+    if(!res.data.notice.length)
       haveMore.value = false;
-    notice.push(...res.data.conversations)
+    notice.push(...res.data.notice)
   })
 }
 
-initLetterNotice();
+initCommentNotice();
 </script>
 
 <style lang="scss" scoped>

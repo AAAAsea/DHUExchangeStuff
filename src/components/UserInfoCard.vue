@@ -8,7 +8,15 @@
       <div class="user-head">
         <img :src="user?.headerUrl  ?  (user?.headerUrl.replace('/header','/image')  + '?width=200') : avatarDefaultImg" alt="">
         <div class="info">
-          <div class="title">{{user.nickName}}</div>
+          <div class="title">
+              {{user.nickName}}
+              <div class="chat">
+                <router-link :to="'/user/chat/' + store.state.data.user?.id+'_'+user.id">
+                  <span class="label">私信</span>
+                </router-link>
+              </div>
+            </div>
+          
           <div class="follow">
             <div class="followee">
               <router-link :to="'/user/follow/' + user.id + '?relate=fans'">
@@ -187,6 +195,15 @@ onBeforeRouteUpdate( (to, from) => {
             font-size: 20px;
             font-weight: bold;
             margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            .chat{
+              font-size: 14px;
+              font-weight: 100;
+              height: 100%;
+              margin-left: 10px;
+              padding-top: 5px;
+            }
           }
           .follow{
             display: flex;

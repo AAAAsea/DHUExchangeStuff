@@ -116,13 +116,96 @@ export function getFollowers(id, offset = 0, limit = 10){
 }
 
 /**
- * 获取粉丝
+ * 获取通知
  */
 export function getNotice(){
   return request({
     url: '/notice/list',
     method: 'get',
     params: {
+    },
+  })
+}
+
+/**
+ * 获取点赞信息
+ */
+export function getLikeNotice(offset=0,limit=10){
+  return request({
+    url: '/notice/detail/like',
+    method: 'get',
+    params: {
+      offset,
+      limit
+    },
+  })
+}
+
+/**
+ * 获取评论信息
+ */
+export function getCommentNotice(offset=0,limit=10){
+  return request({
+    url: '/notice/detail/comment',
+    method: 'get',
+    params: {
+      offset,
+      limit
+    },
+  })
+}
+
+/**
+ * 获取关注信息
+ */
+export function getFollowNotice(offset=0,limit=10){
+  return request({
+    url: '/notice/detail/follow',
+    method: 'get',
+    params: {
+      offset,
+      limit
+    },
+  })
+}
+/**
+ * 获取聊天记录
+ */
+export function getChatRecord(conversationId,offset=0,limit=10){
+  return request({
+    url: '/letter/detail/' + conversationId,
+    method: 'get',
+    params: {
+      offset,
+      limit
+    },
+  })
+}
+
+/**
+ * 发送私信
+ */
+export function sendLetter(toName, content){
+  return request({
+    url: '/letter/send',
+    method: 'post',
+    params: {
+      toName,
+      content
+    },
+  })
+}
+
+/**
+ * 获取私信纪录
+ */
+export function getLetterNotice(offset=0, limit=10){
+  return request({
+    url: '/letter/list',
+    method: 'get',
+    params: {
+      offset,
+      limit
     },
   })
 }
