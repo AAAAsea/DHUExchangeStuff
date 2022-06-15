@@ -62,7 +62,7 @@ export function changeAvatar(headerImage){
   })
 }
 /**
- * 修改用户昵头像
+ * 关注
  */
 export function follow(entityId){
   return request({
@@ -75,7 +75,7 @@ export function follow(entityId){
   })
 }
 /**
- * 修改用户昵头像
+ * 取关
  */
 export function unfollow(entityId){
   return request({
@@ -197,7 +197,7 @@ export function sendLetter(toName, content){
 }
 
 /**
- * 获取私信纪录
+ * 获取私信记录
  */
 export function getLetterNotice(offset=0, limit=10){
   return request({

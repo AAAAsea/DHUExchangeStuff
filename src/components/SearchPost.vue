@@ -122,6 +122,6 @@ a{
 .no-more-post{
   padding-bottom: 20px;
   text-align: center;
-  wkeywordth: 100%;
+  width: 100%;
 }
 </style>

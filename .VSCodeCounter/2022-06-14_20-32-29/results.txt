@@ -1,0 +1,91 @@
+Date : 2022-06-14 20:32:29
+Directory : c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src
+Total : 53 files,  5766 codes, 349 comments, 316 blanks, all 6431 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| Vue.js     |         36 |      4,911 |        201 |        249 |      5,361 |
+| JavaScript |         16 |        758 |        146 |         57 |        961 |
+| SCSS       |          1 |         97 |          2 |         10 |        109 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++--------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                   | files      | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                      |         53 |      5,766 |        349 |        316 |      6,431 |
+| api                                                                                                    |          4 |        295 |         88 |         26 |        409 |
+| assets                                                                                                 |          1 |         97 |          2 |         10 |        109 |
+| assets\css                                                                                             |          1 |         97 |          2 |         10 |        109 |
+| components                                                                                             |         28 |      4,136 |        159 |        193 |      4,488 |
+| components\model                                                                                       |          5 |        657 |         35 |         34 |        726 |
+| local                                                                                                  |          2 |         35 |          3 |          3 |         41 |
+| local\lang                                                                                             |          1 |         24 |          0 |          1 |         25 |
+| router                                                                                                 |          1 |        166 |         13 |          4 |        183 |
+| store                                                                                                  |          5 |        182 |         21 |          8 |        211 |
+| store\plugins                                                                                          |          1 |          7 |          3 |          1 |         11 |
+| utils                                                                                                  |          3 |         65 |          8 |          8 |         81 |
+| views                                                                                                  |          7 |        703 |         37 |         51 |        791 |
++--------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++--------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                                               | language   | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\App.vue                               | Vue.js     |         72 |          5 |          5 |         82 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\api\auth.js                           | JavaScript |         41 |         12 |          5 |         58 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\api\post.js                           | JavaScript |         76 |         22 |          9 |        107 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\api\tags.js                           | JavaScript |         24 |          6 |          3 |         33 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\api\user.js                           | JavaScript |        154 |         48 |          9 |        211 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\assets\css\global.scss                | SCSS       |         97 |          2 |         10 |        109 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\components\ChatRoom.vue               | Vue.js     |        271 |          2 |          8 |        281 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\components\CommentCard copy.vue       | Vue.js     |         64 |          0 |          3 |         67 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\components\CommentCard.vue            | Vue.js     |        426 |         32 |          5 |        463 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\components\CommentMessage.vue         | Vue.js     |        105 |          0 |          6 |        111 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\components\EditButton.vue             | Vue.js     |         39 |          0 |          3 |         42 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\components\FollowCard.vue             | Vue.js     |         66 |          0 |          8 |         74 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\components\FollowMessage.vue          | Vue.js     |         94 |          0 |          6 |        100 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\components\Footer.vue                 | Vue.js     |         21 |          1 |          2 |         24 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\components\LeftSideBar.vue            | Vue.js     |         85 |          0 |          5 |         90 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\components\LetterMessage.vue          | Vue.js     |        100 |          0 |          6 |        106 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\components\LikeMessage.vue            | Vue.js     |         98 |          0 |          6 |        104 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\components\MineInfo.vue               | Vue.js     |        277 |          0 |         15 |        292 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\components\MinePost.vue               | Vue.js     |        141 |         11 |         11 |        163 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\components\NoticeList.vue             | Vue.js     |         17 |          2 |          3 |         22 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\components\OldTopNavBar.vue           | Vue.js     |         68 |          1 |          4 |         73 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\components\PostCard.vue               | Vue.js     |        578 |         10 |         10 |        598 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\components\PostList.vue               | Vue.js     |        150 |          2 |          4 |        156 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\components\RightSideBar.vue           | Vue.js     |        107 |          2 |          4 |        113 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\components\SearchPost.vue             | Vue.js     |        107 |          8 |         12 |        127 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\components\TagPost.vue                | Vue.js     |        107 |          8 |         12 |        127 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\components\TopNavBar.vue              | Vue.js     |        213 |         35 |         12 |        260 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\components\UserInfoCard.vue           | Vue.js     |        229 |          3 |          6 |        238 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\components\UserList.vue               | Vue.js     |        116 |          7 |          8 |        131 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\components\model\LeftDrawerModel.vue  | Vue.js     |         71 |          0 |          4 |         75 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\components\model\LoginModel.vue       | Vue.js     |        255 |         16 |         16 |        287 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\components\model\PostModel.vue        | Vue.js     |        253 |         19 |          9 |        281 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\components\model\ProgressModel.vue    | Vue.js     |         39 |          0 |          2 |         41 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\components\model\RightDrawerModel.vue | Vue.js     |         39 |          0 |          3 |         42 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\local\index.js                        | JavaScript |         11 |          3 |          2 |         16 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\local\lang\zh-CN.js                   | JavaScript |         24 |          0 |          1 |         25 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\main.js                               | JavaScript |         15 |         13 |          8 |         36 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\router\index.js                       | JavaScript |        166 |         13 |          4 |        183 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\store\actions.js                      | JavaScript |         94 |         15 |          3 |        112 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\store\index.js                        | JavaScript |         12 |          1 |          3 |         16 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\store\mutations.js                    | JavaScript |         31 |          2 |          1 |         34 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\store\plugins\saveToLocalStorage.js   | JavaScript |          7 |          3 |          1 |         11 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\store\state.js                        | JavaScript |         38 |          0 |          0 |         38 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\utils\auth.js                         | JavaScript |          4 |          0 |          2 |          6 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\utils\request.js                      | JavaScript |         39 |          3 |          5 |         47 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\utils\tools.js                        | JavaScript |         22 |          5 |          1 |         28 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\views\Constructing.vue                | Vue.js     |        131 |          0 |          6 |        137 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\views\Home.vue                        | Vue.js     |        125 |         25 |          9 |        159 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\views\HotTag.vue                      | Vue.js     |         73 |          2 |          7 |         82 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\views\Message.vue                     | Vue.js     |        122 |          1 |          8 |        131 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\views\PostDetail.vue                  | Vue.js     |        108 |          1 |          7 |        116 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\views\Search.vue                      | Vue.js     |         73 |          2 |          7 |         82 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src\views\User.vue                        | Vue.js     |         71 |          6 |          7 |         84 |
+| Total                                                                                                  |            |      5,766 |        349 |        316 |      6,431 |
++--------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+

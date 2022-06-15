@@ -65,7 +65,8 @@ const store = useStore()
 const route = useRoute();
 const router = useRouter();
 const haveMore = ref(true);
-const conversationId = route.params.id;
+const userId = store.state.data.user.id;
+const conversationId = Math.min(route.params.id, userId) + '_' + Math.max(route.params.id, userId);
 const messages = reactive([])
 const target = reactive({
   id: '',
@@ -82,7 +83,10 @@ function initMessages(flag, offset, limit=10){
     target.username = res.data.target.username;
   })
   .then(()=>{
-    if(flag) initScroll()
+    if(flag){
+      initScroll();
+      haveMore.value = true;
+    }
   })
 }
 initMessages(true, 0)
@@ -118,7 +122,7 @@ function sendMessage(e){
 }
 // 这里没用socket，所以采用轮询http，5秒一次
 const pollingInterval = setInterval(() => {
-  initMessages(false, 0, messages.length);
+  initMessages(true, 0, messages.length);
 }, 10000);
 
 onUnmounted(()=>{

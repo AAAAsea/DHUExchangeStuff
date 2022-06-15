@@ -1,0 +1,38 @@
+Date : 2022-06-14 20:32:29
+Directory : c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\src
+Total : 8 files,  -25425 codes, -17 comments, -14 blanks, all -25456 lines
+
+Languages
++--------------------+------------+------------+------------+------------+------------+
+| language           | files      | code       | comment    | blank      | total      |
++--------------------+------------+------------+------------+------------+------------+
+| JSON with Comments |          1 |         -8 |        -12 |          0 |        -20 |
+| Markdown           |          1 |         -9 |          0 |         -2 |        -11 |
+| HTML               |          1 |        -19 |         -1 |         -1 |        -21 |
+| JavaScript         |          3 |     -1,348 |         -4 |         -9 |     -1,361 |
+| JSON               |          2 |    -24,041 |          0 |         -2 |    -24,043 |
++--------------------+------------+------------+------------+------------+------------+
+
+Directories
++--------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                           | files      | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                              |          8 |    -25,425 |        -17 |        -14 |    -25,456 |
+| ..                                                                             |          8 |    -25,425 |        -17 |        -14 |    -25,456 |
+| ..\public                                                                      |          1 |        -19 |         -1 |         -1 |        -21 |
++--------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++--------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| filename                                                                       | language           | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\README.md         | Markdown           |         -9 |          0 |         -2 |        -11 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\babel.config.js   | JavaScript         |         -5 |          0 |         -1 |         -6 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\jsconfig.json     | JSON with Comments |         -8 |        -12 |          0 |        -20 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\package-lock.json | JSON               |    -23,985 |          0 |         -1 |    -23,986 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\package.json      | JSON               |        -56 |          0 |         -1 |        -57 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\public\index.html | HTML               |        -19 |         -1 |         -1 |        -21 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\server.js         | JavaScript         |     -1,307 |         -3 |         -6 |     -1,316 |
+| c:\Users\86191\Desktop\FrontEnd\Vue\project\DHUExchangeStuff\vue.config.js     | JavaScript         |        -36 |         -1 |         -2 |        -39 |
+| Total                                                                          |                    |    -25,425 |        -17 |        -14 |    -25,456 |
++--------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+

@@ -46,7 +46,7 @@ export function login(username, password) {
 
 
 /**
- * 登录
+ * 登出
  */
 export function logout() {
   return request({

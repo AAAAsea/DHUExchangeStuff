@@ -16,6 +16,8 @@
         </div>
         <span>{{item?.conversation?.content}}</span>
       </div>
+      <span class="bubble" :style="{display:!item.unreadCount ? 'none' : 'block'}">{{item.unreadCount}}</span>
+
     </div>
   </div>
   </transition>
@@ -28,12 +30,10 @@ const { reactive, ref }=require("@vue/reactivity")
 const notice = reactive([]);
 import { timeFormat } from '@/utils/tools'
 import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
 
 const router = useRouter();
-const store = useStore()
 const toChat = id=>{
-  router.push('/user/chat/' + store.state.data.user.id + '_' + id)
+  router.push('/user/chat/' + id)
 }
 const toUser = userId=>{
   router.push('/user/' + userId)
@@ -43,7 +43,7 @@ const haveMore = ref(true);
 const initLetterNotice = ()=>{
   getLetterNotice(notice.length)
   .then(res=>{
-    console.log(res.data)
+    // console.log(res.data)
     if(!res.data.conversations.length)
       haveMore.value = false;
     notice.push(...res.data.conversations)
@@ -76,6 +76,10 @@ initLetterNotice();
     flex-direction: column;
     justify-content: space-around;
     height: 80%;
+    width: 80%;
+    overflow:hidden;//超出一行文字自动隐藏 
+    text-overflow:ellipsis;//文字隐藏后添加省略号
+    white-space:nowrap;//强制不换行
     .top{
       display: flex;
       align-items: center;
@@ -89,6 +93,18 @@ initLetterNotice();
         margin-left: 10px;
       }
     }
+  }
+  .bubble{
+    float: right;
+    width: 15px;
+    height: 15px;
+    background: var(--primary-color);
+    color: var(--main-bg);
+    text-align: center;
+    line-height: 15px;
+    border-radius: 50%;
+    font-size: 13px;
+    margin-left: 3px;
   }
 }
 .footer{

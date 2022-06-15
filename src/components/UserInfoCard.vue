@@ -11,7 +11,7 @@
           <div class="title">
               {{user.nickName}}
               <div class="chat">
-                <router-link :to="'/user/chat/' + store.state.data.user?.id+'_'+user.id">
+                <router-link :to="'/user/chat/' + user.id">
                   <span class="label">私信</span>
                 </router-link>
               </div>
