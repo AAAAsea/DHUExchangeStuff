@@ -23,6 +23,7 @@
         <li>
           <span class="emoji">📧</span>
           <span class="title">消息通知</span>
+          <span class="bubble" :style="{display: !unreadCount ? 'none' : 'block'}">{{unreadCount}}</span>
         </li>
       </router-link>
       <router-link to="/user/set" v-if="isAccountLoggedIn()">
@@ -42,12 +43,29 @@
 </template>
 
 <script setup>
+import { getNotice } from '@/api/user'
 import {isAccountLoggedIn} from '@/utils/auth'
+import { reactive, ref } from '@vue/reactivity'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 const route = useRoute()
 const store = useStore()
-
+const unreadNotice = reactive({
+  comment: 0,
+  follow: 0,
+  like: 0,
+  letter: 0
+})
+const unreadCount = ref(0);
+getNotice()
+.then(res=>{
+  res = res.data;
+  unreadNotice.comment = res.commentNotice?.unread || 0;
+  unreadNotice.follow = res.followNotice?.unread || 0;
+  unreadNotice.like = res.likeNotice?.unread || 0;
+  unreadNotice.letter = res?.letterUnreadCount || 0;  
+  unreadCount.value = unreadNotice.comment + unreadNotice.follow + unreadNotice.like + unreadNotice.letter;
+})
 </script>
 
 <style lang="scss" scoped>
@@ -83,6 +101,23 @@ const store = useStore()
     .router-link-active{
       background: var(--primary-color);
       color: var(--main-bg);
+      .bubble{
+        background: var(--main-bg);
+        color: var(--primary-color);
+      }
+    }
+    .bubble{
+      width: 15px;
+      height: 15px;
+      background: var(--primary-color);
+      color: var(--main-bg);
+      text-align: center;
+      line-height: 15px;
+      border-radius: 50%;
+      font-size: 13px;
+      margin-left: 3px;
+      position: absolute;
+      right: 10px;
     }
   }
 

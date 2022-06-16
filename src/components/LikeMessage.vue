@@ -41,7 +41,7 @@ const haveMore = ref(true);
 const initLikeNotice = ()=>{
   getLikeNotice(notice.length)
   .then(res=>{
-    if(!res.data.notice.length)
+    if(res.data.notice.length < 10)
       haveMore.value = false;
     notice.push(...res.data.notice)
   })

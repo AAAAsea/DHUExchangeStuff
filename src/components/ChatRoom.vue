@@ -2,6 +2,9 @@
   <div class="chat">
       <!-- 标题栏 -->
       <div class="title">
+        <a @click="router.back(-1)"> 
+          <span class="iconfont icon-back">返回</span>
+        </a>
         <!-- 标题 -->
         <span>
           {{target.nickName}}
@@ -37,11 +40,11 @@
       <div class="bottom">
         <!-- 工具栏 -->
         <div class="toolbar">
-          <DiscordPicker
-          class="emoji"
-          gif-format="md"
-          @emoji="text += $event"
-          />
+          <!-- <DiscordPicker
+            class="emoji"
+            gif-format="md"
+            @emoji="text += $event"
+          /> -->
         </div>
         <!-- 输入框 -->
           <textarea 
@@ -58,7 +61,7 @@
 import { getChatRecord, sendLetter } from '@/api/user';
 import { nextTick, onUnmounted, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import DiscordPicker from 'vue3-discordpicker'
+// import DiscordPicker from 'vue3-discordpicker'
 import { useStore } from 'vuex';
 
 const store = useStore()
@@ -73,33 +76,39 @@ const target = reactive({
   nickName: '',
   username: ''
 })
-function initMessages(flag, offset, limit=10){
+function initMessages(offset = 0, limit = 10, spliceFlag = true, scrollFlag = true ){
   getChatRecord(conversationId, offset, limit)
   .then(res=>{
-    if(flag) messages.splice(0);
+    if(spliceFlag) messages.splice(0);
     messages.unshift(...res.data.letters.reverse())
     target.id = res.data.target.id;
     target.nickName = res.data.target.nickName;
     target.username = res.data.target.username;
   })
   .then(()=>{
-    if(flag){
+    if(scrollFlag){
       initScroll();
       haveMore.value = true;
     }
   })
 }
-initMessages(true, 0)
+initMessages()
 
 function loadMore(){
-  getChatRecord(conversationId, messages.length)
+  // 记录scrollHeight
+  let chatBox = document.getElementById('chat-box')
+  const lastScrollHeight = chatBox.scrollHeight;
+  getChatRecord(conversationId, messages.length, 20)
   .then(res=>{
-    if(res.data.letters.length < 10)
+    if(res.data.letters.length < 20)
     {
       haveMore.value = false;
-      return;
     }
     messages.unshift(...res.data.letters.reverse())
+    // 保持页面不动
+    nextTick(()=>{
+      chatBox.scrollTop = chatBox.scrollHeight - lastScrollHeight;
+    })
   })
 }
 // 调整聊天窗口在最下面
@@ -114,15 +123,19 @@ const text = ref('');
 function sendMessage(e){
   e.preventDefault();
   if(text.value.trim() === '') return;
-  sendLetter(target.username, text.value)
+  let msg = text.value;
+  text.value = '';
+  sendLetter(target.username, msg)
   .then(()=>{
-    text.value = '';
-    initMessages(true, 0)
+    initMessages()
+  })
+  .catch(()=>{
+    text.value = msg;
   })
 }
 // 这里没用socket，所以采用轮询http，5秒一次
 const pollingInterval = setInterval(() => {
-  initMessages(true, 0, messages.length);
+  initMessages(0, messages.length, true, false);
 }, 10000);
 
 onUnmounted(()=>{
@@ -136,7 +149,7 @@ onUnmounted(()=>{
     height: 90vh;
     background: var(--post-card-bg);
     .loadmore{
-      margin: 0 auto;
+      margin: 10px auto;
       cursor: pointer;
       font-size: .9em;
       color: var(--secondary-text);
@@ -149,6 +162,11 @@ onUnmounted(()=>{
       font-size: 18px;
       font-weight: bold;
       border-bottom: 1px solid var(--secondary-bg);
+      position: relative;
+      a{
+        position: absolute;
+        left: 10px;
+      }
     }
     .chat-box{
       height: 60%;
@@ -160,10 +178,12 @@ onUnmounted(()=>{
       display: flex;
       flex-direction: column;
       overflow: auto;
+      box-sizing: border-box;
       .message-box{
         display: flex;
         width: 100%;
         margin-bottom: 15px;
+        // margin-left: 10px;
         img{
           height: 40px;
           width: 40px;
@@ -195,8 +215,8 @@ onUnmounted(()=>{
         }
       }
       .me{
-        right: 10px;
         flex-direction: row-reverse;
+        margin-left: 0;
         img{
           margin-right: 0;
           margin-left: 10px;
@@ -232,6 +252,9 @@ onUnmounted(()=>{
         .emoji{
           float: right;
           margin-right: 10px;
+          img{
+            max-width: '';
+          }
         }
       }
       textarea{

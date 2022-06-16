@@ -355,6 +355,7 @@ export default{
       border-radius: 50%;
       width: 40px;
       height: 40px;
+      object-fit: cover;
     }
   }
 
@@ -410,6 +411,7 @@ export default{
           width: 20px;
           height: 20px;
           border-radius: 50%;
+          object-fit: cover;
         }
         .reply-con{
           padding: 0 5px;

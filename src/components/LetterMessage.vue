@@ -44,7 +44,7 @@ const initLetterNotice = ()=>{
   getLetterNotice(notice.length)
   .then(res=>{
     // console.log(res.data)
-    if(!res.data.conversations.length)
+    if(res.data.conversations.length < 10)
       haveMore.value = false;
     notice.push(...res.data.conversations)
   })
