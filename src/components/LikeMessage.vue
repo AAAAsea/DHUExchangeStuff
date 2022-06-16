@@ -1,5 +1,6 @@
 <template>
-  <transition name="el-zoom-in-top">
+
+  <el-collapse-transition>
   <div class="container" v-show="notice.length > 0">
     <div class="like-container"
     v-for="item in notice"
@@ -18,7 +19,8 @@
       </div>
     </div>
   </div>
-  </transition>
+  </el-collapse-transition>
+
   <div class="footer" @click="initLikeNotice" v-if="haveMore">加载更多</div>
 </template>
 
