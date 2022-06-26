@@ -161,6 +161,8 @@
             :minlength="1" 
             :maxlength="140" 
             :autosize="{ minRows: 1, maxRows: 5 }" 
+            @keyup.enter="replyToComment"
+            autofocus
             show-word-limit>
           </el-input>
           </div>

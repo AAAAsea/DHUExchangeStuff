@@ -27,7 +27,7 @@
             <!-- 头像 -->
             <img 
               @click="router.push({path: '/user/' + item.fromUser.id})"
-              :src="item.fromUser.headerUrl" 
+              :src="item.fromUser.headerUrl + '?width=100'" 
             >
             <div class="content-box" >
               <!-- 文字消息 -->

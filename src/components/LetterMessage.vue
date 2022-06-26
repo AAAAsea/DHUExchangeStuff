@@ -6,7 +6,7 @@
     :key="item.conversation.id"
     @click="toChat(item.target.id)"
     >
-      <img :src="item.target.headerUrl" @click.stop="toUser(item.target.id)" alt="">
+      <img :src="item.target.headerUrl  + '?width=100'" @click.stop="toUser(item.target.id)" alt="">
       <div class="content">
         <div class="top">
           <span class="from" @click.stop="toUser(item.target.id)">{{item.target.nickName ?? item.target.username}}</span>

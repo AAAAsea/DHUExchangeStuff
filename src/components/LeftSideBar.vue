@@ -45,17 +45,12 @@
 <script setup>
 import { getNotice } from '@/api/user'
 import {isAccountLoggedIn} from '@/utils/auth'
-import { reactive, ref } from '@vue/reactivity'
+import {  ref } from '@vue/reactivity'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 const route = useRoute()
 const store = useStore()
-const unreadNotice = reactive({
-  comment: 0,
-  follow: 0,
-  like: 0,
-  letter: 0
-})
+const unreadNotice = store.state.data.unreadNotice;
 const unreadCount = ref(0);
 getNotice()
 .then(res=>{

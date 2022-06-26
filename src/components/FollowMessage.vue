@@ -5,7 +5,7 @@
       v-for="item in notice"
       :key="item.notice.id"
       >
-        <img :src="item.user.headerUrl" @click.stop="toUser(item.user.id)" alt="">
+        <img :src="item.user.headerUrl + '?width=100'" @click.stop="toUser(item.user.id)" alt="">
         <div class="content">
           <div class="top">
             <span class="from" @click.stop="toUser(item.user.id)">{{item.user.nickName ?? item.user.username}}</span>

@@ -12,7 +12,8 @@ export default {
     passwordPlace: "输入你的密码",
     password2Place: "再次输入密码",
     nickNamePlace: "输入你的昵称",
-    codePlace: "六位数验证码"
+    codePlace: "六位数验证码",
+    newPassword: "新密码",
   },
   nav: {
     home: '首页',

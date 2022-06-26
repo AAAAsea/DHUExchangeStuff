@@ -16,7 +16,13 @@ export default {
     tags: [],
     hotPostList: [],
     searchPostList: [],
-    currentHotTagName: ''
+    currentHotTagName: '',
+    unreadNotice: {
+      comment: 0,
+      follow: 0,
+      like: 0,
+      letter: 0,
+    }
   },
   model:{
     postModelFlag: false,

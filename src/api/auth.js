@@ -56,3 +56,33 @@ export function logout() {
     },
   });
 }
+
+/**
+ * 修改密码的验证码
+ */
+export function getRecoverCode(username){
+  return request({
+    url: '/recover/code',
+    method: 'get',
+    params: {
+      username
+    },
+  })
+}
+
+/**
+ * 修改密码
+ */
+export function recoverPassword(user){
+  console.log(user)
+  return request({
+    url: '/recover/account',
+    method: 'post',
+    params: {
+      username: user.username,
+      password: user.password,
+      code: user.code
+      
+    },
+  })
+}

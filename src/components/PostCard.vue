@@ -144,8 +144,10 @@
               :maxlength="140" 
               :autosize="{ minRows: 1, maxRows: 5 }" 
               show-word-limit 
+              autofocus
               @focus="store.state.model.publishPostFlag = false"  
-              @blur="store.state.model.publishPostFlag = true"  
+              @blur="store.state.model.publishPostFlag = true" 
+              @keyup.enter="replyToPost" 
             />
             <el-button 
             style="float: right; margin: 10px 0" 
