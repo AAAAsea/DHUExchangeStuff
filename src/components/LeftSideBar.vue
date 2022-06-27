@@ -23,7 +23,7 @@
         <li>
           <span class="emoji">📧</span>
           <span class="title">消息通知</span>
-          <span class="bubble" :style="{display: !unreadCount ? 'none' : 'block'}">{{unreadCount}}</span>
+          <span class="bubble" :style="{display: !store.state.data.unreadNotice.sum ? 'none' : 'block'}">{{store.state.data.unreadNotice.sum}}</span>
         </li>
       </router-link>
       <router-link to="/user/set" v-if="isAccountLoggedIn()">
@@ -45,13 +45,12 @@
 <script setup>
 import { getNotice } from '@/api/user'
 import {isAccountLoggedIn} from '@/utils/auth'
-import {  ref } from '@vue/reactivity'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 const route = useRoute()
 const store = useStore()
 const unreadNotice = store.state.data.unreadNotice;
-const unreadCount = ref(0);
+
 getNotice()
 .then(res=>{
   res = res.data;
@@ -59,7 +58,7 @@ getNotice()
   unreadNotice.follow = res.followNotice?.unread || 0;
   unreadNotice.like = res.likeNotice?.unread || 0;
   unreadNotice.letter = res?.letterUnreadCount || 0;  
-  unreadCount.value = unreadNotice.comment + unreadNotice.follow + unreadNotice.like + unreadNotice.letter;
+  store.state.data.unreadNotice.sum = unreadNotice.comment + unreadNotice.follow + unreadNotice.like + unreadNotice.letter;
 })
 </script>
 

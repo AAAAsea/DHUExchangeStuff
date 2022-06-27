@@ -152,9 +152,11 @@
           v-model="dialogVisible"
           title="评论"
           :width="store.state.model.modelWidth"
+          @open="inputFocus"
         >
           <div class="comment" >
             <el-input 
+            ref="replyInput"
             v-model="comment.content" 
             :placeholder="replyInputPlaceHolder" 
             type="textarea"  
@@ -162,7 +164,6 @@
             :maxlength="140" 
             :autosize="{ minRows: 1, maxRows: 5 }" 
             @keyup.enter="replyToComment"
-            autofocus
             show-word-limit>
           </el-input>
           </div>
@@ -186,7 +187,7 @@
 </template>
 
 <script>
-import { computed, reactive, ref } from 'vue'
+import { computed,  reactive, ref } from 'vue'
 import { timeFormat } from '@/utils/tools'
 import { isAccountLoggedIn } from '@/utils/auth'
 import { addComment, changeLikeStatus  } from '@/api/post'
@@ -202,6 +203,7 @@ export default{
     const router = useRouter()
     const replyInputPlaceHolder = ref('')
     const route = useRoute()
+    const replyInput = ref('');
     const subItemNums = ref(3) // 默认子评论展示3个
     // let canLoadComment = true;
     const isDetail = computed(()=>route.name === '详情') // 判断是否是详情页
@@ -214,6 +216,11 @@ export default{
       targetId: '',
       content: ''
     })
+    function inputFocus(){
+      setTimeout(() => {
+        replyInput.value.focus();
+      }, 100);
+    }
     function showCommentInput(placeHolder, entityType,entityId,targetId=0){
       if(!isAccountLoggedIn()){
         store.commit('showToast',{
@@ -339,7 +346,9 @@ export default{
       toDetail,
       isDetail,
       loadMoreComment,
-      subItemNums
+      subItemNums,
+      replyInput,
+      inputFocus
     }
   }
 }

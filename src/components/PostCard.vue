@@ -80,10 +80,10 @@
           :src="pic + '?width=300'"
           :key="pic" 
           :preview-src-list="post.pictureUrls"
-          style="maxWidth: 40%; maxHeight: 300px;borderRadius: 3px"
+          style="maxWidth: 100%; maxHeight: 300px;borderRadius: 5px"
           fit="cover" />
         </div>
-        <div class="section2" ref="imgSection2Ref" v-if="post.pictureUrls?.length > 1">
+        <div :class="post.pictureUrls?.length === 3 || post.pictureUrls?.length > 4 ? 'section3' : 'section2'" ref="imgSection2Ref" v-if="post.pictureUrls?.length > 1">
           <el-image 
           v-for="(pic, index) in post.pictureUrls"
           :key="pic" 
@@ -91,11 +91,9 @@
           :preview-src-list="post.pictureUrls"
           :initial-index="index"
           :style="{
-              borderRadius: '3px',
-              padding: '2px',
+              borderRadius: '5px',
               boxSizing: 'border-box',
-              width: imgSize(),
-              height: imgSize()
+              maxHeight: '400px'
             }" 
           fit="cover" />
         </div>
@@ -137,6 +135,7 @@
         <div v-if="isComment">
           <div class="comment" >
             <el-input 
+              ref='commentInput'
               v-model="comment" 
               placeholder="发布你的评论" 
               type="textarea"  
@@ -144,7 +143,6 @@
               :maxlength="140" 
               :autosize="{ minRows: 1, maxRows: 5 }" 
               show-word-limit 
-              autofocus
               @focus="store.state.model.publishPostFlag = false"  
               @blur="store.state.model.publishPostFlag = true" 
               @keyup.enter="replyToPost" 
@@ -192,7 +190,7 @@ import CommentCard from '@/components/CommentCard.vue'
 import { getPostDetail, addComment, changeLikeStatus, deletePost } from '@/api/post'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
-import { computed } from '@vue/runtime-core'
+import { computed, nextTick } from '@vue/runtime-core'
 import useClipboard from 'vue-clipboard3'
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -214,6 +212,8 @@ export default {
     const isFold = ref(!isDetail.value) // 详情页默认展开且不允许折叠
     const imgSection2Ref = ref('')
     const dialogVisible = ref(false)
+    const commentInput = ref('');
+
     const imgSize = ()=>{
       if(props.post.pictureUrls.length < 3)
       {
@@ -286,6 +286,7 @@ export default {
       isComment.value = !isComment.value;
       if(isFirstComment.value && props.post.commentCount > 0) initComment() // 第一次展开发送请求获取评论
       isFirstComment.value = false;
+      nextTick(()=>{commentInput.value.focus()})
     }
     function replyToPost(){
       if(!isAccountLoggedIn())
@@ -401,6 +402,8 @@ export default {
             message: "系统异常"
           })
       })
+
+
     }
     return{
       isFold,
@@ -424,7 +427,8 @@ export default {
       imgSection2Ref,
       imgSize,
       handleDeletePost,
-      dialogVisible
+      dialogVisible,
+      commentInput
     }
   }
 }
@@ -494,10 +498,9 @@ export default {
     }
     .pics{
       .section2{
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
-        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 5px;
         .el-image-viewer__btn{
           background: rgba(0,0,0,.1);
         }
@@ -509,6 +512,11 @@ export default {
           left: 10px;
         }
         // el-image-viewer__next
+      }
+      .section3{
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 5px;
       }
       margin-bottom: 10px;
     }

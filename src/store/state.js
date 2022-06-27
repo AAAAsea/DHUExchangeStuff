@@ -22,6 +22,7 @@ export default {
       follow: 0,
       like: 0,
       letter: 0,
+      sum: 0
     }
   },
   model:{
