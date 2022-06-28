@@ -1,14 +1,17 @@
 <template>
   <div class="mine-post" @scroll="onScroll">
-    <div class="tag-nav"><h3>搜索： {{route.params.keyword}}</h3></div>
-    <transition name="el-zoom-in-top">
+    <div class="tag-nav"><h3>搜索： {{route.query.keyword}}</h3></div>
+    <!-- <transition name="el-zoom-in-top"> -->
+  <el-collapse-transition>
       <PostList
         @on-update="reBindOnscroll"
         v-if="data.searchPostList?.length > 0"
         :postList="data.searchPostList"
         :isLoading="false"
       />
-    </transition>
+  </el-collapse-transition>
+
+    <!-- </transition> -->
     <div class="no-more-post" style="color: var(--secondary-text)">
       {{haveMorePost ? 'Loading' : '——到底了——'}}
     </div>
@@ -27,8 +30,7 @@ const store = useStore()
 const data = store.state.data
 const haveMorePost = ref(true)
 const onTop = ref(true)
-
-async function initSearchPostList({offset = 0, limit = 10, keyword = route.params.keyword}){
+async function initSearchPostList({offset = 0, limit = 10, keyword = route.query.keyword}){
   try{
     let _length = data.searchPostList.length
     await store.dispatch('fetchSearchPostList', {offset, limit, keyword}) // 等待数据加载
@@ -52,10 +54,10 @@ initSearchPostList({})
 
 // 监听路由变化
 onBeforeRouteUpdate( (to, from) => {
-  if(to.params.keyword !== from.params.keyword)
+  if(to.query.keyword !== from.query.keyword)
   onTop.value = true; // 防止切换user不透明
   store.state.data.searchPostList.splice(0)
-  initSearchPostList({keyword: to.params.keyword}) // 否则会加载之前的keyword
+  initSearchPostList({keyword: to.query.keyword}) // 否则会加载之前的keyword
 });
 
 

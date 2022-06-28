@@ -141,7 +141,7 @@ function saveInfo(){
     if(form.description !== user.description) reuqests.push(changeDescription(form.description))
     Promise.all(reuqests)
     .then( results => {
-      console.log(results)
+      // console.log(results)
       let success = true;
       results.forEach(res=>{
         if(res.code !== 20000)

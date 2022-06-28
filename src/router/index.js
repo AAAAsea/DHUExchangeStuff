@@ -40,7 +40,7 @@ const	routes=[
 			},
 		},
 		{
-			path:'/search/:keyword',	
+			path:'/search',	
 			name: '搜索',
 			component: ()=>import("@/views/Search"),
 			props: true,

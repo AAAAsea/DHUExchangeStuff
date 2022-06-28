@@ -115,7 +115,7 @@ export default {
     }
     function search(){
       if(keyword.value.trim() === '') return;
-      router.push({ path: '/search/' + keyword.value})
+        router.push({ path: '/search',query: {keyword: keyword.value}})
     }
     return{
       go,

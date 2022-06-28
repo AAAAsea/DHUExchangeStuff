@@ -237,7 +237,7 @@ export default{
     }
     function replyToComment(){
       addComment(comment).then(res=>{
-        console.log(res)
+        // console.log(res)
         if(res.code === 20000){
           store.commit('showToast',{
             type: "success",
@@ -285,7 +285,7 @@ export default{
           .then(res=>{
             if(res.code === 20000)
             {
-              console.log("改变点赞成功")
+              // console.log("改变点赞成功")
             }else{
               item.likeStatus = !item.likeStatus;
               item.likeCount += item.likeStatus || -1

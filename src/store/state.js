@@ -23,7 +23,8 @@ export default {
       like: 0,
       letter: 0,
       sum: 0
-    }
+    },
+    searchText: ''
   },
   model:{
     postModelFlag: false,

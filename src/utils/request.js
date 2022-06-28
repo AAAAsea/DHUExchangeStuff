@@ -28,7 +28,7 @@ service.interceptors.response.use(
     NProgress.done()
     const res = response.data;
     // console.log(res)
-    if(res.USER_NO_LOGIN == 52008 || res.USER_NO_LOGIN == 52007) // 用户登录过期
+    if(res.USER_NO_LOGIN == 52008 ) // 用户登录过期
     {
       store.commit('resetUserInfo')
       store.commit('showToast',{

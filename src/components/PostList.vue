@@ -1,11 +1,10 @@
 <template>
-  <transition name="el-zoom-in-top">
     <div 
-      v-show="postList.length > 0"
+      v-show="postList.length > 0 "
       class="post-list" 
       @touchstart="handleTouchStart" @touchend="handleTouchEnd" @touchmove ="handleTouchMove"
     >
-      <el-icon :style="refreshStyle" color="var(--primary-color)"><refresh-right/></el-icon>
+      <el-icon :style="refreshStyle" color="var(--primary-color)" v-if="showRefresh"><refresh-right/></el-icon>
       <el-empty v-if="postList?.length === 0" description="没有更多数据"></el-empty>
       <div 
         v-for="item in postList"
@@ -15,6 +14,7 @@
         <PostCard
           :post="item.post"
           :user="item.user"
+          @on-picLoaded="picLoaded++"
           :likeStatus="item.likeStatus" 
           @on-changeLikeStatus="()=>{ 
             item.post.likeStatus = !item.post.likeStatus; 
@@ -25,15 +25,15 @@
         />
       </div>
     </div>
-  </transition>
 </template>
 
 <script>
-import { reactive } from '@vue/reactivity'
+import { reactive, ref } from '@vue/reactivity'
 import PostCard from "./PostCard.vue"
 import { useStore } from 'vuex'
 import { RefreshRight  }  from '@element-plus/icons-vue'
 import { useRoute } from 'vue-router'
+import { computed } from '@vue/runtime-core'
 export default {
   name: "PostList",
   props: ['postList'],
@@ -55,6 +55,18 @@ export default {
       transition: '',
     })
     const route = useRoute()
+    const showRefresh = computed(()=>{
+      return route.path === '/home' || route.path === '/'
+    })
+    // 用于判断图片是否加载完毕，但是目前还没写好
+    const picLoaded = ref(0);
+    const picNum = computed(()=>{
+      let num = 0;
+      props.postList.forEach(item => {
+        num += item.post.pictureUrls.length
+      });
+      return num;
+    })
     let startY = 0; // 下拉刷新
     let scrollTop = 0;
     let direction = 0; // 如果在顶部向下滑动，设置为1，用于判断一开始的滑动方向
@@ -125,7 +137,10 @@ export default {
       handleTouchStart,
       handleTouchEnd,
       refreshStyle,
-      handleTouchMove
+      handleTouchMove,
+      picNum,
+      picLoaded,
+      showRefresh
     }
   }
 }

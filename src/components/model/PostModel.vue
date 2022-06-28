@@ -152,9 +152,8 @@ function publish(formEl){
             })
         }
       })
-      .catch((res)=>{
-        console.log(res)  
-        console.log(res)
+      .catch(()=>{
+        // console.log(res)  
         store.commit('showToast',{
             type: 'error',
             message: '上传超时'

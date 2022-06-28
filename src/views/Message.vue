@@ -62,7 +62,7 @@ export default {
       unreadNotice.follow = res.followNotice?.unread;
       unreadNotice.like = res.likeNotice?.unread;
       unreadNotice.letter = res?.letterUnreadCount;  
-      console.log(unreadNotice)
+      // console.log(unreadNotice)
     })
     
     return{

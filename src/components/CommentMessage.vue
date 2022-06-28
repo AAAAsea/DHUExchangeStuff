@@ -48,7 +48,7 @@ const haveMore = ref(true);
 const initCommentNotice = ()=>{
   getCommentNotice(notice.length)
   .then(res=>{
-    console.log(res.data)
+    // console.log(res.data)
     if(res.data.notice.length < 10)
       haveMore.value = false;
     notice.push(...res.data.notice)

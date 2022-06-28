@@ -1,4 +1,5 @@
 <template>
+
   <div class="post-card"  
     @touchstart="handleTouchStart"  
     @touchmove="handleTouchMove" 
@@ -74,20 +75,24 @@
       </p>
       
       <div class="pics">
-        <div class="section1" v-if="post?.pictureUrls?.length === 1">
+        <transition name="el-fade-in-linear">
+        <div class="section1" v-show="post.pictureUrls?.length === 1 && show">
           <el-image 
+          @load="picLoaded"
           v-for="pic in post.pictureUrls"
-          :src="pic + '?width=300'"
+          :src="pic + '?width=600'"
           :key="pic" 
           :preview-src-list="post.pictureUrls"
           style="maxWidth: 100%; maxHeight: 300px;borderRadius: 5px"
           fit="cover" />
         </div>
-        <div :class="post.pictureUrls?.length === 3 || post.pictureUrls?.length > 4 ? 'section3' : 'section2'" ref="imgSection2Ref" v-if="post.pictureUrls?.length > 1">
+        </transition>
+        <div :class="post.pictureUrls?.length === 3 || post.pictureUrls?.length > 4 ? 'section3' : 'section2'" ref="imgSection2Ref" v-show="post.pictureUrls?.length > 1 && show">
           <el-image 
+          @load="picLoaded"
           v-for="(pic, index) in post.pictureUrls"
           :key="pic" 
-          :src="pic + '?width=300'"
+          :src="pic + '?width=600'"
           :preview-src-list="post.pictureUrls"
           :initial-index="index"
           :style="{
@@ -213,7 +218,6 @@ export default {
     const imgSection2Ref = ref('')
     const dialogVisible = ref(false)
     const commentInput = ref('');
-
     const imgSize = ()=>{
       if(props.post.pictureUrls.length < 3)
       {
@@ -286,7 +290,11 @@ export default {
       isComment.value = !isComment.value;
       if(isFirstComment.value && props.post.commentCount > 0) initComment() // 第一次展开发送请求获取评论
       isFirstComment.value = false;
-      nextTick(()=>{commentInput.value.focus()})
+      nextTick(()=>{
+        setTimeout(()=>{
+          // commentInput.value.focus()
+        },500)
+      })
     }
     function replyToPost(){
       if(!isAccountLoggedIn())
@@ -402,8 +410,13 @@ export default {
             message: "系统异常"
           })
       })
+      
 
-
+    }
+    const show = ref(false);
+    function picLoaded(){
+      context.emit('on-picLoaded')
+      show.value = true;
     }
     return{
       isFold,
@@ -428,7 +441,9 @@ export default {
       imgSize,
       handleDeletePost,
       dialogVisible,
-      commentInput
+      commentInput,
+      picLoaded,
+      show
     }
   }
 }

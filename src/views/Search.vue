@@ -7,6 +7,10 @@
       </el-col>
       <!-- 主体 -->
       <el-col  :xs="24" :sm="15" :md="15" :lg="15" :xl="15">      
+        <div class="search-box" tabindex="111" v-if="store.state.model.modelWidth === '95vw'">
+          <el-icon class="search-icon"><Search /></el-icon>
+          <input type="text" :placeholder="$t('nav.search') " maxlength="10" v-model="store.state.data.searchText" @keypress.enter="search"/>
+        </div>
         <SearchPost/>
       </el-col>
       <!-- 右侧 -->
@@ -23,17 +27,16 @@ import RightSideBar from '@/components/RightSideBar.vue'
 import SearchPost from '@/components/SearchPost.vue'
 import { useStore } from 'vuex'
 import { isAccountLoggedIn } from '../utils/auth'
-import { useRoute } from 'vue-router'
-
-
-
+import { useRoute, useRouter } from 'vue-router'
+import { Search } from '@element-plus/icons-vue'
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "User",
   components: {
     LeftSideBar,
     RightSideBar,
-    SearchPost
+    SearchPost,
+    Search
   },
   setup(){
     const store = useStore()
@@ -49,11 +52,17 @@ export default {
         store.state.model.postModelFlag = true
       }
     }
+    const router = useRouter();
+    function search(){
+      if(store.state.data.searchText.trim() === '') return;
+      router.replace({ path: '/search',query: {keyword: store.state.data.searchText.trim()}})
+    }
     return{
       // Edit,
       store,
       showPostModel,
-      route
+      route,
+      search,
     }
   }
 }
@@ -79,4 +88,31 @@ export default {
   font-size: 1.5rem;
   transform: scale(1.2);
 }
+.search-box{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    background-color: var(--post-card-bg);
+    transition: 0.3s;
+    padding: 3px 0;
+    padding-right: 10px;
+    margin-bottom: 8px;
+    .search-icon{
+      padding: 10px;
+    }
+    // 该元素或其后代元素获得焦点
+    &:focus-within, &:hover{
+      opacity: 1;
+      .search-icon{
+        color: var(--color-bg);
+      }
+    }
+    input{
+      width: 100%;
+      background: transparent;
+      height: 35px;
+      border: none;
+      color: var(--color-text);
+    }
+  }
 </style>

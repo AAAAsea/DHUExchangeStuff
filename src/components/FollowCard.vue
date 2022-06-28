@@ -11,13 +11,13 @@
       <span class="nav-title">{{user.nickName}}</span>
       <span class="total-follow">全部{{route.query?.relate === 'fans' ? '粉丝' : '关注'}} {{followerList.reduce((a, item) => item.hasFollowed ? a + 1 : a + 0, 0)}}</span>
     </div>
-      <transition name="el-zoom-in-top">
-
+      <el-collapse-transition>
       <UserList
       v-if="followerList.length > 0"
       :userList="followerList"
       />
-      </transition>
+      </el-collapse-transition>
+
 
     <!-- <el-empty :description="'该用户还没有' + (route.query?.relate === 'fans' ? '粉丝' : '关注')" v-else></el-empty> -->
   </div>
