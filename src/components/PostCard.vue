@@ -150,7 +150,7 @@
               show-word-limit 
               @focus="store.state.model.publishPostFlag = false"  
               @blur="store.state.model.publishPostFlag = true" 
-              @keyup.enter="replyToPost" 
+              @keydown.enter="replyToPost" 
             />
             <el-button 
             style="float: right; margin: 10px 0" 
@@ -296,7 +296,8 @@ export default {
         },500)
       })
     }
-    function replyToPost(){
+    function replyToPost(e){
+      e.preventDefault();
       if(!isAccountLoggedIn())
       {
         store.commit('showToast',{
@@ -305,6 +306,8 @@ export default {
         })
         return;
       }
+      if(comment.value.trim() === '')
+        return;
       addComment({
         id: props.post.id,
         entityId: props.post.id,

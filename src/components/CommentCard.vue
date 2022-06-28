@@ -163,7 +163,7 @@
             :minlength="1" 
             :maxlength="140" 
             :autosize="{ minRows: 1, maxRows: 5 }" 
-            @keyup.enter="replyToComment"
+            @keydown.enter="replyToComment"
             show-word-limit>
           </el-input>
           </div>
@@ -235,7 +235,10 @@ export default{
       replyInputPlaceHolder.value = placeHolder
       dialogVisible.value = true;
     }
-    function replyToComment(){
+    function replyToComment(e){
+      e.preventDefault();
+      if(comment.content.trim() === '')
+        return;
       addComment(comment).then(res=>{
         // console.log(res)
         if(res.code === 20000){
