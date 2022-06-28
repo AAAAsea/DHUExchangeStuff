@@ -207,7 +207,7 @@ onUnmounted(()=>{
           padding: 8px 10px;
           border-radius: 5px;
           position: relative;
-          max-width: 60%;
+          max-width: 55%;
           word-break: break-all;
           line-height: 1.5em;
         }

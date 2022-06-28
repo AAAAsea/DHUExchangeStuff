@@ -80,10 +80,10 @@
           <el-image 
           @load="picLoaded"
           v-for="pic in post.pictureUrls"
-          :src="pic + '?width=600'"
+          :src="pic + '?width=800'"
           :key="pic" 
           :preview-src-list="post.pictureUrls"
-          style="maxWidth: 100%; maxHeight: 300px;borderRadius: 5px"
+          style="maxWidth: 100%; maxHeight: 600px;borderRadius: 5px"
           fit="cover" />
         </div>
         </transition>
@@ -92,13 +92,13 @@
           @load="picLoaded"
           v-for="(pic, index) in post.pictureUrls"
           :key="pic" 
-          :src="pic + '?width=600'"
+          :src="pic + '?width=400'"
           :preview-src-list="post.pictureUrls"
           :initial-index="index"
           :style="{
               borderRadius: '5px',
               boxSizing: 'border-box',
-              maxHeight: '400px'
+              maxHeight: '600px',
             }" 
           fit="cover" />
         </div>
