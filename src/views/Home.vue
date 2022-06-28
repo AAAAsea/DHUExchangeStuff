@@ -9,7 +9,7 @@
       <el-col  :xs="24" :sm="15" :md="15" :lg="15" :xl="15">   
         <div class="search-box" tabindex="111" v-if="store.state.model.modelWidth === '95vw'">
           <el-icon class="search-icon"><Search /></el-icon>
-          <input type="text" :placeholder="$t('nav.search') " maxlength="10" v-model="store.state.data.searchText" @keypress.enter="search"/>
+          <input type="search" :placeholder="$t('nav.search') " maxlength="10" v-model="store.state.data.searchText" @keypress.enter="search"/>
         </div>
         <el-collapse-transition>
           <PostList

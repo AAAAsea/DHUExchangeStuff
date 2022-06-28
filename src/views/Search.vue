@@ -9,7 +9,7 @@
       <el-col  :xs="24" :sm="15" :md="15" :lg="15" :xl="15">      
         <div class="search-box" tabindex="111" v-if="store.state.model.modelWidth === '95vw'">
           <el-icon class="search-icon"><Search /></el-icon>
-          <input type="text" :placeholder="$t('nav.search') " maxlength="10" v-model="store.state.data.searchText" @keypress.enter="search"/>
+          <input type="search" clearable :placeholder="$t('nav.search') " maxlength="10" v-model="store.state.data.searchText" @keypress.enter="search"/>
         </div>
         <SearchPost/>
       </el-col>
@@ -29,6 +29,7 @@ import { useStore } from 'vuex'
 import { isAccountLoggedIn } from '../utils/auth'
 import { useRoute, useRouter } from 'vue-router'
 import { Search } from '@element-plus/icons-vue'
+import { onUnmounted } from '@vue/runtime-core'
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "User",
@@ -57,6 +58,9 @@ export default {
       if(store.state.data.searchText.trim() === '') return;
       router.replace({ path: '/search',query: {keyword: store.state.data.searchText.trim()}})
     }
+    onUnmounted(()=>{
+      store.state.data.searchText = '';
+    })
     return{
       // Edit,
       store,

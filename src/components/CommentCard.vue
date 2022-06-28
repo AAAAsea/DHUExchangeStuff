@@ -85,8 +85,9 @@
                   <!-- @用户 -->
                   <span 
                     v-if="subItem.target"
+                    @click.stop=""
                   >
-                    <router-link :to="/user/+subItem.target.id">
+                    <router-link  :to="/user/+subItem.target.id">
                       @{{subItem.target.nickName ?? subItem.target.username}}
                     </router-link>
                   </span>

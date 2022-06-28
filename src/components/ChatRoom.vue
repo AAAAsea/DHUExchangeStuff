@@ -35,6 +35,10 @@
                 {{item.letter.content}}
               </div>
             </div>
+            <!-- 时间 -->
+            <span class="time">
+              {{timeFormat(item.letter.createTime)}}
+            </span>
         </div>
       </div>
       <div class="bottom">
@@ -63,7 +67,7 @@ import { nextTick, onUnmounted, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 // import DiscordPicker from 'vue3-discordpicker'
 import { useStore } from 'vuex';
-
+import { timeFormat } from '@/utils/tools'
 const store = useStore()
 const route = useRoute();
 const router = useRouter();
@@ -88,7 +92,7 @@ function initMessages(offset = 0, limit = 10, spliceFlag = true, scrollFlag = tr
   .then(()=>{
     if(scrollFlag){
       initScroll();
-      haveMore.value = true;
+      haveMore.value = messages.length >= 10;
     }
   })
 }
@@ -183,7 +187,7 @@ onUnmounted(()=>{
         display: flex;
         width: 100%;
         margin-bottom: 15px;
-        // margin-left: 10px;
+        align-items: center;
         img{
           height: 40px;
           width: 40px;
@@ -200,11 +204,12 @@ onUnmounted(()=>{
           background: var(--secondary-bg);
           display: flex;
           align-items: center;
-          padding: 5px 10px;
+          padding: 8px 10px;
           border-radius: 5px;
           position: relative;
-          max-width: 70%;
+          max-width: 60%;
           word-break: break-all;
+          line-height: 1.5em;
         }
         .content-box::before{
           content: '';
@@ -212,6 +217,12 @@ onUnmounted(()=>{
           border-right: 6px solid  var(--secondary-bg);
           position: absolute;
           right: 100%;
+        }
+        .time{
+          font-size: 14px;
+          vertical-align: bottom;
+          color: var(--secondary-text);
+          transform: scale(0.7);
         }
       }
       .me{
