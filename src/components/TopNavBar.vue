@@ -8,8 +8,8 @@
               <el-icon @click="store.state.model.leftDrawerModelFlag = !store.state.model.leftDrawerModelFlag" style="margin: 0 5px;  "><Expand /></el-icon>
               {{route.name}}
             </h3>
-            <h1 v-else>
-              <img src="https://www.dhu.edu.cn/_upload/tpl/0b/3f/2879/template2879/image/login_mini.png" alt="">
+            <h1 style="cursor: pointer" @click="router.push({path: '/'})" v-else>
+                <img src="https://www.dhu.edu.cn/_upload/tpl/0b/3f/2879/template2879/image/login_mini.png" alt="">
             </h1>
             
           <!-- </router-link> -->
@@ -121,6 +121,7 @@ export default {
       go,
       userInfo,
       route,
+      router,
       gunOffset,
       titles,
       avatarDefaultImg,

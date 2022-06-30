@@ -62,7 +62,7 @@ const	routes=[
 					name: '点赞',
 					component: ()=>import("@/components/LikeMessage"),
 					meta: {
-						title:'点赞'
+						title:'👍 点赞'
 					},
 				},
 				{
@@ -70,7 +70,7 @@ const	routes=[
 					name: '评论',
 					component: ()=>import("@/components/CommentMessage"),
 					meta: {
-						title:'评论'
+						title:'📄 评论'
 					},
 				},
 				{
@@ -78,7 +78,7 @@ const	routes=[
 					name: '关注',
 					component: ()=>import("@/components/FollowMessage"),
 					meta: {
-						title:'关注'
+						title:'🧲 关注'
 					},
 				},
 				{
@@ -86,7 +86,7 @@ const	routes=[
 					name: '私信',
 					component: ()=>import("@/components/LetterMessage"),
 					meta: {
-						title:'私信'
+						title:'📑 私信'
 					},
 				}
 			]
@@ -146,7 +146,7 @@ const	routes=[
 			component: ()=>import("@/views/Constructing"),
 			props: true,
 			meta: {
-				title:'🔐 constructing',
+				title:'📢 项目进度',
 			},
 		},
 

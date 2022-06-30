@@ -209,4 +209,17 @@ export function getLetterNotice(offset=0, limit=10){
     },
   })
 }
+/**
+ * 获取用户总数
+ */
+export function getUsersCount(){
+  return request({
+    url: '/users/count',
+    method: 'get',
+    params: {
+    },
+  })
+}
+
+
 

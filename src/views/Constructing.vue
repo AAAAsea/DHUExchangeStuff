@@ -8,6 +8,10 @@
       <!-- 主体 -->
       <el-col  :xs="24" :sm="15" :md="15" :lg="15" :xl="15">      
         <div class="construct-mid">
+          <div class="users">
+            <span>社区人数</span>
+            <span>{{usersCount}}</span>
+          </div>
           <el-timeline>
             <el-timeline-item :timestamp="item.time" placement="top" v-for="(item, index) in list" :key="index">
               <el-card>
@@ -30,6 +34,34 @@
 <script setup>
 import LeftSideBar from '@/components/LeftSideBar.vue'
 import RightSideBar from '@/components/RightSideBar.vue'
+import { getUsersCount } from '@/api/user'
+import { ref } from '@vue/reactivity'
+
+// 用户总数
+const usersCount = ref(0);
+getUsersCount().then(res=>{
+  let rate = 1;
+  let speed = 500/res.data;
+  let addInterval;
+  const selfAdd = ()=>{
+    if(usersCount.value + rate < res.data)
+    {
+      usersCount.value += rate;
+      // if(speed > 1 )
+      // {
+      //   clearInterval(addInterval);
+      //   speed -= 1;
+      //   rate += 1;
+      //   addInterval = setInterval(selfAdd, speed)
+      // }
+    }else{
+      usersCount.value = res.data;
+      clearInterval(addInterval);
+    }
+  }
+  addInterval = setInterval(selfAdd, speed)
+})
+
 const list = []
 const myAppend = (time, title, content)=>{
   list.push({
@@ -119,9 +151,25 @@ list.reverse()
 
 <style lang="scss" scoped>
 .construct{
-  
   width: 1200px;
   margin: 0 auto;
+  .users{
+    display: flex;
+    flex-direction: column;
+    width: 170px;
+    height: 90px;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 5px;
+    background: var(--secondary-bg);
+    font-weight: bold;
+    margin: 0 auto 40px;
+    padding: 5px 0;
+    span:last-child{
+      color: var(--primary-color);
+      font-size: 2em;
+    }
+  }
   .construct-mid{
     padding: 20px;
     width: 100%;
