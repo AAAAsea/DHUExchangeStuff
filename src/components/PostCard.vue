@@ -1,4 +1,4 @@
-<template>
+  <template>
 
   <div class="post-card"  
     @touchstart="handleTouchStart"  
@@ -75,18 +75,25 @@
       </p>
       
       <div class="pics">
-        <transition name="el-fade-in-linear">
-        <div class="section1" v-show="post.pictureUrls?.length === 1 && show">
-          <el-image 
-          @load="picLoaded"
-          v-for="pic in post.pictureUrls"
-          :src="pic + '?width=800'"
-          :key="pic" 
-          :preview-src-list="post.pictureUrls"
-          style="maxWidth: 100%; maxHeight: 600px;borderRadius: 5px"
-          fit="cover" />
+        <div class="section1" v-show="post.pictureUrls?.length === 1">
+          <transition name="el-fade-in-linear">
+          <div v-show="show">
+            <el-image 
+            @load="picLoaded"
+            v-for="pic in post.pictureUrls"
+            :src="pic + '?width=800'"
+            :key="pic"
+            :preview-src-list="post.pictureUrls"
+            style="maxWidth: 100%; maxHeight: 600px;borderRadius: 5px"
+            fit="cover" />
+          </div>
+          </transition>
+          <el-skeleton style="width: 100%" :loading="loading" animated v-show="!show">
+            <template #template>
+              <el-skeleton-item variant="image" style="width: 100%; height: 240px; opacity: 0.3; color: black; background: black; borderRadius: 5px;" />
+            </template>
+          </el-skeleton>
         </div>
-        </transition>
         <div :class="post.pictureUrls?.length === 3 || post.pictureUrls?.length > 4 ? 'section3' : 'section2'" ref="imgSection2Ref" v-show="post.pictureUrls?.length > 1 && show">
           <el-image 
           @load="picLoaded"
@@ -419,7 +426,9 @@ export default {
     const show = ref(false);
     function picLoaded(){
       context.emit('on-picLoaded')
-      show.value = true;
+      nextTick(()=>{
+        show.value = true;
+      })
     }
     return{
       isFold,
@@ -481,7 +490,7 @@ export default {
     align-items: center;
     word-wrap: break-word;
     word-break:break-all; 
-    margin-bottom: 18px;
+    margin-bottom: 3px;
     img{
       width: 45px;
       height: 45px;
@@ -515,6 +524,7 @@ export default {
       transition: 0.3s;
     }
     .pics{
+      transition: .2s;
       .section2{
         display: grid;
         grid-template-columns: repeat(2, 1fr);
