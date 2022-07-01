@@ -23,6 +23,7 @@
             <router-link :to="/user/+item.user.id">
               {{item.user.nickName || item.user.username}}
             </router-link>
+            <span class="mark" v-if="item.user.id === user.id">版主</span>
           </div>
           <!-- 主评论内容 -->
           <p>{{item.comment.content}}</p>
@@ -79,8 +80,9 @@
                   <!-- 子评论用户昵称 -->
                   <span @click.stop="">
                     <router-link :to="/user/+subItem.user.id">
-                      {{subItem.user.nickName ?? subItem.user.username}}:
+                      {{subItem.user.nickName ?? subItem.user.username}}
                     </router-link>
+                    <span class="mark" v-if="subItem.user.id === user.id">版主</span>:
                   </span> 
                   <!-- @用户 -->
                   <span 
@@ -88,7 +90,7 @@
                     @click.stop=""
                   >
                     <router-link  :to="/user/+subItem.target.id">
-                      @{{subItem.target.nickName ?? subItem.target.username}}
+                      @{{subItem.target.nickName ?? subItem.target.username}}{{' '}}
                     </router-link>
                   </span>
                   <!-- 子评论内容 -->
@@ -197,7 +199,7 @@ import { useRoute, useRouter } from 'vue-router'
 
 export default{
   emits: ['on-reply','on-bottom'],
-  props: ['comments', 'post'],
+  props: ['comments', 'post', 'user'],
   setup(props, context){  
     const store = useStore()
     const dialogVisible = ref(false)
@@ -362,6 +364,18 @@ export default{
 .comment-box{
   width: 100%;
   display: flex;
+  // 版主标识
+  .mark{
+    border: 1px solid var(--primary-color);
+    width: fit-content;
+    font-size: 12px;
+    border-radius: 3px;
+    padding: 0 2px 1px 2px;
+    display: inline-block;
+    transform: scale(0.8);
+    background: var(--primary-color);
+    color: black;
+  }
   .user-face{
     width: 45px;
     padding: 10px 10px 15px 5px;
@@ -436,7 +450,7 @@ export default{
             margin-right: 10px;
             word-break: break-all;
             span{
-              padding-right: 5px;
+              // padding-right: 5px;
               // font-weight: bold;
               a{
                 color: var(--secondary-primary-color)

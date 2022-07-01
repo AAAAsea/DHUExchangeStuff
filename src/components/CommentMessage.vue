@@ -17,7 +17,7 @@
         <span>
           <span 
           @click.stop="router.push({path: '/user/' + store.state.data.user.id})"
-          style="color: var(--primary-color); cursor: pointer" v-if="item.entityType === 2">@{{store.state.data.user.nickName }}</span>
+          style="color: var(--primary-color); cursor: pointer" v-if="item.entityType === 2 && item.comment?.targetId !== 0">@{{store.state.data.user.nickName }}</span>
           {{item.comment?.content}}
         </span>
       </div>

@@ -171,9 +171,10 @@
                 :comments="postDetail.comments" 
                 v-show="postDetail.comments && postDetail.comments?.length > 0" 
                 :post="post"
+                :user="user"
                 :handleLike="handleLike"
                 @on-reply="initComment"
-                @on-bottom="initComment(postDetail.comments?.length, 5, 'add')"
+                @on-bottom="initComment(postDetail.comments?.length, 10, 'add')"
               />
             </el-collapse-transition>
           <!-- 加载动画 -->
@@ -237,7 +238,7 @@ export default {
       }
     }
     if(isDetail.value){  // 详情页默认加载评论
-      initComment()
+      initComment(0, 10) // 详情页默认加载10条
     } 
     let likeTimeOut; // 点赞定时器
     let isLikeChange = false; // 是否在发送请求之前改变了点赞，发送之后置为false
