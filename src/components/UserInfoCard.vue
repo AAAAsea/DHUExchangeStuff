@@ -159,7 +159,7 @@ onBeforeRouteUpdate( (to, from) => {
         width: 100%;
         height: 280px;
         opacity: 0.4;
-        background-image: repeating-linear-gradient(rgba(0, 0, 0, 0.8) , rgba(202, 202, 202, 0)  30%, rgba(253, 253, 253, 0) 70%, rgba(0, 0, 0, 0.8) );
+        background-image: repeating-linear-gradient(var(--main-bg) , transparent  30%, transparent 70%, var(--main-bg) );
         background-size:cover;
         position: absolute;
         top: 0;

@@ -22,15 +22,26 @@
     v-show="store.state.model.publishPostFlag"  
   >
     <el-button 
+      type="primary" 
+      :icon="Pointer" 
+      circle 
+      class="pointer" 
+      color="rgb(255,195,0)" 
+      size="large"
+      :dark="true"
+    />
+  </el-backtop>
+  <!-- 主题切换 -->
+  <el-button 
     type="primary" 
-    :icon="Pointer" 
+    :icon="isDark ? Sunny : MoonNight" 
     circle 
-    class="pointer" 
+    class="theme" 
     color="rgb(255,195,0)" 
     size="large"
-    :dark="true"
+    :dark="isDark"
+    @click="toggleDark()"
   />
-  </el-backtop>
 </template>
 
 <script setup>
@@ -42,7 +53,8 @@ import RightDrawerModel from './components/model/RightDrawerModel.vue'
 import ProgressModel from './components/model/ProgressModel.vue'
 import { useStore } from 'vuex'
 import { Pointer } from '@element-plus/icons-vue'
-
+import { useDark, useToggle } from '@vueuse/core'
+import { Sunny, MoonNight } from '@element-plus/icons-vue'
 const store = useStore()
 window.addEventListener('touchstart',handleTouchStart)
 window.addEventListener('touchend',handleTouchEnd)
@@ -71,10 +83,26 @@ function handleTouchEnd(e){
   else if(e.changedTouches[0].clientX - startX < -80 && model.leftDrawerModelFlag)
     model.leftDrawerModelFlag = false;
 }
+
+const isDark = useDark({
+  onChanged: dark=>{
+    store.state.settings.theme = dark ? 'dark' : 'light';
+    window.document.documentElement.setAttribute('class', dark ? 'dark' : 'light')
+  }
+})
+const toggleDark = useToggle(isDark)
+
 </script>
 
 <style scoped>
 .pointer{
+  font-size: 1.5rem;
+  transform: scale(1.2);
+}
+.theme{
+  position: fixed;
+  left: 30px;
+  bottom: 40px;
   font-size: 1.5rem;
   transform: scale(1.2);
 }

@@ -268,6 +268,7 @@ function saveInfo(){
   border: 1px solid var(--secondary-text);
   border-radius: 5px;
   :deep() .el-upload-dragger{
+    padding: 0;
     position: relative;
     background: transparent;
     border: 1px solid transparent;

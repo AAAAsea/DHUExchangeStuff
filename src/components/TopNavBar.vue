@@ -9,7 +9,7 @@
               {{route.name}}
             </h3>
             <h1 style="cursor: pointer" @click="router.push({path: '/'})" v-else>
-                <img src="https://www.dhu.edu.cn/_upload/tpl/0b/3f/2879/template2879/image/login_mini.png" alt="">
+                <img :class="{reverse: store.state.settings.theme === 'light'}" src="https://www.dhu.edu.cn/_upload/tpl/0b/3f/2879/template2879/image/login_mini.png" alt="">
             </h1>
             
           <!-- </router-link> -->
@@ -71,6 +71,8 @@ import { Search,Expand } from '@element-plus/icons-vue'
 import avatarDefaultImg from '@/assets/img/unlogin.png' 
 import { isAccountLoggedIn } from '@/utils/auth'
 import { logout } from '@/api/auth'
+// import { useDark } from '@vueuse/core'
+
 export default {
   name: "NavBar",
   components: {
@@ -89,6 +91,7 @@ export default {
     window.onresize = function() {
         isMobile.value = document.documentElement.clientWidth < 768;
     }
+    const isDark = true;
     const gunOffset = reactive({
       offsetX: 0,
       width: 1
@@ -131,7 +134,8 @@ export default {
       isAccountLoggedIn,
       isMobile,
       keyword,
-      search
+      search,
+      isDark
       // Expand
     }
   }
@@ -174,7 +178,9 @@ h1{
     height: 40px;
   }
 }
-
+.reverse{
+  filter: invert(100%);
+}
 .title{
   text-align: center;
 }

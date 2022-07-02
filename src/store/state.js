@@ -41,6 +41,7 @@ export default {
   },
   settings:{
     lang: 'zh-CN',
+    theme: 'light',
     ...JSON.parse(localStorage.getItem('settings'))
   },
 }

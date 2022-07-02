@@ -1,4 +1,4 @@
-:root{
+:root.dark{
   --primary-color:  #ffc300  ;
   --secondary-primary-color:  rgb(204, 159, 12)  ;
   --top-nav-bg: #16161a;
@@ -17,7 +17,28 @@
   --footer-bg:  rgba(51, 39, 58, 0.425);
   --footer-text: white;
   --color-topNavBar-title: #8b6161 ;
-
+  --post-card-font-size: 1rem;
+  --post-card-footer-font-size: .2rem;
+}
+:root{
+  --primary-color:  #ffc300  ;
+  --secondary-primary-color:  rgb(204, 159, 12)  ;
+  --top-nav-bg: #ffffff;
+  --post-card-bg: #f6f6f6;  
+  --post-card-border: #efefef;
+  --secondary-bg: rgb(242,242,242);
+  --main-text: rgb(9,29,61);
+  --main-bg: #ffffff;
+  --secondary-text: rgb(48, 48, 48);
+  --secondary-border: rgb(231, 231, 231);
+  --toolbar-text: #888;
+  --body-bg: #ffffff;
+  --extreme: rgb(0, 0, 0);
+  --comment-text: rgb(0, 0, 0);
+  --comment-bg: rgba(51, 39, 58, 0.425);
+  --footer-bg:  rgba(51, 39, 58, 0.425);
+  --footer-text: rgb(0, 0, 0);
+  --color-topNavBar-title: #8b6161 ;
   --post-card-font-size: 1rem;
   --post-card-footer-font-size: .2rem;
 }
@@ -35,7 +56,7 @@ html{
 
 
 body{
-  color: #ebfaef;
+  color: var(--main-text);
   background: var(--body-bg); 
   overflow: scroll;
   // 滚动条

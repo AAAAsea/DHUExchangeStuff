@@ -482,7 +482,7 @@ export default {
   color: var(--main-text);
   @media screen and(min-width: 1200px) {
       &:hover{
-      box-shadow: 0 5px 15px -5px rgba(0,0,0,.5);
+      // box-shadow: 0 5px 15px -5px rgba(0,0,0,.5);
       // transform: translateY(-3px);
     }
   }
