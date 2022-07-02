@@ -55,7 +55,8 @@ function initPostDetail(){
     if(res.code === 20000)
     {
       postDetail.value = res.data;
-      document.title = '🎲 '+ postDetail.value?.post?.title
+      document.title = '🎲 '+( postDetail.value?.post?.title ?? postDetail?.value?.post.content)
+      // console.log(postDetail.value)
     }else{
       postDetail.value.comments = []
       store.commit('showToast',{
@@ -69,8 +70,6 @@ function initPostDetail(){
   })
 }
 initPostDetail()
-
-
 </script>
 
 <style lang="scss" scoped>

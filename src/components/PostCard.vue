@@ -7,7 +7,21 @@
     v-if="!post?.deleteStatus"
   >
     <!-- 折叠展开 -->
-    
+    <el-dialog
+      v-model="dialogVisible"
+      title="删除"
+      :width="store.state.model.modelWidth"
+    >
+      <span>删除后不可恢复，确定删除？</span>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="dialogVisible = false">取消</el-button>
+          <el-button type="primary" @click="handleDeletePost(post)"
+            >确定</el-button
+          >
+        </span>
+      </template>
+    </el-dialog>
     <el-dropdown
     trigger="click"
     :style="{
@@ -19,33 +33,20 @@
       <el-icon
       :style="{
         cursor: 'pointer',
-        color:'#eee', 
+        color: 'var(--main-text)', 
         transition: '0.3s'
         }" 
       >
         <arrow-down-bold />
       </el-icon>
-        <el-dialog
-          v-model="dialogVisible"
-          title="删除"
-          :width="store.state.model.modelWidth"
-        >
-          <span>删除后不可恢复，确定删除？</span>
-          <template #footer>
-            <span class="dialog-footer">
-              <el-button @click="dialogVisible = false">取消</el-button>
-              <el-button type="primary" @click="handleDeletePost(post)"
-                >确定</el-button
-              >
-            </span>
-          </template>
-        </el-dialog>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item @click="handleLike">{{(likeStatus || post.likeStatus) ? '取消点赞' : '点赞'}}</el-dropdown-item>
-          <el-dropdown-item @click="dialogVisible = true" v-if="user.id === store.state.data.user.id">删除</el-dropdown-item>
-          <!-- <el-dropdown-item>Action 2</el-dropdown-item>
-          <el-dropdown-item>Action 3</el-dropdown-item> -->
+          <el-dropdown-item @click="handleLike">
+            {{(likeStatus || post.likeStatus) ? '取消点赞' : '点赞'}}
+          </el-dropdown-item>
+          <el-dropdown-item @click="dialogVisible = true" v-if="user.id === store.state.data.user.id">
+            删除
+          </el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
@@ -77,37 +78,57 @@
       <div class="pics">
         <div class="section1" v-show="post.pictureUrls?.length === 1">
           <transition name="el-fade-in-linear">
-          <div v-show="show">
+          <div v-show="show.one">
             <el-image 
-            @load="picLoaded"
+            @load="picLoaded('one')"
             v-for="pic in post.pictureUrls"
-            :src="pic + '?width=800'"
+            :src="pic + '?width=300'"
             :key="pic"
             :preview-src-list="post.pictureUrls"
             style="maxWidth: 100%; maxHeight: 600px;borderRadius: 5px"
             fit="cover" />
           </div>
           </transition>
-          <el-skeleton style="width: 100%" :loading="loading" animated v-show="!show">
+          <el-skeleton style="width: 100%" :loading="loading" 
+          animated      
+          v-show="!show.one">
             <template #template>
-              <el-skeleton-item variant="image" style="width: 100%; height: 240px; opacity: 0.3; color: black; background: black; borderRadius: 5px;" />
+              <el-skeleton-item variant="image" style="width: 300px; height: 300; opacity: 0.3; color: black; background: #333; borderRadius: 5px;" />
             </template>
           </el-skeleton>
         </div>
-        <div :class="post.pictureUrls?.length === 3 || post.pictureUrls?.length > 4 ? 'section3' : 'section2'" ref="imgSection2Ref" v-show="post.pictureUrls?.length > 1 && show">
-          <el-image 
-          @load="picLoaded"
+        <div class="section2"
+        :style="'grid-template-columns: repeat(' + (post.pictureUrls.length === 2 || post.pictureUrls.length === 4 ? 2 : 3)  + ', 1fr);'"
+        ref="imgSection2Ref" v-show="post.pictureUrls?.length > 1">
+          <div 
+          class="img-box"
           v-for="(pic, index) in post.pictureUrls"
           :key="pic" 
-          :src="pic + '?width=400'"
-          :preview-src-list="post.pictureUrls"
-          :initial-index="index"
-          :style="{
-              borderRadius: '5px',
-              boxSizing: 'border-box',
-              maxHeight: '600px',
-            }" 
-          fit="cover" />
+          >
+            <transition name="el-fade-in-linear">
+              <el-image 
+                v-show="show[pic]"
+                @load="picLoaded(pic)"
+                :src="pic + '?width=400'"
+                :preview-src-list="post.pictureUrls"
+                :initial-index="index"
+                :style="{
+                    borderRadius: '5px',
+                    boxSizing: 'border-box',
+                    maxHeight: '600px',
+                  }" 
+                fit="cover" />
+            </transition>
+            <el-skeleton 
+              :loading="loading" 
+              class="el-image"
+              animated 
+              v-show="!show[pic]">
+              <template #template>
+                <el-skeleton-item variant="image" style="width: 100%; height: 100%; opacity: 0.2; color: var(--main-bg); background: black; borderRadius: 5px;" />
+              </template>
+            </el-skeleton>
+          </div>
         </div>
       </div>
     </div>
@@ -118,6 +139,7 @@
         :to="'/tag/' + tag.tagId" 
       >
         <el-tag
+          @load="picLoaded('one')"
           :style="{margin: '0  10px 10px 0'}"
           :disable-transitions="false"
           type="info"
@@ -424,11 +446,14 @@ export default {
       
 
     }
-    const show = ref(false);
-    function picLoaded(){
+    const show = reactive({
+      one: false
+    });
+    function picLoaded(pic){
       context.emit('on-picLoaded')
       nextTick(()=>{
-        show.value = true;
+        show[pic] = true;
+        // console.log(show[pic])
       })
     }
     return{
@@ -515,7 +540,7 @@ export default {
     }
   }
   .sub{
-      transition: 0.3s;
+      // transition: 0.1s;
       color: var(--main-text);
     p{
       font-size: var(--post-card-font-size);
@@ -542,10 +567,22 @@ export default {
         }
         // el-image-viewer__next
       }
-      .section3{
+      .section2{
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
         gap: 5px;
+        .el-image{
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+        }
+        .img-box{
+          position: relative;
+          width: 100%;
+          height: 0;
+          padding-bottom: 100%;
+        }
       }
       margin-bottom: 10px;
     }

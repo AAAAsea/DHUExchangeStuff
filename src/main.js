@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import './assets/css/global.scss'
+import './assets/css/element.scss'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 // 路由
 import router from  './router'

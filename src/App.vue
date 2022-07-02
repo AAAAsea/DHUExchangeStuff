@@ -41,6 +41,7 @@
     size="large"
     :dark="isDark"
     @click="toggleDark()"
+    v-show="store.state.model.publishPostFlag"
   />
 </template>
 

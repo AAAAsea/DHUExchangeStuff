@@ -167,12 +167,14 @@ list.reverse()
     justify-content: space-around;
     align-items: center;
     border-radius: 5px;
-    background: var(--secondary-bg);
+    background: var(--main-text);
+    color: var(--main-bg);
     font-weight: bold;
     margin: 0 auto 40px;
     padding: 5px 0;
     span:last-child{
       color: var(--primary-color);
+      text-shadow: 1px 1px 1px var(--main-bg);
       font-size: 2em;
     }
   }

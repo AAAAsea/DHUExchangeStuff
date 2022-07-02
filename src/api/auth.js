@@ -74,7 +74,7 @@ export function getRecoverCode(username){
  * 修改密码
  */
 export function recoverPassword(user){
-  console.log(user)
+  // console.log(user)
   return request({
     url: '/recover/account',
     method: 'post',
