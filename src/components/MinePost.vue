@@ -15,7 +15,7 @@
         </div>
       </transition>
       <UserInfoCard @on-update="name=>{userNickName = name}"/>
-      <div class="description">全部帖子 · {{data.userPostCount}}</div>
+      <div class="description" v-if="data.userPostList?.length > 0">全部帖子 · {{data.userPostCount}}</div>
       <transition name="el-zoom-in-top">
         <PostList
           @on-update="reBindOnscroll"

@@ -88,8 +88,7 @@
             :key="pic"
             :preview-src-list="post.pictureUrls"
             style="maxWidth: 100%; maxHeight: 600px;borderRadius: 5px"
-            fit="cover">
-            </el-image>
+            fit="cover"/>
             <el-skeleton 
             style="width: 100%"
             :class="{transparent: show.one}"  
@@ -109,26 +108,24 @@
           v-for="(pic, index) in post.pictureUrls"
           :key="pic" 
           >
-            <transition name="el-fade-in-linear">
-              <el-image
-                lazy 
-                :class="{transparent: !show[pic]}"
-                hide-on-click-modal
-                @load="picLoaded(pic)"
-                :src="pic + '?width=' + 780 / (post.pictureUrls.length === 2 || post.pictureUrls.length === 4 ? 2 : 3)"
-                :preview-src-list="post.pictureUrls"
-                :initial-index="index"
-                :style="{
-                    borderRadius: '5px',
-                    boxSizing: 'border-box',
-                    maxHeight: '600px',
-                  }" 
-                fit="cover" />
-            </transition>
+            <el-image
+              lazy 
+              :class="{transparent: !show[pic]}"
+              hide-on-click-modal
+              @load="picLoaded(pic)"
+              :src="pic + '?width=' + 780 / (post.pictureUrls.length === 2 || post.pictureUrls.length === 4 ? 2 : 3)"
+              :preview-src-list="post.pictureUrls"
+              :initial-index="index"
+              :style="{
+                  borderRadius: '5px',
+                  boxSizing: 'border-box',
+                  maxHeight: '600px',
+                }" 
+              fit="cover" />
             <el-skeleton 
               class="el-image"
               animated 
-              :class="{transparent: show[pic]}">
+              v-show="!show[pic]">
               <template #template>
                 <el-skeleton-item variant="image" style="width: 100%; height: 100%; opacity: 0.1; color: var(--main-bg); background: black; borderRadius: 5px;" />
               </template>
