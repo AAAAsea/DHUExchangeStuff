@@ -6,21 +6,23 @@
         <LeftSideBar/>
       </el-col>
       <!-- 主体 -->
-      <el-col  :xs="24" :sm="16" :md="16" :lg="16" :xl="15">      
-      <div class="detail-nav">
-        <a @click="router.back(-1)"> 
-          <span class="iconfont icon-back">返回</span>
-        </a>
-        <span class="nav-title">{{postDetail?.user?.nickName}}</span>
-      </div>
-      <PostCard
-        v-if="postDetail"
-        :post="postDetail.post"
-        :user="postDetail.user"
-        :likeStatus="postDetail.likeStatus"
-        @on-changeLikeStatus="()=>{postDetail.likeStatus = !postDetail.likeStatus; postDetail.post.likeCount += postDetail.likeStatus || -1}"
-      />
-      </el-col>
+        <el-col  :xs="24" :sm="16" :md="16" :lg="16" :xl="15">
+        <div class="detail-nav">
+          <a @click="router.back(-1)"> 
+            <span class="iconfont icon-back">返回</span>
+          </a>
+          <span class="nav-title">{{postDetail?.user?.nickName}}</span>
+        </div>
+              <transition name="el-zoom-in-top">
+        <PostCard
+          v-if="postDetail"
+          :post="postDetail.post"
+          :user="postDetail.user"
+          :likeStatus="postDetail.likeStatus"
+          @on-changeLikeStatus="()=>{postDetail.likeStatus = !postDetail.likeStatus; postDetail.post.likeCount += postDetail.likeStatus || -1}"
+        />
+              </transition>
+        </el-col>
       <!-- 右侧 --> 
       <el-col  :xs="0" :sm="4" :md="4" :lg="4" :xl="5">
         <RightSideBar/>

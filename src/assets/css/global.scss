@@ -20,6 +20,7 @@
   --color-topNavBar-title: #8b6161 ;
   --post-card-font-size: 1rem;
   --post-card-footer-font-size: .2rem;
+  --ripple-color: rgba(255, 255, 255, 0.5);
 }
 :root{
   --primary-color:  #ffc300  ;
@@ -30,7 +31,7 @@
   --secondary-bg: rgb(231, 230, 230);
   --main-text: rgb(9,29,61);
   --main-bg: #f6f6f6;
-  --secondary-text: rgb(48, 48, 48);
+  --secondary-text: rgb(142, 142, 142);
   --secondary-border: rgb(231, 231, 231);
   --toolbar-text: rgb(161, 161, 161);
   --body-bg: #f6f6f6;
@@ -42,6 +43,7 @@
   --color-topNavBar-title: #8b6161 ;
   --post-card-font-size: 1rem;
   --post-card-footer-font-size: .2rem;
+  --ripple-color: rgba(133, 133, 133, 0.5);
 }
 *{
   /* 去除移动端蓝色阴影 */
@@ -59,7 +61,7 @@ html{
 body{
   color: var(--main-text);
   background: var(--body-bg); 
-  overflow: scroll;
+  // overflow: scroll;
   // 滚动条
   &::-webkit-scrollbar{
     width: 6px;
@@ -94,7 +96,7 @@ input{
 .ripples{
   border: none;
   backdrop-filter: blur(10px);
-  background: rgba(255, 255, 255, 0.5);
+  background: var(--ripple-color);
   transform: translate(-50%, -50%);
   position: absolute;
   pointer-events: none;

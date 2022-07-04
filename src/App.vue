@@ -56,7 +56,10 @@ import { useStore } from 'vuex'
 import { Pointer } from '@element-plus/icons-vue'
 import { useDark, useToggle } from '@vueuse/core'
 import { Sunny, MoonNight } from '@element-plus/icons-vue'
+
 const store = useStore()
+
+
 window.addEventListener('touchstart',handleTouchStart)
 window.addEventListener('touchend',handleTouchEnd)
 // 监听窗口变化

@@ -1,8 +1,8 @@
   <template>
 
   <div class="post-card"  
-    @touchstart="handleTouchStart"  
-    @touchmove="handleTouchMove" 
+    @touchstart="'' || handleTouchStart"  
+    @touchmove="'' || handleTouchMove" 
     ref='postCardRef'
     v-if="!post?.deleteStatus"
   >
@@ -50,18 +50,18 @@
         </el-dropdown-menu>
       </template>
     </el-dropdown>
-    <div class="header">
-      <router-link :to="/user/+user.id">
+    <div class="header" @click="router.push({path: '/home/' + post.id})">
+      <router-link :to="/user/+user.id" @click.stop="">
         <img :src="user.headerUrl.replace('/header','/image')  + '?width=100'" alt="">
       </router-link>
       <div class="title">
         <router-link :to="/user/+user.id">
-          <h4>{{user.nickName ?? user.username}}</h4>
+          <h4 @click.stop="">{{user.nickName ?? user.username}}</h4>
         </router-link>
         <p>{{timeFormat(new Date(post.createTime).getTime())}}</p>
       </div>
     </div>
-    <div class="sub">
+    <div class="sub" @click="router.push({path: '/home/' + post.id})">
       <h3 v-html="post.title"></h3>
       <p :class="{fold: false}">
         <span v-html="post.content.substr(0, isFold ? 140 : undefined )"/>
@@ -75,27 +75,31 @@
         </span>
       </p>
       
-      <div class="pics">
+      <div class="pics" @click.stop="">
         <div class="section1" v-show="post.pictureUrls?.length === 1">
-          <transition name="el-fade-in-linear">
-          <div v-show="show.one">
-            <el-image 
+          <div>
+            <el-image
+            lazy
+            :class="{transparent: !show.one}"
+            hide-on-click-modal
             @load="picLoaded('one')"
             v-for="pic in post.pictureUrls"
             :src="pic + '?width=300'"
             :key="pic"
             :preview-src-list="post.pictureUrls"
             style="maxWidth: 100%; maxHeight: 600px;borderRadius: 5px"
-            fit="cover" />
+            fit="cover">
+            </el-image>
+            <el-skeleton 
+            style="width: 100%"
+            :class="{transparent: show.one}"  
+            >
+              <template #template>
+                <el-skeleton-item variant="image" style="width: 300px; height: 300px; opacity: 0.1; color: var(--main-bg); background: black; borderRadius: 5px;" />
+              </template>
+            </el-skeleton>
           </div>
-          </transition>
-          <el-skeleton style="width: 100%" :loading="loading" 
-          animated      
-          v-show="!show.one">
-            <template #template>
-              <el-skeleton-item variant="image" style="width: 300px; height: 300; opacity: 0.3; color: black; background: #333; borderRadius: 5px;" />
-            </template>
-          </el-skeleton>
+          
         </div>
         <div class="section2"
         :style="'grid-template-columns: repeat(' + (post.pictureUrls.length === 2 || post.pictureUrls.length === 4 ? 2 : 3)  + ', 1fr);'"
@@ -106,10 +110,12 @@
           :key="pic" 
           >
             <transition name="el-fade-in-linear">
-              <el-image 
-                v-show="show[pic]"
+              <el-image
+                lazy 
+                :class="{transparent: !show[pic]}"
+                hide-on-click-modal
                 @load="picLoaded(pic)"
-                :src="pic + '?width=400'"
+                :src="pic + '?width=' + 780 / (post.pictureUrls.length === 2 || post.pictureUrls.length === 4 ? 2 : 3)"
                 :preview-src-list="post.pictureUrls"
                 :initial-index="index"
                 :style="{
@@ -120,12 +126,11 @@
                 fit="cover" />
             </transition>
             <el-skeleton 
-              :loading="loading" 
               class="el-image"
               animated 
-              v-show="!show[pic]">
+              :class="{transparent: show[pic]}">
               <template #template>
-                <el-skeleton-item variant="image" style="width: 100%; height: 100%; opacity: 0.2; color: var(--main-bg); background: black; borderRadius: 5px;" />
+                <el-skeleton-item variant="image" style="width: 100%; height: 100%; opacity: 0.1; color: var(--main-bg); background: black; borderRadius: 5px;" />
               </template>
             </el-skeleton>
           </div>
@@ -224,7 +229,7 @@ import { isAccountLoggedIn } from '@/utils/auth'
 import CommentCard from '@/components/CommentCard.vue'
 import { getPostDetail, addComment, changeLikeStatus, deletePost } from '@/api/post'
 import { useStore } from 'vuex'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { computed, nextTick } from '@vue/runtime-core'
 import useClipboard from 'vue-clipboard3'
 export default {
@@ -242,6 +247,7 @@ export default {
     const postDetail = reactive({comments:[]})
     const store = useStore()
     const route = useRoute()
+    const router = useRouter();
     const isDetail = computed(()=>route.name === '详情') // 判断是否是详情页
     const isComment = ref(isDetail.value)
     const isFold = ref(!isDetail.value) // 详情页默认展开且不允许折叠
@@ -481,7 +487,8 @@ export default {
       dialogVisible,
       commentInput,
       picLoaded,
-      show
+      show,
+      router
     }
   }
 }
@@ -551,6 +558,13 @@ export default {
     }
     .pics{
       transition: .2s;
+      .el-image{
+        transition: .6s ease;
+      }
+      .transparent{
+        position: absolute;
+        opacity: 0;
+      }
       .section2{
         display: grid;
         grid-template-columns: repeat(2, 1fr);

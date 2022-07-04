@@ -12,6 +12,10 @@
             <span>社区人数</span>
             <span>{{usersCount}}</span>
           </div>
+          <div class="users">
+            <span>发帖总数</span>
+            <span>{{postCount}}</span>
+          </div>
           <el-timeline>
             <el-timeline-item :timestamp="item.time" placement="top" v-for="(item, index) in list" :key="index">
               <el-card>
@@ -36,14 +40,21 @@ import LeftSideBar from '@/components/LeftSideBar.vue'
 import RightSideBar from '@/components/RightSideBar.vue'
 import { getUsersCount } from '@/api/user'
 import { ref } from '@vue/reactivity'
+import { useStore } from 'vuex';
 
+// 回到顶部
+document.body.scrollTop = 0;
+// 帖子总数
+const postNum = useStore().state.data.postCount;
+const postCount = ref(0);
 // 用户总数
 const usersCount = ref(0);
 getUsersCount().then(res=>{
   let rate = 1;
   let speed = 500/res.data;
   let addInterval;
-  const selfAdd = ()=>{
+  let postInterval;
+  const userAdd = ()=>{
     if(usersCount.value + rate < res.data)
     {
       usersCount.value += rate;
@@ -59,8 +70,20 @@ getUsersCount().then(res=>{
       clearInterval(addInterval);
     }
   }
-  addInterval = setInterval(selfAdd, speed)
+  const postAdd = ()=>{
+    if(postCount.value + rate < postNum)
+    {
+      postCount.value += rate;
+    }else{
+      postCount.value = postNum;
+      clearInterval(postInterval);
+    }
+  }
+  addInterval = setInterval(userAdd, speed)
+  postInterval = setInterval(postAdd, (res.data/postNum)*speed);
 })
+
+
 
 const list = []
 const myAppend = (time, title, content)=>{
@@ -150,6 +173,9 @@ myAppend(
 )(
   "2022-07-02",
   "适配浅色模式和深色模式"
+)(
+  "2022-07-04",
+  "图片懒加载优化、增加全站总帖数和个人总帖数"
 )
 list.reverse()
 

@@ -11,14 +11,14 @@
           <el-icon class="search-icon"><Search /></el-icon>
           <input type="search" :placeholder="$t('nav.search') " maxlength="10" v-model="store.state.data.searchText" @keypress.enter="search"/>
         </div>
-        <el-collapse-transition>
+        <!-- <el-collapse-transition> -->
           <PostList
             v-if="store.state.data.postList.length > 0"
             @on-update="reBindOnscroll"
             :postList="store.state.data.postList"
             class="postlist"
           />
-        </el-collapse-transition>
+        <!-- </el-collapse-transition> -->
         
       <div class="no-more-post" style="color: var(--secondary-text)">{{haveMorePost ? 'Loading' : '——到底了——'}}</div>
       

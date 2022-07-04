@@ -27,7 +27,8 @@ const	routes=[
 			component: ()=>import("@/views/PostDetail"),
 			props: true,
 			meta: {
-				title:'详情'
+				title:'详情',
+				index: 2
 			},
 		},
 		{
@@ -36,7 +37,8 @@ const	routes=[
 			component: ()=>import("@/views/HotTag"),
 			props: true,
 			meta: {
-				title:'话题'
+				title:'话题',
+				index: 1
 			},
 		},
 		{
@@ -45,7 +47,8 @@ const	routes=[
 			component: ()=>import("@/views/Search"),
 			props: true,
 			meta: {
-				title:'搜索'
+				title:'搜索',
+				index: 1
 			},
 		},
 		{
@@ -105,7 +108,8 @@ const	routes=[
 					name: '账号主页',
 					component: ()=>import("@/components/MinePost"),
 					meta: {
-						title:'账号主页'
+						title:'账号主页',
+						index: 1
 					},
 				},
 				{

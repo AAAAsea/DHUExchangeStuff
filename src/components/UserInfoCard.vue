@@ -149,7 +149,7 @@ onBeforeRouteUpdate( (to, from) => {
   .user-index{
     background: var(--post-card-bg);
     border-radius: 5px;
-    margin-bottom: 8px;
+    margin-bottom: 5px;
     width: 100%;
     .user-banner{
       position: relative;
@@ -199,10 +199,18 @@ onBeforeRouteUpdate( (to, from) => {
             align-items: center;
             .chat{
               font-size: 14px;
-              font-weight: 100;
-              height: 100%;
               margin-left: 10px;
-              padding-top: 5px;
+              .label{
+                color: var(--main-bg);
+                font-weight: bold;
+                background: var(--primary-color);
+                padding: 1px 2px;
+                border-radius: 4px;
+                display: flex;
+                align-items: center;
+                box-sizing: border-box;
+                height: fit-content;
+              }
             }
           }
           .follow{

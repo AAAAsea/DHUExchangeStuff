@@ -15,6 +15,7 @@
         </div>
       </transition>
       <UserInfoCard @on-update="name=>{userNickName = name}"/>
+      <div class="description">全部帖子 · {{data.userPostCount}}</div>
       <transition name="el-zoom-in-top">
         <PostList
           @on-update="reBindOnscroll"
@@ -159,5 +160,11 @@ a{
   padding-bottom: 20px;
   text-align: center;
   width: 100%;
+}
+.description{
+  // border: 1px solid red;
+  margin-bottom: 5px;
+  padding-left: 10px;
+  color: var(--secondary-text);
 }
 </style>

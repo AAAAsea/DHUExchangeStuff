@@ -11,7 +11,7 @@
 <script setup>
 const { useStore }=require("vuex");
 const store = useStore()
-const format = (percentage) => (percentage === 100 ? 'OK' : `${percentage}%`)
+const format = (percentage) => (percentage === 100 ? 'Done' : `${percentage}%`)
 </script>
 
 <style scoped>
