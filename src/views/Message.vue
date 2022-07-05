@@ -58,9 +58,9 @@ export default {
     .then(res=>{
       res = res.data;
       // console.log(res)
-      unreadNotice.comment = res.commentNotice?.unread;
-      unreadNotice.follow = res.followNotice?.unread;
-      unreadNotice.like = res.likeNotice?.unread;
+      unreadNotice.comment = res?.commentNotice?.unread;
+      unreadNotice.follow = res?.followNotice?.unread;
+      unreadNotice.like = res?.likeNotice?.unread;
       unreadNotice.letter = res?.letterUnreadCount;  
       // console.log(unreadNotice)
     })

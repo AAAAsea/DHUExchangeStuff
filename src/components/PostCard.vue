@@ -467,7 +467,7 @@ export default {
     }
     // 打开图片预览
     const showImageView = (e, pics, index) =>{
-      console.log(index)
+      // console.log(index)
       store.state.data.imageViewPics.splice(0);
       store.state.data.imageViewPics.push(...pics);
       store.state.data.imageViewIndex = index;

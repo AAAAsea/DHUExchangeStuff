@@ -73,9 +73,13 @@ initUserPostList()
 // 监听路由变化
 onBeforeRouteUpdate( (to, from) => {
   if(to.params.id !== from.params.id)
-  onTop.value = true; // 防止切换user不透明
-  store.state.data.userPostList.splice(0)
-  initUserPostList(to.params.id)
+  {
+    onTop.value = true; // 防止切换user不透明
+    store.state.data.userPostList.splice(0)
+    initUserPostList(to.params.id)
+  }else{
+    onTop.value = false;
+  }
 });
 
 // 动态修改导航栏背景色

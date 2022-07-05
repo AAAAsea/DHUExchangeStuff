@@ -139,9 +139,13 @@ function changeFollow(){
 }
 // 监听路由变化
 onBeforeRouteUpdate( (to, from) => {
-  show.value = false;
+  
   if(to.params.id !== from.params.id)
-  initUserInfo(to.params.id)
+  {
+    initUserInfo(to.params.id);
+    show.value = false;
+  }
+
 });
 </script>
 

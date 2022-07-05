@@ -54,9 +54,9 @@ const unreadNotice = store.state.data.unreadNotice;
 getNotice()
 .then(res=>{
   res = res.data;
-  unreadNotice.comment = res.commentNotice?.unread || 0;
-  unreadNotice.follow = res.followNotice?.unread || 0;
-  unreadNotice.like = res.likeNotice?.unread || 0;
+  unreadNotice.comment = res?.commentNotice?.unread || 0;
+  unreadNotice.follow = res?.followNotice?.unread || 0;
+  unreadNotice.like = res?.likeNotice?.unread || 0;
   unreadNotice.letter = res?.letterUnreadCount || 0;  
   store.state.data.unreadNotice.sum = unreadNotice.comment + unreadNotice.follow + unreadNotice.like + unreadNotice.letter;
 })

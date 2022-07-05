@@ -38,17 +38,17 @@
       :key="item">
           <div 
             style="color: white; position: absolute; width: 100vw; text-align: center; font-size: 30px"
-            :class="{hidden: picShow}"
+            :class="{hidden: picShow[index]}"
           >
           <el-icon>
             <Loading class="loading" />
           </el-icon>
           </div>
           <img
-          :src="index === store.state.data.imageViewIndex || picShow ? item : ''"
+          :src="index === store.state.data.imageViewIndex || picShow[index] ? item : '#'"
+          loading="lazy"
           ref="curImgRef"
-          :class="{hidden: !picShow}"
-          @load="picShow = true"
+          @load="picShow[index] = true"
           :style="{
             transform: index === store.state.data.imageViewIndex ? 'matrix(' + transform.scale + ', 0, 0, ' + transform.scale + ', ' + transform.x + ', ' + transform.y +  ')' : '',
             transition: isMoving || opened ? '' : 'transform .3s ease',
@@ -70,7 +70,7 @@ const { watch, computed }=require("@vue/runtime-core");
 const { useStore }=require("vuex");
 
 const store = useStore();
-const picShow = ref(false);
+const picShow = reactive(new Array(9).fill(false));
 const pics = store.state.data.imageViewPics
 const curImgRef = ref('')
 let screenWidth  = document.documentElement.clientWidth;
@@ -337,7 +337,7 @@ watch(flag, (newV)=>{
   screenHeight  = document.documentElement.clientHeight;  
   setTimeout(()=>{
     transform.maxScale = (curImgRef.value[index.value].naturalWidth/curImgRef.value[index.value].clientWidth)
-    picShow.value = curImgRef.value[index.value].complete;
+    picShow[index.value] = curImgRef.value[index.value].complete;
     }, 500)
   if(newV){
     opened.value =  true;
@@ -345,7 +345,7 @@ watch(flag, (newV)=>{
       opened.value =  false;
     }, 300);
     x.value = -(store.state.data.imageViewIndex * (screenWidth + 50))
-    history.pushState(null, null, '#');
+    history.pushState(null, null, document.URL);
     window.addEventListener('popstate', back, false);//false阻止默认事件
   }else{
     window.removeEventListener('popstate', back, false);//false阻止默认事件
@@ -357,11 +357,10 @@ watch(index, ()=>{
   transform.lastScale = 1;
   transform.x = 0;
   transform.y = 0;
-  picShow.value = true;
   x.value = (-1 * store.state.data.imageViewIndex * (screenWidth + 50))
   setTimeout(()=>{
     transform.maxScale = (curImgRef.value[index.value].naturalWidth/curImgRef.value[index.value].clientWidth)
-    picShow.value = curImgRef.value[index.value].complete;
+    picShow[index.value] = curImgRef.value[index.value].complete;
   }, 300)
 })
 
