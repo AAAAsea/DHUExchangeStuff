@@ -17,6 +17,8 @@
   <LeftDrawerModel/>  
   <!-- 侧边tag栏抽屉 -->
   <RightDrawerModel/>
+  <!-- 图片预览 -->
+  <ImageView/>
   <!-- 回到顶部 -->
   <el-backtop :right="30" :bottom="100" 
     v-show="store.state.model.publishPostFlag"  
@@ -52,6 +54,7 @@ import LoginModel from './components/model/LoginModel.vue'
 import LeftDrawerModel from './components/model/LeftDrawerModel.vue'
 import RightDrawerModel from './components/model/RightDrawerModel.vue'
 import ProgressModel from './components/model/ProgressModel.vue'
+import ImageView from './components/ImageView.vue'
 import { useStore } from 'vuex'
 import { Pointer } from '@element-plus/icons-vue'
 import { useDark, useToggle } from '@vueuse/core'

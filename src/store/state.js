@@ -24,7 +24,9 @@ export default {
       letter: 0,
       sum: 0
     },
-    searchText: ''
+    searchText: '',
+    imageViewPics: [],
+    imageViewIndex: 0
   },
   model:{
     postModelFlag: false,
@@ -34,7 +36,8 @@ export default {
     modelWidth: '500px',
     publishPostFlag: true,
     progressModelFlag: false,
-    progressPercentage: 0
+    progressPercentage: 0,
+    imageViewFlag: false
   },
   user:{
     isLogin: true

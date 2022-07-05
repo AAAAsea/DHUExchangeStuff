@@ -76,6 +76,7 @@
       </p>
       
       <div class="pics" @click.stop="">
+        <!-- 单张照片 -->
         <div class="section1" v-show="post.pictureUrls?.length === 1">
           <div>
             <el-image
@@ -83,15 +84,16 @@
             :class="{transparent: !show.one}"
             hide-on-click-modal
             @load="picLoaded('one')"
-            v-for="pic in post.pictureUrls"
+            v-for="(pic, index) in post.pictureUrls"
             :src="pic + '?width=300'"
             :key="pic"
-            :preview-src-list="post.pictureUrls"
+            @click="showImageView($event, post.pictureUrls, index)"
+            :preview-src-list="post.pictureUrl"
             style="maxWidth: 100%; maxHeight: 600px;borderRadius: 5px"
             fit="cover"/>
             <el-skeleton 
             style="width: 100%"
-            :class="{transparent: show.one}"  
+            v-show="!show.one"  
             >
               <template #template>
                 <el-skeleton-item variant="image" style="width: 300px; height: 300px; opacity: 0.1; color: var(--main-bg); background: black; borderRadius: 5px;" />
@@ -100,6 +102,7 @@
           </div>
           
         </div>
+        <!-- 多张照片 -->
         <div class="section2"
         :style="'grid-template-columns: repeat(' + (post.pictureUrls.length === 2 || post.pictureUrls.length === 4 ? 2 : 3)  + ', 1fr);'"
         ref="imgSection2Ref" v-show="post.pictureUrls?.length > 1">
@@ -110,11 +113,12 @@
           >
             <el-image
               lazy 
+              @click="showImageView($event, post.pictureUrls, index)"
               :class="{transparent: !show[pic]}"
               hide-on-click-modal
               @load="picLoaded(pic)"
               :src="pic + '?width=' + 780 / (post.pictureUrls.length === 2 || post.pictureUrls.length === 4 ? 2 : 3)"
-              :preview-src-list="post.pictureUrls"
+              :preview-src-list="post.pictureUrl"
               :initial-index="index"
               :style="{
                   borderRadius: '5px',
@@ -339,6 +343,7 @@ export default {
         })
         return;
       }
+      let tempComment = comment.value;
       if(comment.value.trim() === '')
         return;
       addComment({
@@ -354,7 +359,6 @@ export default {
           })
           initComment()
           context.emit('on-mainReply')
-          comment.value = ''
         }else if(res){
           store.commit('showToast',{
             type: "error",
@@ -366,7 +370,9 @@ export default {
             type: "error",
             message: "出错了",
           })
+        comment.value = tempComment;
       })
+      comment.value = '';
     }
     function handleLike(){
       if(!isAccountLoggedIn())
@@ -459,6 +465,15 @@ export default {
         // console.log(show[pic])
       })
     }
+    // 打开图片预览
+    const showImageView = (e, pics, index) =>{
+      console.log(index)
+      store.state.data.imageViewPics.splice(0);
+      store.state.data.imageViewPics.push(...pics);
+      store.state.data.imageViewIndex = index;
+      store.state.model.imageViewFlag = true;
+      
+    }
     return{
       isFold,
       // ...toRefs(props.user),
@@ -485,7 +500,8 @@ export default {
       commentInput,
       picLoaded,
       show,
-      router
+      router,
+      showImageView
     }
   }
 }
