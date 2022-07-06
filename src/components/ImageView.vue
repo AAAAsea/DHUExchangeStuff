@@ -13,10 +13,18 @@
   :class="{
     hidden: !store.state.model.imageViewFlag
   }"
+  :style="{
+    background: 'rgba(0,0,0,0.96)',
+    top: flag ? 0 : position.top + 'px',
+    left: flag ? 0 :  position.left+ 'px',
+    right: flag ? 0 :  screenWidth - position.right + 'px',
+    bottom: flag ? 0 :  screenHeight - position.bottom + 'px',
+    transition: flag || opening ? 'transform 0s, top .3s ease, right .3s ease, left .3s ease, bottom .3s ease, opacity .3s ease' : '',
+  }"
   >
     <div 
     class="arrow" 
-    v-if="store.state.data.imageViewPics.length > 1"
+    v-if="store.state.data.imageViewPics.length > 1 && flag"
     :class="{
       hidden: transform.scale > 1
     }"
@@ -24,18 +32,36 @@
       <el-icon @click.stop="next(-1)"><ArrowLeftBold /></el-icon>
       <el-icon @click.stop="next(1)"><ArrowRightBold /></el-icon>
     </div>
-    <span v-if="store.state.data.imageViewPics.length > 1">{{store.state.data.imageViewIndex + 1}}/{{store.state.data.imageViewPics.length}}</span>
+    <span v-if="store.state.data.imageViewPics.length > 1 && flag">{{store.state.data.imageViewIndex + 1}}/{{store.state.data.imageViewPics.length}}</span>
     <div 
     class="image-container"
     :style="{
       transform: 'translate('+ x +'px)',
       transition: (isMoving || opened) ? '' : 'transform .3s ease',
+      width: ((flag && !opening) || (pics.length > 1)) ? 'fit-content' : '100%',
     }">
       <div 
       class="image-box"
       v-for="(item, index) in pics"
       :src="item"
+      :style="{
+        width: (flag && !opening) || (pics.length > 1) ? '100vw' : '100%',
+        marginRight: (flag && !opening || pics.length > 1) ? '50px' : 0
+      }"
       :key="item">
+          <transition name="el-fade-in">
+          <img
+          :src="item + store.state.data.imageViewPicQuery"
+          v-show="!picShow[index]"
+          :style="{
+            transform: index === store.state.data.imageViewIndex ? 'matrix(' + transform.scale + ', 0, 0, ' + transform.scale + ', ' + transform.x + ', ' + transform.y +  ')' : '',
+            transition: isMoving || opened ? '' : 'transform .3s ease',
+            width: '100%',
+            height: '100%',
+            transformOrigin: '0 0',
+          }"
+          />
+          </transition>
           <div 
             style="color: white; position: absolute; width: 100vw; text-align: center; font-size: 30px"
             :class="{hidden: picShow[index]}"
@@ -44,19 +70,22 @@
             <Loading class="loading" />
           </el-icon>
           </div>
+
           <img
-          :src="index === store.state.data.imageViewIndex || picShow[index] ? item : '#'"
+          :src="index === store.state.data.imageViewIndex || picShow[index] || picPassed[index] ? item : '#'"
           loading="lazy"
           ref="curImgRef"
-          @load="picShow[index] = true"
+          @load="showPic(index)"
           :style="{
             transform: index === store.state.data.imageViewIndex ? 'matrix(' + transform.scale + ', 0, 0, ' + transform.scale + ', ' + transform.x + ', ' + transform.y +  ')' : '',
             transition: isMoving || opened ? '' : 'transform .3s ease',
-            maxWidth: screenWidth + 'px',
-            maxHeight: screenHeight + 'px',
-            transformOrigin: '0 0'
+            maxWidth: '100vw',
+            maxHeight: '100%',
+            transformOrigin: '0 0',
+            position: 'absolute'
           }"
           />
+
       </div>
     </div>
   </div>
@@ -71,6 +100,8 @@ const { useStore }=require("vuex");
 
 const store = useStore();
 const picShow = reactive(new Array(9).fill(false));
+const picPassed = reactive(new Array(9).fill(false)); // 是否划过该图片
+const bgOpacity = ref('0.9')
 const pics = store.state.data.imageViewPics
 const curImgRef = ref('')
 let screenWidth  = document.documentElement.clientWidth;
@@ -92,7 +123,7 @@ const transform = reactive({
 })
 
 const isMoving = ref(false);
-
+const opening = ref(true);
 const touchStart = reactive({x: 0, y: 0, offset: 0})
 const tempTouchStart = reactive({x: 0, y: 0}) // 用于移动
 
@@ -109,8 +140,10 @@ const transformOrigin = reactive({x: 0, y: 0}) // 第一个记录的是双指缩
 const transformOrigin2 = reactive({x: 0, y: 0})
 
 const setOrigin = (p, p2, res)=>{
-  res.x=(p.x + p2.x)/2 - curImgRef.value[index.value].clientLeft
-  res.y=(p.y + p2.y)/2 - curImgRef.value[index.value].offsetTop // 我也不知道为啥不能用client
+  let rect = curImgRef.value[index.value].getBoundingClientRect();
+
+  res.x=((p.x + p2.x)/2 - rect.left)/transform.scale
+  res.y=((p.y + p2.y)/2 - rect.top)/transform.scale
   }
 
 const handleTouchStart = (e, type)=>{
@@ -197,6 +230,9 @@ const handleTouchMove = (e, type)=>{
   }
 }
 const handleTouchEnd = (e, type)=>{
+
+  if(type === 'm' && e.type==='mouseout' && (!mouseDownState || e.buttons === 0)) return;
+
   // 记录改变前的页面
   let _index = store.state.data.imageViewIndex;
   // 控制动画
@@ -279,10 +315,20 @@ let clickPoint = {x: 0, y: 0};
 const handleClick= (e)=>{
   e.preventDefault()
   // 双击
-  if(new Date() - lastClickTime < 200 && getDistance({x: e.clientX, y: e.clientY}, clickPoint) < 50){
-    let scale = transform.scale === 1 ? curImgRef.value[index.value].naturalWidth/curImgRef.value[index.value].clientWidth : 1;
+  if(new Date() - lastClickTime < 300 && getDistance({x: e.clientX, y: e.clientY}, clickPoint) < 50){
+    let scale = 1;
+    transform.maxScale = curImgRef.value[index.value].naturalWidth/curImgRef.value[index.value].clientWidth
+    let secondScale = 1 + (transform.maxScale - 1)/3;
+    if(transform.scale === 1){
+      scale = secondScale
+    }else if(transform.scale === secondScale)
+    {
+      scale = transform.maxScale;
+    }else{
+      scale = 1
+    }
     // 缩小时的中心点和放大时一致
-    if(scale !== 1){
+    if(scale !== 1 ){
       setOrigin({
         x: e.clientX,
         y: e.clientY
@@ -295,7 +341,7 @@ const handleClick= (e)=>{
     clickTimeOut = setTimeout(()=>{
       if(flag.value){history.back()}
       store.state.model.imageViewFlag = false;
-    }, 200)
+    }, 300)
     lastClickTime = new Date();
     clickPoint.x = e.clientX
     clickPoint.y = e.clientY
@@ -309,6 +355,11 @@ const flag = computed(()=>{
 const index = computed(()=>{
   return store.state.data.imageViewIndex
 })
+const position = computed(()=>{
+  return store.state.data.imageViewPosition
+})
+
+
 // 控制缩放以及切换视图的不同的动画速度（防止打开以后还在滚动）
 const opened = ref(false);
 const back = ()=>{
@@ -327,8 +378,11 @@ const next = (num)=>{
     store.state.data.imageViewIndex --;
   }
 }
+
+let openingTimeOut;
 // 当打开预览窗口时
 watch(flag, (newV)=>{
+  // console.log(position.value)
   transform.scale = 1;
   transform.lastScale = 1;
   transform.x = 0;
@@ -339,15 +393,22 @@ watch(flag, (newV)=>{
     transform.maxScale = (curImgRef.value[index.value].naturalWidth/curImgRef.value[index.value].clientWidth)
     picShow[index.value] = curImgRef.value[index.value].complete;
     }, 500)
+  clearTimeout(openingTimeOut)
+  opening.value = true;
+  openingTimeOut = setTimeout(() => {
+    opening.value = false;
+    x.value = -(store.state.data.imageViewIndex * (screenWidth + 50))
+  }, 300);
   if(newV){
     opened.value =  true;
     setTimeout(() => {
       opened.value =  false;
-    }, 300);
-    x.value = -(store.state.data.imageViewIndex * (screenWidth + 50))
+    }, 50);
     history.pushState(null, null, document.URL);
     window.addEventListener('popstate', back, false);//false阻止默认事件
+    bgOpacity.value = '0.9'
   }else{
+    bgOpacity.value = '0'
     window.removeEventListener('popstate', back, false);//false阻止默认事件
   }
 })
@@ -358,25 +419,27 @@ watch(index, ()=>{
   transform.x = 0;
   transform.y = 0;
   x.value = (-1 * store.state.data.imageViewIndex * (screenWidth + 50))
+  picPassed[index.value] = true;
   setTimeout(()=>{
     transform.maxScale = (curImgRef.value[index.value].naturalWidth/curImgRef.value[index.value].clientWidth)
     picShow[index.value] = curImgRef.value[index.value].complete;
+    // let rect = curImgRef.value[index.value].getBoundingClientRect();
+    // store.state.data.imageViewPosition.top = rect.top;
+    // store.state.data.imageViewPosition.bottom = rect.bottom;
+    // store.state.data.imageViewPosition.left = rect.left;
+    // store.state.data.imageViewPosition.right = rect.right;
   }, 300)
 })
-
-
+// 图片已经加载完成
+const showPic = (index)=>{
+  picShow[index] = true;
+}
 </script>
 
 <style lang="scss" scoped>
 .image-view{
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
   z-index: 9999;
-  background: rgba($color: #000000, $alpha: .98);
-  transition: .3s;
   overflow: hidden;
   @keyframes loading {
     0%{
@@ -435,19 +498,16 @@ watch(index, ()=>{
     background: rgba($color: #000000, $alpha: .5);
   }
   .image-container{
-    height: 100vh;
+    height: 100%;
     width: fit-content;
     display: flex;
     .image-box{
-      width: 100vw;
-      height: 100vh;
-      margin-right: 50px;
+      height: 100%;
       overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
       img{
-        // display: block;
         object-fit: contain;
         box-sizing: border-box;
       }
@@ -456,9 +516,13 @@ watch(index, ()=>{
 }
 .hidden{
   opacity: 0;
-  pointer-events:none;
-  transition: .3s;
+  pointer-events: none;
   background: transparent;
-  transform: scale(0);
+  border-radius: 10px;
+  // transition: .3s ease;
+  img{
+    // object-fit: cover !important; 
+    // width: 100vw;
+  }
 }
 </style>

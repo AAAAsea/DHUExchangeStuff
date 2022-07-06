@@ -55,9 +55,11 @@ initSearchPostList({})
 // 监听路由变化
 onBeforeRouteUpdate( (to, from) => {
   if(to.query.keyword !== from.query.keyword)
-  onTop.value = true; // 防止切换user不透明
-  store.state.data.searchPostList.splice(0)
-  initSearchPostList({keyword: to.query.keyword}) // 否则会加载之前的keyword
+  {
+    onTop.value = true; // 防止切换user不透明
+    store.state.data.searchPostList.splice(0)
+    initSearchPostList({keyword: to.query.keyword}) // 否则会加载之前的keyword
+  }
 });
 
 

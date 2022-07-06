@@ -26,7 +26,14 @@ export default {
     },
     searchText: '',
     imageViewPics: [],
-    imageViewIndex: 0
+    imageViewIndex: 0,
+    imageViewPicQuery: '',
+    imageViewPosition: {
+      top: 500,
+      left: 0,
+      right: 0,
+      bottom: 0
+    }
   },
   model:{
     postModelFlag: false,

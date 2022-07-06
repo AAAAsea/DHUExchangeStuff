@@ -85,9 +85,9 @@
             hide-on-click-modal
             @load="picLoaded('one')"
             v-for="(pic, index) in post.pictureUrls"
-            :src="pic + '?width=300'"
+            :src="pic + '?width=500'"
             :key="pic"
-            @click="showImageView($event, post.pictureUrls, index)"
+            @click="showImageView($event, post.pictureUrls, index, '?width=500')"
             :preview-src-list="post.pictureUrl"
             style="maxWidth: 100%; maxHeight: 600px;borderRadius: 5px"
             fit="cover"/>
@@ -113,7 +113,7 @@
           >
             <el-image
               lazy 
-              @click="showImageView($event, post.pictureUrls, index)"
+              @click="showImageView($event, post.pictureUrls, index, '?width=' + 780 / (post.pictureUrls.length === 2 || post.pictureUrls.length === 4 ? 2 : 3))"
               :class="{transparent: !show[pic]}"
               hide-on-click-modal
               @load="picLoaded(pic)"
@@ -465,13 +465,22 @@ export default {
         // console.log(show[pic])
       })
     }
+
     // 打开图片预览
-    const showImageView = (e, pics, index) =>{
-      // console.log(index)
+    const showImageView = (e, pics, index, query) =>{
+      let rect = e.target.getBoundingClientRect();
+      store.state.data.imageViewPosition.top = rect.top;
+      store.state.data.imageViewPosition.bottom = rect.bottom;
+      store.state.data.imageViewPosition.left = rect.left;
+      store.state.data.imageViewPosition.right = rect.right;
       store.state.data.imageViewPics.splice(0);
       store.state.data.imageViewPics.push(...pics);
       store.state.data.imageViewIndex = index;
-      store.state.model.imageViewFlag = true;
+      store.state.data.imageViewPicQuery = query;
+      // 等待移动到对应地方以后再打开
+      setTimeout(() => {
+        store.state.model.imageViewFlag = true;
+      }, 50);
       
     }
     return{
