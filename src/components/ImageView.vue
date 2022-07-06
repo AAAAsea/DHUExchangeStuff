@@ -43,7 +43,6 @@
       <div 
       class="image-box"
       v-for="(item, index) in pics"
-      :src="item"
       :style="{
         width: (flag && !opening) || (pics.length > 1) ? '100vw' : '100%',
         marginRight: (flag && !opening || pics.length > 1) ? '50px' : 0
@@ -74,7 +73,7 @@
           <img
           :src="index === store.state.data.imageViewIndex || picShow[index] || picPassed[index] ? item : '#'"
           loading="lazy"
-          ref="curImgRef"
+          :ref="(el) => setRef(el, index)"
           @load="showPic(index)"
           :style="{
             transform: index === store.state.data.imageViewIndex ? 'matrix(' + transform.scale + ', 0, 0, ' + transform.scale + ', ' + transform.x + ', ' + transform.y +  ')' : '',
@@ -103,7 +102,11 @@ const picShow = reactive(new Array(9).fill(false));
 const picPassed = reactive(new Array(9).fill(false)); // 是否划过该图片
 const bgOpacity = ref('0.9')
 const pics = store.state.data.imageViewPics
-const curImgRef = ref('')
+// v-for中使用ref
+const curImgRef = ref([]);
+const setRef = (el, index)=>{
+  curImgRef.value[index] = el
+}
 let screenWidth  = document.documentElement.clientWidth;
 let screenHeight  = document.documentElement.clientHeight;
 
@@ -141,7 +144,7 @@ const transformOrigin2 = reactive({x: 0, y: 0})
 
 const setOrigin = (p, p2, res)=>{
   let rect = curImgRef.value[index.value].getBoundingClientRect();
-
+  console.log(rect, curImgRef.value)
   res.x=((p.x + p2.x)/2 - rect.left)/transform.scale
   res.y=((p.y + p2.y)/2 - rect.top)/transform.scale
   }
