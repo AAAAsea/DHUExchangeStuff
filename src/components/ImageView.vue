@@ -365,6 +365,7 @@ const overBorder = ()=>{
 }
 // 越界调整
 const adjustBoder = ()=>{
+  isMoving.value = false;
   if(transform.scale === 1){
     resetTransform();
     return;
@@ -546,10 +547,7 @@ watch(flag, (newV)=>{
 })
 // 切换图片
 watch(index, ()=>{
-  transform.scale = 1;
-  transform.lastScale = 1;
-  transform.x = 0;
-  transform.y = 0;
+  resetTransform();
   x.value = (-1 * store.state.data.imageViewIndex * (screenWidth + 50))
   picPassed[index.value] = true;
   setTimeout(()=>{
