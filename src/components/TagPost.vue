@@ -53,9 +53,11 @@ initHotPostList({})
 // 监听路由变化
 onBeforeRouteUpdate( (to, from) => {
   if(to.params.id !== from.params.id)
-  onTop.value = true; // 防止切换user不透明
-  store.state.data.hotPostList.splice(0)
-  initHotPostList({id: to.params.id}) // 否则会加载之前的id
+  {
+    onTop.value = true; // 防止切换user不透明
+    store.state.data.hotPostList.splice(0)
+    initHotPostList({id: to.params.id}) // 否则会加载之前的id
+  }
 });
 
 
